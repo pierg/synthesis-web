@@ -1,16 +1,15 @@
-# crome-web
+# Synthesis-web
 
-Web Interface for the Contract-Based Goal Graph package.
+Web Interface for the Synthesis package.
 
 ## System Requirements
 
-[Strix](https://strix.model.in.tum.de) must be installed on the system. Alternatively, a
-[docker](https://www.docker.com) must be installed and running.
+[Strix](https://strix.model.in.tum.de) must be installed on the system.
 
 ### Dependencies
 
 Clone crome-logic, crome-contracts, crome-cgg and crome-synthesis from git in the same
-folder where crome-web is located
+folder where synthesis-web is located
 
 ```bash
 git clone https://github.com/pierg/crome-logic.git
@@ -62,39 +61,11 @@ Install the other dependencies with poetry (optional):
 poetry install
 ```
 
-
-## Docker
-
-You can directly run the project by running the docker image on any platform
-
-`docker run -it --platform linux/x86_64 pmallozzi/crome-web:dev`
-
-### Building the image
-
-To build the image you can run the following command
-
-`docker buildx build --platform linux/x86_64 -t [DOCKERUSERNAME]/[PROJECT]:[TAG] --push .`
-
-## Usage
-
-Check the `examples` folder
-
-## One magic command
-
-Run `make lint` to run all the typing, linting and formatting tools
-
-Run `make pre-commit` to run all the pre-commit tools
-
-Check all the available commands in `Makefile`
-
 ## License
 
 [MIT](https://github.com/piergiuseppe/crome-synthesis/blob/master/LICENSE)
 
 ## Features and Credits
-
-- Fully typed with annotations and checked with mypy,
-  [PEP561 compatible](https://www.python.org/dev/peps/pep-0o561/)
 
 - This project has been initially generated with
   [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package).
