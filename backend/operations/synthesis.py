@@ -32,6 +32,7 @@ class Synthesis:
             list_controller.update(dict_controller)
         # Now we get all the examples !
         controller_folder = controller_path("default")
+        print(controller_folder)
         dir_path, dir_names, _ = next(walk(controller_folder))
         for dir_name in dir_names:
             _, _, filenames = next(walk(os.path.join(controller_folder, dir_name)))

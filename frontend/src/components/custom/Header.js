@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // components
-import CustomCardMini from "./custom/CustomCardMini";
+import CustomCardMini from "./CustomCardMini";
 
 export default function Header({ cards, color, states, clickable, onSelectCustomHeader}) {
   const bgColors = {
@@ -46,7 +46,7 @@ Header.defaultProps = {
 };
 
 Header.propTypes = {
-  // array of props to pass to the CardStatsMini component
+  // array of props to pass to the CardStatsMini components
   cards: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.oneOf([
     "light",

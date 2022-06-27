@@ -4,11 +4,10 @@ import {SocketProvider, ConnectorProvider} from "./socket/SocketProvider";
 import useLocalStorage from "./hooks/useLocalStorage";
 
 // components
-import Specifications from "./views/Specifications";
-import Controllers from "./views/Controllers";
-import Synthetise from "./views/Synthetise";
-import LandingPage from "./views/LandingPage";
-import Header from "./component/Header";
+import CustomSidebar from "./components/CustomSidebar";
+import LandingPageSynthesis from "./views/LandingPageSynthesis";
+import CustomSynthesis from "./views/CustomSynthesis";
+import customsidebar from "./_texts/customsidebar";
 
 export default function RoutePage(props) {
     const [id, setId] = useLocalStorage('id')
@@ -16,51 +15,26 @@ export default function RoutePage(props) {
     const tabId =   sessionStorage.tabID ?
                     sessionStorage.tabID :
                     sessionStorage.tabID = Math.random()
-    const headerStates = [true, false, false, false]
-
-    const onSelectCustomHeader = (activeHeaderIndex, clickable, statTitle) => {
-
-        if (!this.state.headerStates[activeHeaderIndex] && clickable) {
-            let newHeaderStates = Array(this.state.headerStates.length).fill(false);
-            newHeaderStates[activeHeaderIndex] = true
-
-            this.setState({
-                activeHeaderIndex: activeHeaderIndex,
-                project: statTitle,
-                headerStates:
-                newHeaderStates, cgg: false
-            })
-        }
-    }
 
     return (
         <SocketProvider id={id} cookie={cookie} tabId={tabId}>
             <ConnectorProvider setId={setId}/>
-            <Header
-                {...customcontractsheaderscards}
-                color={"emerald"}
-                states={headerStates}
-                clickable={true}
-                onSelectCustomHeader={onSelectCustomHeader}
+            <CustomSidebar
+                {...customsidebar}
+                id={id}
+                setId={setId}
+                cookie={cookie}
             />
             <div className="relative xxl:ml-64 bg-blueGray-100 min-h-screen">
                 {(() => {
                     switch (props.page) {
-                        case 'specification':
+                        case 'synthesis':
                             return (
-                                <Specifications/>
-                            )
-                        case 'controllers':
-                            return (
-                                <Controllers/>
-                            )
-                        case 'synthetise':
-                            return (
-                                <Synthetise/>
+                                <CustomSynthesis/>
                             )
                         default:
                             return (
-                                <LandingPage/>
+                                <LandingPageSynthesis/>
                             )
                     }
                 })()}

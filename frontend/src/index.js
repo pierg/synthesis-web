@@ -2,8 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
+import "@fortawesome/fontawesome-free/css/all.css";
+import "./assets/styles/bootstrap.min.css";
+import "./assets/scss/now-ui-kit.css";
 // styles from Notus template
-import "./assets/styles/tailwind.min.css";
+import "./assets/styles/tailwind.css";
 import "./assets/styles/docs.css";
 
 //
