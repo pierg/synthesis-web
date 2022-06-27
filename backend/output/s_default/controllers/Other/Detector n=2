@@ -1,0 +1,21 @@
+**NAME**
+
+Detector n=2
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+(G F request_0 & G F request_1) <-> G F grant
+
+**INPUTS**
+
+request_0, request_1
+
+**OUTPUTS**
+
+grant
+
+**END**

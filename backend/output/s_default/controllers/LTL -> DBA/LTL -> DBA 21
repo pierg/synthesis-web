@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA 21
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G F (p <-> X X X q) <-> G F acc
+
+**INPUTS**
+
+p, q
+
+**OUTPUTS**
+
+acc
+
+**END**

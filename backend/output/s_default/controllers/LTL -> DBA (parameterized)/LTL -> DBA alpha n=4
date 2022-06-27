@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA alpha n=4
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+F (p & X (p & X (p & X (p & X p))) & q & X (q & X (q & X (q & X q)))) <-> G F acc
+
+**INPUTS**
+
+p, q
+
+**OUTPUTS**
+
+acc
+
+**END**

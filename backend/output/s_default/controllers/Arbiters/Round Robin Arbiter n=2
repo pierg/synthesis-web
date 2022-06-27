@@ -1,0 +1,35 @@
+**NAME**
+
+Round Robin Arbiter n=2
+
+**ASSUMPTIONS**
+
+G ((request_0 & !grant_0) -> X request_0)
+
+G ((request_1 & !grant_1) -> X request_1)
+
+G ((!request_0 & grant_0) -> X !request_0)
+
+G ((!request_1 & grant_1) -> X !request_1)
+
+G F (!request_0 | !grant_0)
+
+G F (!request_1 | !grant_1)
+
+**GUARANTEES**
+
+G (!grant_0 | !grant_1)
+
+G (request_0 -> F grant_0)
+
+G (request_1 -> F grant_1)
+
+**INPUTS**
+
+request_0, request_1
+
+**OUTPUTS**
+
+grant_0, grant_1
+
+**END**

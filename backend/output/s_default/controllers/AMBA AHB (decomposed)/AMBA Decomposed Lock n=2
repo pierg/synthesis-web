@@ -1,0 +1,27 @@
+**NAME**
+
+AMBA Decomposed Lock n=2
+
+**ASSUMPTIONS**
+
+G (!hgrant_0 | ! hgrant_1)
+
+G (hgrant_0 | hgrant_1)
+
+**GUARANTEES**
+
+G ((decide & X hgrant_0) -> (X locked <-> X hlock_0))
+
+G ((decide & X hgrant_1) -> (X locked <-> X hlock_1))
+
+G (! decide -> (X locked <-> locked))
+
+**INPUTS**
+
+decide, hlock_0, hlock_1, hgrant_0, hgrant_1
+
+**OUTPUTS**
+
+locked
+
+**END**

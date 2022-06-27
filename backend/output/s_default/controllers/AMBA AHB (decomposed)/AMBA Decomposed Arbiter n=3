@@ -1,0 +1,53 @@
+**NAME**
+
+AMBA Decomposed Arbiter n=3
+
+**ASSUMPTIONS**
+
+G F allready
+
+allready
+
+**GUARANTEES**
+
+G ((!hgrant_0 & ! hgrant_1) | ((!hgrant_0 | ! hgrant_1) & !hgrant_2))
+
+G (hgrant_0 | hgrant_1 | hgrant_2)
+
+G (!allready -> (X hgrant_0 <-> hgrant_0))
+
+G (!allready -> (X hgrant_1 <-> hgrant_1))
+
+G (!allready -> (X hgrant_2 <-> hgrant_2))
+
+G (hbusreq_0 -> F (!hbusreq_0 | hgrant_0))
+
+G (hbusreq_1 -> F (!hbusreq_1 | hgrant_1))
+
+G (hbusreq_2 -> F (!hbusreq_2 | hgrant_2))
+
+G (hgrant_0 -> (busreq <-> hbusreq_0))
+
+G (hgrant_1 -> (busreq <-> hbusreq_1))
+
+G (hgrant_2 -> (busreq <-> hbusreq_2))
+
+G (!allready -> !decide)
+
+G (decide <-> (!(X hgrant_0 <-> hgrant_0) | !(X hgrant_1 <-> (hgrant_1)) | !(X hgrant_2 <-> (hgrant_2))))
+
+G ((!hbusreq_0 & !hbusreq_1 & !hbusreq_2 & decide) -> X hgrant_0)
+
+! decide
+
+hgrant_0
+
+**INPUTS**
+
+allready, hbusreq_0, hbusreq_1, hbusreq_2
+
+**OUTPUTS**
+
+decide, busreq, hgrant_0, hgrant_1, hgrant_2
+
+**END**

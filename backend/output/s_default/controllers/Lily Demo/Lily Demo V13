@@ -1,0 +1,23 @@
+**NAME**
+
+Lily Demo V13
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G r1 -> F a1
+
+G !r1 -> F !a1
+
+**INPUTS**
+
+r1
+
+**OUTPUTS**
+
+a1
+
+**END**

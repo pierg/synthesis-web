@@ -1,0 +1,31 @@
+**NAME**
+
+AMBA Decomposed Tburst4
+
+**ASSUMPTIONS**
+
+!decide
+
+G F hready
+
+G (!ready2 -> X !decide)
+
+**GUARANTEES**
+
+G (decide -> X X (((burst4 & locked) -> (!ready2 U (hready & !ready2 & X (!ready2 U (hready & !ready2 & X (!ready2 U (hready & !ready2 & X (!ready2 U (hready & !ready2 & X ready2))))))))) & (!(burst4 & locked) -> ready2)))
+
+G ((ready2 & X !decide) -> X ready2)
+
+G ((ready2 & X decide) -> X (!ready2 & X !ready2))
+
+ready2
+
+**INPUTS**
+
+decide, locked, hready, burst4
+
+**OUTPUTS**
+
+ready2
+
+**END**

@@ -1,0 +1,27 @@
+**NAME**
+
+AMBA Decomposed Encode n=2
+
+**ASSUMPTIONS**
+
+G (!hgrant_0 | ! hgrant_1)
+
+G (hgrant_0 | hgrant_1)
+
+**GUARANTEES**
+
+G (hready -> (X !hmaster_0 <-> hgrant_0))
+
+G (hready -> (X hmaster_0 <-> hgrant_1))
+
+G (!hready -> (X hmaster_0 <-> hmaster_0))
+
+**INPUTS**
+
+hready, hgrant_0, hgrant_1
+
+**OUTPUTS**
+
+hmaster_0
+
+**END**

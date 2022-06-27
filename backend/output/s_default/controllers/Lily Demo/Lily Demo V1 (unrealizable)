@@ -1,0 +1,25 @@
+**NAME**
+
+Lily Demo V1 (unrealizable)
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (req -> X (grant & X (grant & X grant)))
+
+G (grant -> X !grant)
+
+G (cancel -> X (!grant U go))
+
+**INPUTS**
+
+req, cancel, go
+
+**OUTPUTS**
+
+grant
+
+**END**

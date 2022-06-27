@@ -1,0 +1,21 @@
+**NAME**
+
+Lily Demo V8
+
+**ASSUMPTIONS**
+
+G F req
+
+**GUARANTEES**
+
+G F grant
+
+**INPUTS**
+
+req
+
+**OUTPUTS**
+
+grant
+
+**END**

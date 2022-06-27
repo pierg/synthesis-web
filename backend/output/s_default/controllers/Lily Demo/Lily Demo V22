@@ -1,0 +1,37 @@
+**NAME**
+
+Lily Demo V22
+
+**ASSUMPTIONS**
+
+!godown
+
+!goup
+
+!ws
+
+G !(godown & goup)
+
+G F !ws
+
+G ((!ws & ss) -> X !ws)
+
+G (ws -> X (!ws | X (!ws | X (!ws | X !ws))))
+
+**GUARANTEES**
+
+G !(ws & X ss)
+
+G (goup -> F !ss)
+
+G (godown -> F ss)
+
+**INPUTS**
+
+godown, goup, ws
+
+**OUTPUTS**
+
+ss
+
+**END**

@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA 27 (unrealizable)
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+F G !p <-> G F acc
+
+**INPUTS**
+
+p
+
+**OUTPUTS**
+
+acc
+
+**END**

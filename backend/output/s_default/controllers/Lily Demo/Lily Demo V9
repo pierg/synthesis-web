@@ -1,0 +1,23 @@
+**NAME**
+
+Lily Demo V9
+
+**ASSUMPTIONS**
+
+G F req
+
+**GUARANTEES**
+
+!grant -> (!grant U req)
+
+G (req -> F grant)
+
+**INPUTS**
+
+req
+
+**OUTPUTS**
+
+grant
+
+**END**

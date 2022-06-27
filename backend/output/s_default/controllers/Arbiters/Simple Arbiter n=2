@@ -1,0 +1,25 @@
+**NAME**
+
+Simple Arbiter n=2
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (!grant_0 | !grant_1)
+
+G (request_0 -> F grant_0)
+
+G (request_1 -> F grant_1)
+
+**INPUTS**
+
+request_0, request_1
+
+**OUTPUTS**
+
+grant_0, grant_1
+
+**END**

@@ -1,0 +1,31 @@
+**NAME**
+
+AMBA Decomposed Tsingle
+
+**ASSUMPTIONS**
+
+!decide
+
+G F hready
+
+G (!ready3 -> X !decide)
+
+**GUARANTEES**
+
+G (decide -> X X (((single & locked) -> (!ready3 U (hready & !ready3 & X ready3))) & (!(single & locked) -> ready3)))
+
+G ((ready3 & X !decide) -> X ready3)
+
+G ((ready3 & X decide) -> X (!ready3 & X !ready3))
+
+ready3
+
+**INPUTS**
+
+decide, locked, hready, single
+
+**OUTPUTS**
+
+ready3
+
+**END**

@@ -1,0 +1,33 @@
+**NAME**
+
+AMBA Decomposed Tincr
+
+**ASSUMPTIONS**
+
+!decide
+
+G F hready
+
+G F !busreq
+
+G (!ready1 -> X !decide)
+
+**GUARANTEES**
+
+G (decide -> X X (((incr & locked) -> (!ready1 W (hready & !busreq))) & (!(incr & locked) -> ready1)))
+
+G ((ready1 & X !decide) -> X ready1)
+
+G ((ready1 & X decide) -> X (!ready1 & X !ready1))
+
+ready1
+
+**INPUTS**
+
+busreq, decide, locked, hready, incr
+
+**OUTPUTS**
+
+ready1
+
+**END**

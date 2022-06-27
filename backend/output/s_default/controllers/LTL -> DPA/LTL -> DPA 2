@@ -1,0 +1,23 @@
+**NAME**
+
+LTL -> DPA 2
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (p0 <-> !p1)
+
+G (a | F b) <-> G F p0
+
+**INPUTS**
+
+a, b
+
+**OUTPUTS**
+
+p0, p1
+
+**END**

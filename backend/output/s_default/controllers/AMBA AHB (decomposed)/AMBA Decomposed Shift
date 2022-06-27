@@ -1,0 +1,23 @@
+**NAME**
+
+AMBA Decomposed Shift
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (hready -> (X hmastlock <-> locked))
+
+G (!hready -> (X hmastlock <-> hmastlock))
+
+**INPUTS**
+
+locked, hready
+
+**OUTPUTS**
+
+hmastlock
+
+**END**

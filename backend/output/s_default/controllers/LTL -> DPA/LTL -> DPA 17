@@ -1,0 +1,23 @@
+**NAME**
+
+LTL -> DPA 17
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (p0 <-> !p1)
+
+((G (b & G F a) & G (c | G F !a)) | G b | G c) <-> G F p0
+
+**INPUTS**
+
+a, b, c
+
+**OUTPUTS**
+
+p0, p1
+
+**END**

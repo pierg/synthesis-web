@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA beta n=2
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+(F (p_0 & F p_1) & F (q_0 & F q_1)) <-> G F acc
+
+**INPUTS**
+
+p_0, p_1, q_0, q_1
+
+**OUTPUTS**
+
+acc
+
+**END**

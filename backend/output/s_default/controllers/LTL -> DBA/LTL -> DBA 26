@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA 26
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (p -> G (q -> F r)) <-> G F acc
+
+**INPUTS**
+
+p, q, r
+
+**OUTPUTS**
+
+acc
+
+**END**

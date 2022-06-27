@@ -1,0 +1,29 @@
+**NAME**
+
+Lily Demo V15 (unrealizable)
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+G (r1 -> F a1)
+
+G (r2 -> F a2)
+
+G !(a1 & a2)
+
+a1 W r1
+
+a2 W r2
+
+**INPUTS**
+
+r1, r2
+
+**OUTPUTS**
+
+a1, a2
+
+**END**

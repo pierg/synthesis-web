@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA Q n=3
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+((F p_0 | G p_1) & (F p_1 | G p_2) & F p_2) <-> G F acc
+
+**INPUTS**
+
+p_0, p_1, p_2
+
+**OUTPUTS**
+
+acc
+
+**END**

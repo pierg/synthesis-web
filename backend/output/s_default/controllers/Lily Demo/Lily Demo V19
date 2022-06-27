@@ -1,0 +1,29 @@
+**NAME**
+
+Lily Demo V19
+
+**ASSUMPTIONS**
+
+G F ets
+
+**GUARANTEES**
+
+G (hl -> (hl U ets))
+
+G (fl -> (fl U ets))
+
+G !(hl & fl)
+
+G (ec -> F fl)
+
+G F hl
+
+**INPUTS**
+
+ets, ec
+
+**OUTPUTS**
+
+hl, fl
+
+**END**

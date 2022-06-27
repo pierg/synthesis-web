@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA E n=4
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+(F p_0 & F p_1 & F p_2 & F p_3) <-> G F acc
+
+**INPUTS**
+
+p_0, p_1, p_2, p_3
+
+**OUTPUTS**
+
+acc
+
+**END**

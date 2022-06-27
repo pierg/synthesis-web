@@ -1,0 +1,37 @@
+**NAME**
+
+Load Balancer n=2
+
+**ASSUMPTIONS**
+
+G F idle
+
+G ((idle & X (!grant_0 & !grant_1)) -> X idle)
+
+X G (grant_0 -> ((!request_0 & !idle) U (!request_0 & idle)))
+
+**GUARANTEES**
+
+X G (!grant_0 | !grant_1)
+
+G (X grant_0 -> request_0)
+
+G (X grant_1 -> request_1)
+
+G (request_0 -> grant_1)
+
+G (!idle -> X (!grant_0 & !grant_1))
+
+G F (request_0 -> X grant_0)
+
+G F (request_1 -> X grant_1)
+
+**INPUTS**
+
+idle, request_0, request_1
+
+**OUTPUTS**
+
+grant_0, grant_1
+
+**END**

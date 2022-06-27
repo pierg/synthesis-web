@@ -1,0 +1,21 @@
+**NAME**
+
+Lily Demo V11 (unrealizable)
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+!(G (req -> F ack) & G (go -> F grant))
+
+**INPUTS**
+
+req, go
+
+**OUTPUTS**
+
+grant, ack
+
+**END**

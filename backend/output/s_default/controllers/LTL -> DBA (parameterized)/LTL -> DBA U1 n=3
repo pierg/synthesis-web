@@ -1,0 +1,21 @@
+**NAME**
+
+LTL -> DBA U1 n=3
+
+**ASSUMPTIONS**
+
+true
+
+**GUARANTEES**
+
+((p_0 U p_1) U p_2) <-> G F acc
+
+**INPUTS**
+
+p_0, p_1, p_2
+
+**OUTPUTS**
+
+acc
+
+**END**

@@ -1,0 +1,23 @@
+**NAME**
+
+Lily Demo V23
+
+**ASSUMPTIONS**
+
+G ((e & X s) -> X e)
+
+G F !e
+
+**GUARANTEES**
+
+G X (!e & X !s)
+
+**INPUTS**
+
+e
+
+**OUTPUTS**
+
+s
+
+**END**
