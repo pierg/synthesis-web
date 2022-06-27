@@ -1,0 +1,9 @@
+name: contracts-web
+
+channels:
+  - default
+  - conda-forge
+
+dependencies:
+  - flask
+  - flask-socketio
