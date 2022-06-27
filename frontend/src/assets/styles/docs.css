@@ -1,0 +1,54 @@
+.docs-code-preview .token.tag.token.tag,
+.docs-code-preview .token.tag.token.tag.token.punctuation {
+  color: #a8d0ff;
+}
+.docs-code-preview .token.tag.token.attr-name {
+  color: #f1a19e;
+}
+.docs-code-preview .token.string,
+.docs-code-preview .token.tag.token.attr-value,
+.docs-code-preview .token.tag.token.script.language-javascript.token.string {
+  color: #78d092;
+}
+.docs-code-preview .token.keyword,
+.docs-code-preview .token.tag.token.script.language-javascript {
+  color: #fff;
+}
+.docs-code-preview .token.keyword.module {
+  color: #b586c3;
+}
+.docs-code-preview .token.maybe-class-name,
+.docs-code-preview .token.tag.token.tag.token.class-name {
+  color: #e4bd77;
+}
+.docs-code-preview .token.comment {
+  color: #7d7d7d;
+}
+.ct-docs-disable-nav-fixed nav.fixed{
+  position: absolute!important;
+  top: 0;
+  left: 0;
+}
+.ct-docs-disable-sidebar-fixed nav.fixed{
+  position: unset!important;
+  top: 0;
+}
+.ct-docs-disable-sidebar-content nav.fixed{
+  position: unset!important;
+}
+.ct-docs-disable-sidebar-content div.md\:ml-64{
+  margin-left: -16rem!important;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .ct-docs-disable-sidebar-content div.md\:ml-64{
+    margin-left: 0!important;
+    width: calc(100% - 16rem);
+  }
+}
+.docs-components-wrapper [id]::before{
+  display: block;
+  height: 6rem;
+  margin-top: -6rem;
+  content: "";
+}
