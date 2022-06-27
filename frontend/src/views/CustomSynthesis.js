@@ -132,6 +132,7 @@ export default class CustomSynthesis extends React.Component {
     }
 
     setTree = (tree) => {
+        console.log(tree)
         let treeTmp = []
         let keys = Object.keys(tree).sort()
         let node
