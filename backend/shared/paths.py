@@ -24,3 +24,7 @@ project_path: Callable[[str, str], Path] = (
 goals_path: Callable[[str, str], Path] = (
     lambda s, p: storage_path / f"s_{s}" / f"p_{p}" / "goals"
 )
+
+controller_path: Callable[str, Path] = (
+    lambda s: storage_path / f"s_{s}" / "controllers"
+)
