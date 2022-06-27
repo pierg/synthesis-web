@@ -147,7 +147,6 @@ class Synthesis:
                 return json_content
             elif mode == "strix":
                 controller = Controller.from_file(file_path=controller_file)
-                Synthesis.__remove_dat_file(controller_folder)
                 dump_mono_controller(absolute_folder_path=controller_folder, controller=controller)
                 if controller_return:
                     return controller
