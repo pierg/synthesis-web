@@ -1,0 +1,9 @@
+name: synthesis-web
+
+channels:
+  - default
+  - conda-forge
+
+dependencies:
+  - flask
+  - flask-socketio
