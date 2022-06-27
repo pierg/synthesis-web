@@ -1,5 +1,4 @@
 import os
-import random
 from os import walk
 from pathlib import Path
 from typing import Any

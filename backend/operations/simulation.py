@@ -1,6 +1,5 @@
 import random
 
-from backend.shared.objects import arrayRunFile, getter_line, setter_line
 from backend.shared.paths import controller_path
 from crome_synthesis.tools.persistence import dump_mono_controller, load_mono_controller, load_parallel_controller, \
     dump_parallel_controller
@@ -9,11 +8,9 @@ from crome_synthesis.tools.persistence import dump_mono_controller, load_mono_co
 class Simulation:
 
     @staticmethod
-    def get_input_possible(session_id, mode, project_id=None, name=None):
+    def get_input_possible(session_id, mode, name=None):
         controller_folder = controller_path(session_id)
-        if mode == "crome":
-            return ["person", ""]
-        elif mode == "parallel":
+        if mode == "parallel":
             return  # Not implemented yet
         elif mode == "strix":
             controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
@@ -24,12 +21,8 @@ class Simulation:
             return inputs
 
     @staticmethod
-    def react_to_inputs(session_id, choice, mode, project_id=None, name=None):
-        if mode == "crome":
-            result = arrayRunFile[getter_line()]
-            setter_line(getter_line() + 1)
-            return result
-        elif mode == "parallel":
+    def react_to_inputs(session_id, choice, mode, name=None):
+        if mode == "parallel":
             return  # We haven't implemented it yet
         elif mode == "strix":
             controller_folder = controller_path(session_id)
@@ -49,14 +42,9 @@ class Simulation:
             return result
 
     @staticmethod
-    def random_simulation(session_id, mode, nb_iteration, project_id=None, name=None):
+    def random_simulation(session_id, mode, nb_iteration, name=None):
         controller_folder = controller_path(session_id)
-        if mode == "crome":
-            beforeLine = getter_line()
-            lineToSend = min(getter_line()+25, len(arrayRunFile))
-            setter_line(lineToSend)
-            return [arrayRunFile[i] for i in range(beforeLine, lineToSend)]
-        elif mode == "parallel":
+        if mode == "parallel":
             return
         if mode == "strix":
             controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
@@ -74,11 +62,8 @@ class Simulation:
             return history
 
     @staticmethod
-    def reset_simulation(session_id, mode, project_id=None, name=None):
-        if mode == "crome":
-            setter_line(0)
-            return
-        elif mode == "parallel":
+    def reset_simulation(session_id, mode, name=None):
+        if mode == "parallel":
             controller_folder = controller_path(session_id)
             pcontroller = load_parallel_controller(absolute_folder_path=controller_folder, controller_name=name)
             if not pcontroller:

@@ -1,7 +1,4 @@
 import argparse
-import json
-import os
-import shutil
 import threading
 import time
 from os import walk
@@ -10,11 +7,11 @@ from typing import Any
 
 from flask import Flask, Response, request
 from flask_socketio import SocketIO, emit
-from operations.modelling import Modelling
 
+from backend.operations.simulation import Simulation
+from backend.operations.synthesis import Synthesis
 from backend.shared.paths import (
     build_path,
-    project_path,
     storage_path,
 )
 
@@ -145,54 +142,6 @@ def get_current_time() -> dict[str, float]:
     return {"time": time.time()}
 
 
-def copy_simple(session_id: str) -> str:
-    """
-    Copy the default session into the desired session.
-    """
-    number_of_copies = 1
-    while os.path.isdir(
-            project_path(session_id, f"simple_{number_of_copies}")
-    ):
-        number_of_copies += 1
-    project_id = f"simple_{number_of_copies}"
-    project_folder = project_path(session_id, project_id)
-    shutil.copytree(
-        project_path("default", "simple"),
-        project_folder,
-    )
-
-    list_save = ["info", "environment"]
-    for i in list_save:
-        with open(
-                os.path.join(project_path(session_id, project_id), f"{i}.json"),
-        ) as file:
-            json_data = json.load(file)
-        if i == "info":
-            json_data["name"] = f"Simple Gridworld ({number_of_copies})"
-        json_data["project_id"] = project_id
-        json_data["session_id"] = session_id
-        with open(
-                os.path.join(project_path(session_id, project_id), f"{i}.json"),
-                "w",
-        ) as file:
-            json_formatted = json.dumps(json_data, indent=4, sort_keys=True)
-            file.write(json_formatted)
-
-    return project_id
-
-
-def build_simple_project() -> None:
-    """
-    Build the default project with all the .dat file.
-    """
-    project_dir = project_path("default", "simple")
-    Modelling.create_environment(project_dir)
-    Modelling.add_goal(project_dir, "0000.json")
-    Modelling.add_goal(project_dir, "0001.json")
-    Modelling.add_goal(project_dir, "0002.json")
-    Modelling.add_goal(project_dir, "0003.json")
-
-
 def send_message_to_user(content: str, room_id: str, crometype: str) -> None:
     """
     Simplified version to send a notification and a message to a user.
@@ -210,11 +159,114 @@ def send_message_to_user(content: str, room_id: str, crometype: str) -> None:
     )
 
 
-# We import all the signal handler for each page
-import backend.flask_handlers.crome
-import backend.flask_handlers.synthesis
-import backend.flask_handlers.contracts
-import backend.flask_handlers.component
+@socketio.on("get-synthesis")
+def get_synthesis() -> None:
+    """
+        get the synthesis created by the user and the examples.
+    """
+    list_examples = Synthesis.get_synthesis(str(request.args.get("id")))
+
+    emit("receive-synthesis", list_examples, room=request.sid)
+
+
+@socketio.on("save-synthesis")
+def save_synthesis(data) -> None:
+    """
+        Save the current synthesis inside a .txt file inside the session folder
+    """
+    session_id = str(request.args.get("id"))
+    for key in data:
+        if not data[key]:
+            emit("synthesis-saved", False, room=request.sid)
+            return
+    Synthesis.create_txt_file(data, session_id)
+
+    send_message_to_user("The mealy has been saved", request.sid, "success")
+    emit("synthesis-saved", True, room=request.sid)
+
+
+@socketio.on("delete-synthesis")
+def delete_synthesis(name) -> None:
+    """
+        Delete a synthesis using only his name to find it.
+    """
+    session_id = str(request.args.get("id"))
+
+    Synthesis.delete_synthesis(name, session_id)
+
+    send_message_to_user(f"The synthesis '{name}' has been deleted.", request.sid, "success")
+    emit("synthesis-deleted", True, room=request.sid)
+
+
+@socketio.on("controller-strix")
+def create_controller_strix(name) -> None:
+    """
+        Create the controller and the mealy according to the strix method
+    """
+    json_content = Synthesis.create_controller(name, request.args.get("id"), "strix")
+
+    send_message_to_user("The mealy has been created using strix method", request.sid, "success")
+    emit("controller-created-strix", json_content, room=request.sid)
+
+
+@socketio.on("controller-crome")
+def create_controller_crome(name) -> None:
+    """
+        Create the controller and the mealy according to the parallel method
+    """
+    json_content = Synthesis.create_controller(name, request.args.get("id"), "crome")
+
+    send_message_to_user("The mealy has been created using parallel method", request.sid, "success")
+    emit("controller-created-crome", json_content, room=request.sid)
+
+
+@socketio.on("get-inputs")
+def get_inputs(data) -> None:
+    """
+        Get all the imputs possible for the current state of a controller.
+        It differentiates the two ways of simulating the synthesis.
+    """
+    session_id = request.args.get("id")
+    inputs = Simulation.get_input_possible(name=data["name"], session_id=session_id, mode=data["mode"])
+    emit("received-inputs", inputs, room=request.sid)
+
+
+@socketio.on("simulate-controller")
+def simulate_controller(data) -> None:
+    """
+        Simulate the mealy according to the method strix
+    """
+    content = Simulation.react_to_inputs(name=data["name"], session_id=request.args.get("id"), mode=data["mode"],
+                                         choice=data["input"])
+    send_message_to_user("The mealy has been simulated", "success", request.sid)
+    emit("mealy-simulated", content, room=request.sid)
+
+
+@socketio.on("reset-controller")
+def reset_controller(data) -> None:
+    """
+        It reset a controller to his initial state.
+        It differentiates the two ways of simulating the synthesis.
+    """
+    session_id = request.args.get("id")
+    Simulation.reset_simulation(name=data["name"], session_id=session_id, mode=data["mode"])
+    send_message_to_user("The simulation has been reset", request.sid, "success")
+    emit("reset-done", True, room=request.sid)
+
+
+@socketio.on("random-simulation-controller")
+def random_simulation_controller(data) -> None:
+    """
+        It simulates a controller by randomly choosing the inputs for each state.
+        It differentiates the two ways of simulating the synthesis.
+    """
+    session_id = request.args.get("id")
+    content = Simulation.random_simulation(name=data["name"], nb_iteration=data["iterations"], mode=data["mode"],
+                                           session_id=session_id)
+    emit("receive-random-simulation-controller", content, room=request.sid)
+    send_message_to_user(f"A random simulation of {data['iterations']} iterations has been made",
+                         request.sid, "success")
+
 
 if __name__ == "__main__":
     # app.run(host='localhost', debug=True, port=3000)*
