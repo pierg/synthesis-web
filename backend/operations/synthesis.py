@@ -47,6 +47,22 @@ class Synthesis:
         return list_controller
 
     @staticmethod
+    def get_controller(session_id):
+        controller_folder = controller_path(session_id)
+        list_controller_strix = Synthesis.__get_controller_from_folder(controller_folder / "save_strix", "strix")
+        list_controller_parallel = Synthesis.__get_controller_from_folder(controller_folder / "save_parallel", "parallel")
+        dict_controller_info = {"parallel": [], "strix": []}
+        for controller in list_controller_strix:
+            data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
+                    "inputs": controller.spec.i, "outputs": controller.spec.o}
+            dict_controller_info["strix"].append(data)
+        for controller in list_controller_parallel:
+            data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
+                    "inputs": controller.spec.i, "outputs": controller.spec.o}
+            dict_controller_info["parallel"].append(data)
+        return dict_controller_info
+
+    @staticmethod
     def create_txt_file(data, session_id) -> None:
         controller_folder = controller_path(session_id)
 
@@ -148,13 +164,31 @@ class Synthesis:
                 return json_content
             elif mode == "strix":
                 controller = Controller.from_file(file_path=controller_file)
-                dump_mono_controller(absolute_folder_path=controller_folder, controller=controller)
+                save_strix_controller_folder = controller_folder / "save_strix"
+                dump_mono_controller(absolute_folder_path=save_strix_controller_folder, controller=controller)
                 if controller_return:
                     return controller
                 return Synthesis.__upgrade_dot(controller.get_format("dot"))
             else:
                 # Not a good mode !
                 return None
+
+    @staticmethod
+    def get_mealy_from_controller(name, session_id, mode):
+        controller_folder = controller_path(session_id)
+        save_folder = controller_folder / f"save_{mode}"
+        _, _, filenames = next(walk(save_folder))
+        for filename in filenames:
+            if name == filename.split(".")[0][0:-2]:
+                if mode == "strix":
+                    controller = load_mono_controller(absolute_folder_path=save_folder / filename, controller_name=name)
+                    return Synthesis.__upgrade_dot(controller.get_format("dot"))
+                elif mode == "parallel":
+                    pcontroller = load_parallel_controller(absolute_folder_path=save_folder / filename, controller_name=name)
+                    json_content = []
+                    for controller in pcontroller.controllers:
+                        json_content.append(Synthesis.__upgrade_dot(controller.spot_automaton.to_str("dot")))
+                    return json_content
 
     @staticmethod
     def get_specific_synthesis(data, session_id):
@@ -193,8 +227,6 @@ class Synthesis:
             return ""
         _, _, filenames = next(walk(controller_folder))
         for filename in filenames:
-            if len(filename.split(".")) == 2 and filename.split(".")[-1] == "dat":
-                continue
             name_found = Synthesis.__get_name_controller(controller_folder / filename)
             if name_found == name:
                 return filename
@@ -242,3 +274,20 @@ class Synthesis:
             tmp = filename.split(".")
             if len(tmp) == 2 and tmp[-1] == "dat":
                 os.remove(folder / filename)
+
+    @staticmethod
+    def __get_controller_from_folder(folder, mode) -> list[Controller]:
+        if not os.path.exists(folder):
+            return []
+        _, _, filenames = next(walk(folder))
+        load_function = None
+        if mode == "strix":
+            load_function = load_mono_controller
+        elif mode == "parallel":
+            load_function = load_parallel_controller
+        result = []
+        for filename in filenames:
+            controller = load_function(absolute_folder_path=folder, controller_name=filename.split(".")[0][0:-2])
+            result.append(controller)
+        return result
+

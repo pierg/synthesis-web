@@ -169,6 +169,27 @@ def get_synthesis() -> None:
     emit("receive-synthesis", list_examples, room=request.sid)
 
 
+@socketio.on("get-controller")
+def get_controller() -> None:
+    """
+        Get the controllers already created by the user
+    """
+    list_controller = Synthesis.get_controller(str(request.args.get("id")))
+
+    emit("receive-controller", list_controller, room=request.sid)
+
+
+@socketio.on("controller-mealy")
+def get_mealy_from_controller(data):
+    """
+        Get the mealy of a controller that is already created
+    """
+    mealy_content = Synthesis.get_mealy_from_controller(name=data["name"], session_id=str(request.args.get("id")),
+                                                        mode=data["mode"])
+
+    emit("receive-controller-mealy", mealy_content, room=request.sid)
+
+
 @socketio.on("save-synthesis")
 def save_synthesis(data) -> None:
     """

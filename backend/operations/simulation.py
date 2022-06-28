@@ -13,7 +13,8 @@ class Simulation:
         if mode == "parallel":
             return  # Not implemented yet
         elif mode == "strix":
-            controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
+            save_folder = controller_folder / "save_strix"
+            controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
             if not controller:
                 return
             tmp = controller.mealy.current_state.possible_inputs
@@ -26,7 +27,8 @@ class Simulation:
             return  # We haven't implemented it yet
         elif mode == "strix":
             controller_folder = controller_path(session_id)
-            controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
+            save_folder = controller_folder / "save_strix"
+            controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
             if not controller:
                 return  # The controller saved is not the one wanted. Glitch !
             old_state = controller.mealy.current_state.name
@@ -47,7 +49,8 @@ class Simulation:
         if mode == "parallel":
             return
         if mode == "strix":
-            controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
+            save_folder = controller_folder / "save_strix"
+            controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
             if not controller:
                 return
             history = []
@@ -73,7 +76,8 @@ class Simulation:
             dump_parallel_controller(absolute_folder_path=controller_folder, controller=pcontroller)
         elif mode == "strix":
             controller_folder = controller_path(session_id)
-            controller = load_mono_controller(absolute_folder_path=controller_folder, controller_name=name)
+            save_folder = controller_folder / "save_strix"
+            controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
             if not controller:
                 return
             controller.mealy.reset()
