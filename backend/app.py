@@ -224,10 +224,15 @@ def create_controller_strix(name) -> None:
     """
         Create the controller and the mealy according to the strix method
     """
-    json_content = Synthesis.create_controller(name, request.args.get("id"), "strix")
+    try:
+        json_content = Synthesis.create_controller(name, request.args.get("id"), "strix")
 
-    send_message_to_user("The mealy has been created using strix method", request.sid, "success")
-    emit("controller-created-strix", json_content, room=request.sid)
+        send_message_to_user("The mealy has been created using strix method", request.sid, "success")
+        emit("controller-created-strix", json_content, room=request.sid)
+    except Exception as e:
+        emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
+                                   "crometype": "error"}, room=request.sid)
+        emit("send-message", f"Mealy '{name}' can't be created. Error : {str(e)} ", room=request.sid)
 
 
 @socketio.on("controller-crome")
@@ -235,10 +240,15 @@ def create_controller_crome(name) -> None:
     """
         Create the controller and the mealy according to the parallel method
     """
-    json_content = Synthesis.create_controller(name, request.args.get("id"), "crome")
+    try:
+        json_content = Synthesis.create_controller(name, request.args.get("id"), "parallel")
 
-    send_message_to_user("The mealy has been created using parallel method", request.sid, "success")
-    emit("controller-created-crome", json_content, room=request.sid)
+        send_message_to_user("The mealy has been created using parallel method", request.sid, "success")
+        emit("controller-created-crome", json_content, room=request.sid)
+    except Exception as e:
+        emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
+                                   "crometype": "error"}, room=request.sid)
+        emit("send-message", f"Mealy '{name}' can't be created. Error : {str(e)} ", room=request.sid)
 
 
 @socketio.on("get-inputs")
