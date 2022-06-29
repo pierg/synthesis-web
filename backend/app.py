@@ -230,8 +230,9 @@ def create_controller(data) -> None:
         send_message_to_user(f"The mealy has been created using {data['mode']} method", request.sid, "success")
         emit("controller-created", json_content, room=request.sid)
     except Exception as e:
+        emit("controller-created", False, room=request.sid)
         emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
-                                   "crometype": "error"}, room=request.sid)
+                                   "crometypes": "error"}, room=request.sid)
         emit("send-message", f"Mealy \"{data['name']}\" can't be created. Error : {str(e)} ", room=request.sid)
 
 

@@ -7,16 +7,15 @@ export default function CustomCardMini({
   statIconColor,
   state,
   headerKey,
-  clickable,
-  onSelectCustomHeader,
+  changePageHeader,
 }) {
   let color = state ? "text-blueGray-700" : "text-blueGray-300";
   let iconColor = state ? statIconColor : "bg-blueGray-200";
-  let mouseHover = clickable ? "cursor-pointer" : "cursor-auto";
+  let mouseHover = state ? "cursor-not-allowed" : "cursor-pointer";
 
   return (
     <>
-      <div onClick={() => onSelectCustomHeader(headerKey, clickable, statTitle)} className={"relative flex justify-center break-words bg-white rounded-lg mb-6 shadow-lg text-center " + mouseHover}>
+      <div onClick={() => changePageHeader(headerKey)} className={"relative flex justify-center break-words bg-white rounded-lg mb-6 shadow-lg text-center " + mouseHover}>
         <div className="p-3 ">
           <div className="flex flex-row ">
             <div className="pr-4 flex justify-center items-center ">

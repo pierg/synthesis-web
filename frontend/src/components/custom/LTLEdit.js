@@ -102,16 +102,17 @@ function LTLEdit(props) {
     return(<>
         <Editor
             value={props.value}
-            onValueChange={code => props.changeParameter(code)}
+            onValueChange={code => props.setValue(code)}
             highlight={code => highlightWithLineNumbers(code)}
             padding={10}
-            className="editor border-blueGray-300 textareaResizeNone text-blueGray-700 relative bg-white rounded-md outline-none focus:ring focus:ring-lightBlue-500 focus:ring-1 focus:border-lightBlue-500 border border-solid transition duration-200"
+            className="editor border-blueGray-300 textareaResizeNone text-blueGray-700 relative bg-white rounded-md outline-none focus:ring focus:ring-lightBlue-500 focus:ring-1 focus:border-lightBlue-500 border border-solid transition duration-200 readonly"
             textareaId="codeArea"
             style={{
                 fontFamily: '"Fira code", "Fira Mono", monospace',
                 fontSize: props.size,
                 outline: 0,
             }}
+            readOnly={props.readOnly}
             />
     </>);
 }

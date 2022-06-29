@@ -5,6 +5,7 @@ function SocketGetExamples(props) {
     const socket = useSocket()
 
     const setTree = useCallback((tree) => {
+        console.log(tree)
         props.setTree(tree);
     }, [props]) // eslint-disable-next-line
 
@@ -13,8 +14,14 @@ function SocketGetExamples(props) {
 
         if (props.trigger) {
             props.setTrigger(false)
-            socket.emit("get-synthesis")
-            socket.on('receive-synthesis', setTree)
+            if(!props.controllers) {
+                socket.emit("get-synthesis")
+                socket.on('receive-synthesis', setTree)
+            }
+            else {
+                socket.emit("get-controller")
+                socket.on('receive-controller', setTree)
+            }
 
             return () => socket.off('graph-generated')
         }

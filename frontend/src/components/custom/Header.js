@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 // components
 import CustomCardMini from "./CustomCardMini";
 
-export default function Header({ cards, color, states, clickable, onSelectCustomHeader}) {
+export default function Header({ cards, color, states, changePageHeader}) {
   const bgColors = {
     light: "bg-blueGray-200",
     dark: "bg-blueGray-800",
@@ -12,7 +12,7 @@ export default function Header({ cards, color, states, clickable, onSelectCustom
     red: "bg-red-500",
     orange: "bg-orange-500",
     amber: "bg-amber-500",
-    emerald: "bg-emerald-500",
+    emerald: "bg-emerald-400",
     teal: "bg-teal-500",
     lightBlue: "bg-lightBlue-500",
     indigo: "bg-indigo-500",
@@ -22,14 +22,14 @@ export default function Header({ cards, color, states, clickable, onSelectCustom
 
   return (
     <>
-      <div className={"relative pt-8 pb-12 " + bgColors[color]}>
+      <div className={"relative pt-8 pb-8 " + bgColors[color]}>
         <div className="px-12 mx-8 w-40">
           <div>
             <div className="flex flex-wrap justify-center ">
               {cards.map((prop, key) => (
                 <div key={key} className="flex-initial w-64 px-3 ">
                   <CustomCardMini
-                      {...prop} clickable={clickable} headerKey={key} state={states[key]} onSelectCustomHeader={onSelectCustomHeader}/>
+                      {...prop} headerKey={key} state={states[key]} changePageHeader={changePageHeader}/>
                 </div>
               ))}
             </div>

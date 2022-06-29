@@ -8,12 +8,10 @@ function SocketGetSynthesis(props) {
         if(graph) {
             props.setGraph(graph);
         }
-        if (props.strix) {
-            socket.off('controller-created-strix')
-        }
         else {
-            socket.off('controller-created-crome')
+            props.setGraph(null);
         }
+        socket.off('controller-created')
     }, [props,socket]) // eslint-disable-next-line
 
     useEffect(() => {
@@ -21,12 +19,12 @@ function SocketGetSynthesis(props) {
 
         if (props.trigger && props.name !== "") {
             if (props.strix) {
-                socket.emit("controller-strix", props.name)
-                socket.on('controller-created-strix', setGraph)
-            } else {
-                socket.emit("controller-crome", props.name)
-                socket.on('controller-created-crome', setGraph)
+                socket.emit("create-controller", {name : props.name, mode : "strix"})
             }
+            else if(props.parallel) {
+                socket.emit("create-controller", {name : props.name, mode : "parallel"})
+            }
+            socket.on('controller-created', setGraph)
 
             props.setTrigger(false)
 

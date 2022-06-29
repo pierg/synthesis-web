@@ -2,7 +2,7 @@ const textProps = {
   color: "emerald",
   cards: [{
       statTitle: "Specifications",
-      statIconName: "fas fa-globe",
+      statIconName: "fa-brands fa-wpforms",
       statIconColor: "bg-red-500",
       href: "#/specifications",
     },
@@ -14,7 +14,7 @@ const textProps = {
     },
     {
       statTitle: "Synthetise",
-      statIconName: "fas fa-spinner",
+      statIconName: "fa-solid fa-diagram-project",
       statIconColor: "bg-pink-500",
       href: "#/synthetise",
     },

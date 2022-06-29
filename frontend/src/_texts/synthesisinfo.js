@@ -1,14 +1,9 @@
 const textProps = {
     info: {
         buttons: {
-            upload: {
-                color:"gray",
-                text:"upload",
-                icon:"fas fa-long-arrow-alt-up ml-2"
-            },
             formula: {
                 color:"emerald",
-                text:"load formula",
+                text:"save formula",
             },
             up: "fas fa-chevron-up",
             down: "fas fa-chevron-down",
@@ -27,7 +22,8 @@ const textProps = {
             guarantees: "guarantees",
             inputs: "inputs",
             outputs: "outputs",
-            load:  "load examples"
+            load:  "load examples",
+            yourCreation:  "your creation"
         }
     }
 };

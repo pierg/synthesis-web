@@ -4,6 +4,10 @@ import {SocketProvider, ConnectorProvider} from "./socket/SocketProvider";
 import useLocalStorage from "./hooks/useLocalStorage";
 
 // components
+import consoleinfo from "./_texts/console";
+import SocketIoConsoleMessage from "./components/socketConnection/message/GetConsoleMessage";
+import Console from "./components/custom/Console";
+
 import CustomSidebar from "./components/CustomSidebar";
 import LandingPageSynthesis from "./views/LandingPageSynthesis";
 import CustomSynthesis from "./views/CustomSynthesis";
@@ -15,6 +19,16 @@ export default function RoutePage(props) {
     const tabId =   sessionStorage.tabID ?
                     sessionStorage.tabID :
                     sessionStorage.tabID = Math.random()
+    let [message, setMessage] = React.useState("")
+
+    function updateMessage(msg) {
+        if (message === "") {
+            setMessage(msg);
+        }
+        else {
+            setMessage(message + "\n" + msg);
+        }
+    }
 
     return (
         <SocketProvider id={id} cookie={cookie} tabId={tabId}>
@@ -25,6 +39,8 @@ export default function RoutePage(props) {
                 setId={setId}
                 cookie={cookie}
             />
+            <Console {...consoleinfo} customText={message}/>
+            <SocketIoConsoleMessage modifyMessage={(e) => updateMessage(e)} session={id}/>
             <div className="relative xxl:ml-64 bg-blueGray-100 min-h-screen">
                 {(() => {
                     switch (props.page) {

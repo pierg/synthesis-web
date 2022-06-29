@@ -153,7 +153,7 @@ class Synthesis:
                 break
 
         if controller_file:
-            if mode == "crome":
+            if mode == "parallel":
                 pcontrollers = PControllers.from_file(file_path=controller_file)
                 # We have to dump the pcontrollers when the function will be written and works correctly
                 if controller_return:

@@ -16,10 +16,15 @@ import customfooter from "../_texts/customfooter";
 import Simulation from "../components/custom/Simulation";
 import SynthesisForm from "../components/custom/SynthesisForm";
 import CustomFooter from "../components/custom/CustomFooter";
+import Header from "../components/custom/Header";
+import customheadercards from "../_texts/customheadercards";
 
 export default class CustomSynthesis extends React.Component {
 
     state = {
+        headerStates : [true, false, false],
+
+        //-- first page
         nameValue : "",
         assumptionsValue : "",
         guaranteesValue : "",
@@ -28,23 +33,47 @@ export default class CustomSynthesis extends React.Component {
 
         triggerExample : true,
         tree : [],
+        yourCreation : [],
         isOpen : [],
         nameToDelete : "",
-        nbFolders : 0,
-        nbExampleCreation : 0,
-        creationExpanded: false,
         triggerSave : false,
         triggerDelete : false,
 
+        //-- third page
         triggerSynthesis : false,
         toastLoading : null,
         clickedButtonStrix : false,
         clickedButtonParallel : false,
-        network : null,
         graph : null,
         simulation : false,
     }
 
+    // -------------------- GENERALE PAGE FUNCTIONS --------------------
+    setHeaderStates = (headerStates) => {
+        this.setState({
+            headerStates : headerStates
+        })
+    }
+
+    changePageHeader = (keyPage) => {
+        let headerStates = [false,false,false]
+        headerStates[keyPage] = true
+        this.setState({
+            nameValue : "",
+            assumptionsValue : "",
+            guaranteesValue : "",
+            inputsValue : "",
+            outputsValue : "",
+            clickedButtonStrix : false,
+            clickedButtonParallel : false,
+            graph : null,
+            simulation : false,
+        })
+        this.setHeaderStates(headerStates)
+        this.setTriggerExample(true)
+    }
+
+    // -------------------- FIRST PAGE FUNCTIONS (form) --------------------
     setNameValue = (e) => {
         this.setState({
             nameValue : e.target.value
@@ -75,19 +104,6 @@ export default class CustomSynthesis extends React.Component {
         })
     }
 
-    setGraph = (graph) => {
-        const toastId = this.state.toastLoading
-        toast.dismiss(toastId)
-        this.setState({
-            graph : graph,
-            toastLoading: null,
-        })
-    }
-
-    loadFormula = () => {
-        this.setTriggerSave(true)
-    }
-
     setTriggerExample = (bool) => {
         this.setState({
             triggerExample: bool
@@ -96,8 +112,6 @@ export default class CustomSynthesis extends React.Component {
 
     changeIsOpen = ({e}) => {
         e.isExpanded = !e.isExpanded
-        let creationExpanded = this.state.creationExpanded
-        let sizeFolder = this.state.nbFolders
         if(e.id.length !== undefined) {
             this.setState({
                 nameValue : e.label,
@@ -107,75 +121,63 @@ export default class CustomSynthesis extends React.Component {
                 outputsValue : e.outputs.join(", "),
             })
         }
-        else {
-            if(e.label !== "Your creation") {
-                if(!e.isExpanded) {
-                    sizeFolder -= e.childNodes.length
-                }
-                else {
-                    sizeFolder += e.childNodes.length
-                }
-            }
-            else {
-                creationExpanded = e.isExpanded
-            }
-        }
         this.setState({
             clickedButtonStrix : false,
             clickedButtonParallel : false,
             triggerSynthesis : false,
             graph: null,
             simulation: false,
-            nbFolders: sizeFolder,
-            creationExpanded: creationExpanded,
         })
+    }
+
+    initChildNode = (node,i,j) => {
+        let childNode = {}
+        childNode.id = i+"_"+j
+        childNode.label = node.id
+        childNode.assumptions = node.assumptions
+        childNode.guarantees = node.guarantees
+        childNode.inputs = node.inputs
+        childNode.outputs = node.outputs
+        return childNode
     }
 
     setTree = (tree) => {
-        console.log(tree)
         let treeTmp = []
+        let yourCreationTmp = []
         let keys = Object.keys(tree).sort()
         let node
-        let nbExampleCreation = 0
         for(let i=0;i<keys.length;i++) {
-            node = {}
-            node.id = i
-            node.label = keys[i]
-            node.icon = "folder-close"
-            node.isExpanded = false
-            node.childNodes = []
-
-            let childNode
-            for(let j=0;j<tree[keys[i]].length;j++) {
-                childNode = {}
-                childNode.id = i+"_"+j
-                childNode.label = tree[keys[i]][j].id
-                if(keys[i] === "Your creation") {
-                    nbExampleCreation++
+            if(keys[i] === "Your creation") {
+                for(let j=0;j<tree[keys[i]].length;j++) {
+                    yourCreationTmp.push(this.initChildNode(tree[keys[i]][j],i,j))
                 }
-                childNode.assumptions = tree[keys[i]][j].assumptions
-                childNode.guarantees = tree[keys[i]][j].guarantees
-                childNode.inputs = tree[keys[i]][j].inputs
-                childNode.outputs = tree[keys[i]][j].outputs
-                node.childNodes[j] = childNode
             }
+            else {
+                node = {}
+                node.id = i
+                node.label = keys[i]
+                node.icon = "folder-close"
+                node.isExpanded = false
+                node.childNodes = []
 
-            treeTmp[i] = node
+                for(let j=0;j<tree[keys[i]].length;j++) {
+                    node.childNodes[j] = this.initChildNode(tree[keys[i]][j],i,j)
+                }
+
+                treeTmp[i] = node
+            }
         }
+
+        console.log(treeTmp)
 
         this.setState({
             tree : treeTmp,
-            nbFolders : keys.length,
-            nbExampleCreation : nbExampleCreation,
-            creationExpanded: false,
+            yourCreation : yourCreationTmp,
         })
     }
 
-    deleteCreationClick = (nodeId) => {
-        this.setState({
-            nameToDelete: this.state.tree[this.state.tree.length-1].childNodes[nodeId].label
-        })
-        this.setTriggerDelete(true)
+    saveFormula = () => {
+        this.setTriggerSave(true)
     }
 
     setTriggerSave = (bool) => {
@@ -184,32 +186,43 @@ export default class CustomSynthesis extends React.Component {
         })
     }
 
+    savedDone = () => {
+        this.setTriggerExample(true)
+    }
+
+    deleteCreationClick = (nodeId) => {
+        this.setState({
+            nameToDelete: this.state.yourCreation[nodeId].label
+        })
+        this.setTriggerDelete(true)
+    }
+
     setTriggerDelete = (bool) => {
         this.setState({
             triggerDelete: bool
         })
     }
 
-    savedDone = () => {
-        const toastId = toast.loading('Synthesis is working, please wait')
-        this.setState({
-            toastLoading: toastId
-        })
-        this.setTriggerExample(true)
-    }
-
     deletedDone = () => {
         this.setTriggerExample(true)
     }
 
+    // -------------------- THIRD PAGE FUNCTIONS (graph ...) --------------------
     setTriggerSynthesis = (bool) => {
         this.setState({
             triggerSynthesis: bool
         })
     }
 
+    synthesisWorking = () => {
+        const toastId = toast.loading('Synthesis is working, please wait')
+        this.setState({
+            toastLoading: toastId
+        })
+    }
+
     synthesisStrix = () => {
-        this.setTriggerSave(true)
+        this.synthesisWorking()
         this.setState({
             clickedButtonStrix : true,
             clickedButtonParallel : false,
@@ -220,13 +233,22 @@ export default class CustomSynthesis extends React.Component {
     }
 
     parallelSynthesis = () => {
-        this.setTriggerSave(true)
+        this.synthesisWorking()
         this.setState({
             clickedButtonStrix : false,
             clickedButtonParallel : true,
             triggerSynthesis : true,
             graph : null,
             simulation: false
+        })
+    }
+
+    setGraph = (graph) => {
+        const toastId = this.state.toastLoading
+        toast.dismiss(toastId)
+        this.setState({
+            graph : graph,
+            toastLoading: null,
         })
     }
 
@@ -238,11 +260,11 @@ export default class CustomSynthesis extends React.Component {
 
     render(){
         const deleteCreation = [];
-        for (let i = 0; i < this.state.nbExampleCreation; i += 1) {
+        for (let i = 0; i < this.state.yourCreation.length; i += 1) {
             deleteCreation.push(
                 <button
                     key={i}
-                    style={{top: ((this.state.nbFolders+i)*30)+"px", right: "10px", height: "30px", width: "30px"}}
+                    style={{top: (i*30)+"px", right: "10px", height: "30px", width: "30px"}}
                     className="absolute text-right"
                     onClick={() => this.deleteCreationClick(i)}
                 >
@@ -276,6 +298,7 @@ export default class CustomSynthesis extends React.Component {
                 <SocketGetExamples
                     trigger={this.state.triggerExample}
                     setTrigger={this.setTriggerExample}
+                    controllers={this.state.headerStates[1]}
                     setTree={this.setTree}
                 />
                 <SocketSaveSynthesis
@@ -302,7 +325,7 @@ export default class CustomSynthesis extends React.Component {
                     parallel={this.state.clickedButtonParallel}
                     setGraph={this.setGraph}
                 />
-                <div className="relative pt-8 pb-12 bg-emerald-400 ">
+                <div className="relative pt-8 bg-emerald-400 ">
                     <div className="px-4 md:px-6 mx-auto w-full">
                         <div>
                             <div className="flex flex-wrap justify-center">
@@ -313,26 +336,64 @@ export default class CustomSynthesis extends React.Component {
                         </div>
                     </div>
                 </div>
-                <SynthesisForm
-                    nameValue={this.state.nameValue}
-                    setNameValue={this.setNameValue}
-                    assumptionsValue={this.state.assumptionsValue}
-                    setAssumptionsValue={this.setAssumptionsValue}
-                    inputsValue={this.state.inputsValue}
-                    outputsValue={this.state.outputsValue}
-                    guaranteesValue={this.state.guaranteesValue}
-                    setGuaranteesValue={this.setGuaranteesValue}
-                    setInputsValue={this.setInputsValue}
-                    setOutputsValue={this.setOutputsValue}
-                    tree={this.state.tree}
-                    changeIsOpen={this.changeIsOpen}
-                    creationExpanded={this.state.creationExpanded}
-                    deleteCreation={deleteCreation}
-                    clickedButtonStrix={this.state.clickedButtonStrix}
-                    synthesisStrix={this.synthesisStrix}
-                    clickedButtonParallel={this.state.clickedButtonParallel}
-                    parallelSynthesis={this.parallelSynthesis}
-                />
+                <Header {...customheadercards} states={this.state.headerStates} changePageHeader={this.changePageHeader}/>
+                {
+                    this.state.headerStates[0] &&
+                    <>
+                        <SynthesisForm
+                            nameValue={this.state.nameValue}
+                            setNameValue={this.setNameValue}
+                            assumptionsValue={this.state.assumptionsValue}
+                            setAssumptionsValue={this.setAssumptionsValue}
+                            guaranteesValue={this.state.guaranteesValue}
+                            setGuaranteesValue={this.setGuaranteesValue}
+                            inputsValue={this.state.inputsValue}
+                            setInputsValue={this.setInputsValue}
+                            outputsValue={this.state.outputsValue}
+                            setOutputsValue={this.setOutputsValue}
+                            tree={this.state.tree}
+                            yourCreation={this.state.yourCreation}
+                            deleteCreation={deleteCreation}
+                            changeIsOpen={this.changeIsOpen}
+                            saveFormula={this.saveFormula}
+                            readOnly={false}
+                        />
+                    </>
+                }
+                {
+                    this.state.headerStates[1] &&
+                    <SynthesisForm
+                        nameValue={this.state.nameValue}
+                        assumptionsValue={this.state.assumptionsValue}
+                        inputsValue={this.state.inputsValue}
+                        outputsValue={this.state.outputsValue}
+                        guaranteesValue={this.state.guaranteesValue}
+                        yourCreation={this.state.tree}
+                        changeIsOpen={this.changeIsOpen}
+                        clickedButtonStrix={this.state.clickedButtonStrix}
+                        synthesisStrix={this.synthesisStrix}
+                        clickedButtonParallel={this.state.clickedButtonParallel}
+                        parallelSynthesis={this.parallelSynthesis}
+                        readOnly={true}
+                    />
+                }
+                {
+                    this.state.headerStates[2] &&
+                    <SynthesisForm
+                        nameValue={this.state.nameValue}
+                        assumptionsValue={this.state.assumptionsValue}
+                        inputsValue={this.state.inputsValue}
+                        outputsValue={this.state.outputsValue}
+                        guaranteesValue={this.state.guaranteesValue}
+                        yourCreation={this.state.yourCreation}
+                        changeIsOpen={this.changeIsOpen}
+                        clickedButtonStrix={this.state.clickedButtonStrix}
+                        synthesisStrix={this.synthesisStrix}
+                        clickedButtonParallel={this.state.clickedButtonParallel}
+                        parallelSynthesis={this.parallelSynthesis}
+                        readOnly={true}
+                    />
+                }
                 <div  id="synthesis" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto pb-5">
                 {
                         this.state.graph ?

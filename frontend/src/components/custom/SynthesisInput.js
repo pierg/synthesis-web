@@ -15,6 +15,7 @@ function SynthesisInput(props) {
                         style={{
                             fontFamily: '"Fira code", "Fira Mono", monospace',
                         }}
+                        readOnly={props.readOnly}
                     />
                 </div>
             </div>);
