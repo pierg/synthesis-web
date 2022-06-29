@@ -11,6 +11,7 @@ const textProps = {
             pause: "fas fa-pause",
             synthesis: {
                 color:"gray",
+                controller:"Synthesis",
                 strix:"Synthesis with strix",
                 parallel:"Parallel synthesis",
             },

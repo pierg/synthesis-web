@@ -5,7 +5,6 @@ function SocketGetExamples(props) {
     const socket = useSocket()
 
     const setTree = useCallback((tree) => {
-        console.log(tree)
         props.setTree(tree);
     }, [props]) // eslint-disable-next-line
 

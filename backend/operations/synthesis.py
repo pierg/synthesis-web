@@ -182,10 +182,10 @@ class Synthesis:
         for filename in filenames:
             if name == filename.split(".")[0][0:-2]:
                 if mode == "strix":
-                    controller = load_mono_controller(absolute_folder_path=save_folder / filename, controller_name=name)
+                    controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
                     return Synthesis.__upgrade_dot(controller.get_format("dot"))
                 elif mode == "parallel":
-                    pcontroller = load_parallel_controller(absolute_folder_path=save_folder / filename, controller_name=name)
+                    pcontroller = load_parallel_controller(absolute_folder_path=save_folder, controller_name=name)
                     json_content = []
                     for controller in pcontroller.controllers:
                         json_content.append(Synthesis.__upgrade_dot(controller.spot_automaton.to_str("dot")))

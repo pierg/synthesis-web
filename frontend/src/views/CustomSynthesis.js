@@ -39,6 +39,9 @@ export default class CustomSynthesis extends React.Component {
         triggerSave : false,
         triggerDelete : false,
 
+        //-- second page
+        modeParent : "",
+
         //-- third page
         triggerSynthesis : false,
         toastLoading : null,
@@ -64,6 +67,7 @@ export default class CustomSynthesis extends React.Component {
             guaranteesValue : "",
             inputsValue : "",
             outputsValue : "",
+            modeParent : "",
             clickedButtonStrix : false,
             clickedButtonParallel : false,
             graph : null,
@@ -120,6 +124,9 @@ export default class CustomSynthesis extends React.Component {
                 inputsValue : e.inputs.join(", "),
                 outputsValue : e.outputs.join(", "),
             })
+            if(this.state.headerStates[1]) {
+                this.setModeParent(e.parent)
+            }
         }
         this.setState({
             clickedButtonStrix : false,
@@ -162,13 +169,14 @@ export default class CustomSynthesis extends React.Component {
 
                 for(let j=0;j<tree[keys[i]].length;j++) {
                     node.childNodes[j] = this.initChildNode(tree[keys[i]][j],i,j)
+                    if(node.label === "strix"  ||  node.label === "parallel") {
+                        node.childNodes[j].parent = node.label
+                    }
                 }
 
                 treeTmp[i] = node
             }
         }
-
-        console.log(treeTmp)
 
         this.setState({
             tree : treeTmp,
@@ -205,6 +213,23 @@ export default class CustomSynthesis extends React.Component {
 
     deletedDone = () => {
         this.setTriggerExample(true)
+    }
+
+    // -------------------- SECOND PAGE FUNCTIONS (graph ...) --------------------
+    setModeParent = (mode) => {
+        this.setState({
+            modeParent: mode
+        })
+    }
+
+    synthesisControllers = () => {
+        this.setState({
+            clickedButtonStrix : false,
+            clickedButtonParallel : false,
+            triggerSynthesis : true,
+            graph: null,
+            simulation: false
+        })
     }
 
     // -------------------- THIRD PAGE FUNCTIONS (graph ...) --------------------
@@ -321,6 +346,7 @@ export default class CustomSynthesis extends React.Component {
                     trigger={this.state.triggerSynthesis}
                     setTrigger={this.setTriggerSynthesis}
                     name={this.state.nameValue}
+                    controllers={this.state.modeParent}
                     strix={this.state.clickedButtonStrix}
                     parallel={this.state.clickedButtonParallel}
                     setGraph={this.setGraph}
@@ -339,26 +365,25 @@ export default class CustomSynthesis extends React.Component {
                 <Header {...customheadercards} states={this.state.headerStates} changePageHeader={this.changePageHeader}/>
                 {
                     this.state.headerStates[0] &&
-                    <>
-                        <SynthesisForm
-                            nameValue={this.state.nameValue}
-                            setNameValue={this.setNameValue}
-                            assumptionsValue={this.state.assumptionsValue}
-                            setAssumptionsValue={this.setAssumptionsValue}
-                            guaranteesValue={this.state.guaranteesValue}
-                            setGuaranteesValue={this.setGuaranteesValue}
-                            inputsValue={this.state.inputsValue}
-                            setInputsValue={this.setInputsValue}
-                            outputsValue={this.state.outputsValue}
-                            setOutputsValue={this.setOutputsValue}
-                            tree={this.state.tree}
-                            yourCreation={this.state.yourCreation}
-                            deleteCreation={deleteCreation}
-                            changeIsOpen={this.changeIsOpen}
-                            saveFormula={this.saveFormula}
-                            readOnly={false}
-                        />
-                    </>
+                    <SynthesisForm
+                        nameValue={this.state.nameValue}
+                        setNameValue={this.setNameValue}
+                        assumptionsValue={this.state.assumptionsValue}
+                        setAssumptionsValue={this.setAssumptionsValue}
+                        guaranteesValue={this.state.guaranteesValue}
+                        setGuaranteesValue={this.setGuaranteesValue}
+                        inputsValue={this.state.inputsValue}
+                        setInputsValue={this.setInputsValue}
+                        outputsValue={this.state.outputsValue}
+                        setOutputsValue={this.setOutputsValue}
+                        tree={this.state.tree}
+                        yourCreation={this.state.yourCreation}
+                        deleteCreation={deleteCreation}
+                        changeIsOpen={this.changeIsOpen}
+                        saveFormula={this.saveFormula}
+                        readOnly={false}
+                        headerStates={this.state.headerStates}
+                    />
                 }
                 {
                     this.state.headerStates[1] &&
@@ -370,11 +395,9 @@ export default class CustomSynthesis extends React.Component {
                         guaranteesValue={this.state.guaranteesValue}
                         yourCreation={this.state.tree}
                         changeIsOpen={this.changeIsOpen}
-                        clickedButtonStrix={this.state.clickedButtonStrix}
-                        synthesisStrix={this.synthesisStrix}
-                        clickedButtonParallel={this.state.clickedButtonParallel}
-                        parallelSynthesis={this.parallelSynthesis}
+                        synthesisControllers={this.synthesisControllers}
                         readOnly={true}
+                        headerStates={this.state.headerStates}
                     />
                 }
                 {
@@ -392,20 +415,21 @@ export default class CustomSynthesis extends React.Component {
                         clickedButtonParallel={this.state.clickedButtonParallel}
                         parallelSynthesis={this.parallelSynthesis}
                         readOnly={true}
+                        headerStates={this.state.headerStates}
                     />
                 }
-                <div  id="synthesis" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto pb-5">
                 {
-                        this.state.graph ?
+                    this.state.graph ?
+                        <div  id="synthesis" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
                             <div className="px-3 pb-5 relative flex flex-col min-w-0 break-words bg-white rounded shadow-md m-auto">
                                 <div className="w-full border-b-1">
                                     <div className="fs-4 m-2 text-center">
-                                        {this.state.clickedButtonStrix ? synthesisInfo.info.buttons.synthesis.strix : synthesisInfo.info.buttons.synthesis.parallel}
+                                        {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix" ? synthesisInfo.info.buttons.synthesis.strix : synthesisInfo.info.buttons.synthesis.parallel}
                                     </div>
                                 </div>
                                 <div className="row h-auto">
                                     <div className="m-auto">
-                                        {this.state.clickedButtonStrix ?
+                                        {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix"  ?
                                             <Graphviz
                                                 dot={this.state.graph}
                                                 options={({
@@ -433,12 +457,12 @@ export default class CustomSynthesis extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                        : null
+                        </div>
+                    : null
                 }
-                </div>
-                <div  id="simulation" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto pb-5">
-                    {
-                        this.state.simulation ?
+                {
+                    this.state.simulation ?
+                        <div  id="simulation" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
                             <div
                                 className="px-3 pb-5 relative flex flex-col min-w-0 break-words bg-white rounded shadow-md m-auto">
                                 <div className="w-full border-b-1">
@@ -447,7 +471,7 @@ export default class CustomSynthesis extends React.Component {
                                     </div>
                                 </div>
                                 <div className="row h-auto mt-4">
-                                    {this.state.clickedButtonStrix ?
+                                    {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix"  ?
                                         <Simulation
                                             name={this.state.nameValue}
                                             mode="strix"
@@ -458,9 +482,10 @@ export default class CustomSynthesis extends React.Component {
                                     }
                                 </div>
                             </div>
-                            : null
-                    }
-                </div>
+                        </div>
+                    : null
+                }
+                <div className="h-32"></div>
                 <CustomFooter {...customfooter} />
             </>
         )

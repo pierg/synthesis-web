@@ -41,7 +41,7 @@ export default function RoutePage(props) {
             />
             <Console {...consoleinfo} customText={message}/>
             <SocketIoConsoleMessage modifyMessage={(e) => updateMessage(e)} session={id}/>
-            <div className="relative xxl:ml-64 bg-blueGray-100 min-h-screen">
+            <div className="relative bg-blueGray-100 min-h-screen">
                 {(() => {
                     switch (props.page) {
                         case 'synthesis':

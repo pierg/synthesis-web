@@ -15,12 +15,12 @@ export default function CustomSidebar({
         <>
             <nav
                 className={
-                    "block py-4 px-6 top-0 bottom-0 w-64 bg-white shadow-xl left-0 fixed flex-row flex-nowrap xxl:z-10 z-9999 transition-all duration-300 ease-in-out transform xxl:translate-x-0 " +
+                    "block py-4 px-6 top-0 bottom-0 w-64 bg-white shadow-xl left-0 fixed flex-row flex-nowrap z-9999 transition-all duration-300 ease-in-out transform " +
                     sidebarShow
                 }
             >
                 <button
-                    className="xxl:hidden flex items-center justify-center cursor-pointer text-blueGray-700 w-6 h-10 border-l-0 border-r border-t border-b border-solid border-blueGray-100 text-xl leading-none bg-white rounded-r border border-solid border-transparent absolute top-1/2 -right-24-px focus:outline-none z-9998"
+                    className="flex items-center justify-center cursor-pointer text-blueGray-700 w-6 h-10 border-l-0 border-r border-t border-b border-solid border-blueGray-100 text-xl leading-none bg-white rounded-r border border-solid border-transparent absolute top-1/2 -right-24-px focus:outline-none z-9998"
                     onClick={() => {
                         if (sidebarShow === "") {
                             setSidebarShow("-translate-x-full");
@@ -40,7 +40,7 @@ export default function CustomSidebar({
                         {brand && brand.link && brand.link.to && (
                             <Link
                                 {...brand}
-                                className="xxl:flex items-center flex-col text-center xxl:pb-2 text-blueGray-700 mr-0 inline-flex whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+                                className="items-center flex-col text-center text-blueGray-700 mr-0 inline-flex whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                             >
                                 {brand && brand.image && (
                                     <img src={brand.image} alt="..." className="max-w-full rounded"/>
@@ -52,7 +52,7 @@ export default function CustomSidebar({
                             <a
                                 {...brand}
                                 href={brand.link.href}
-                                className="xxl:flex items-center flex-col text-center xxl:pb-2 text-blueGray-700 mr-0 inline-flex whitespace-nowrap text-sm uppercase font-bold "
+                                className="items-center flex-col text-center text-blueGray-700 mr-0 inline-flex whitespace-nowrap text-sm uppercase font-bold "
                             >
                                 {brand && brand.image && (
                                     <img src={brand.image} alt="..." className="max-w-full rounded"/>
@@ -60,7 +60,7 @@ export default function CustomSidebar({
                                 {brand && brand.text && <span>{brand.text}</span>}
                             </a>
                         )}
-                        <div className="xxl:flex-col xxl:min-w-full flex flex-col list-none">
+                        <div className="flex flex-col list-none">
                             <LoginSession id={id} onIdSubmit={setId} cookie={cookie}/>
                         </div>
                     </div>

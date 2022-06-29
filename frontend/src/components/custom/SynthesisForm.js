@@ -11,7 +11,7 @@ import SynthesisInput from "./SynthesisInput";
 function SynthesisForm(props) {
 
     return(
-        <div className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto pb-5">
+        <div className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
             <div className="px-3 pb-3 relative flex flex-col min-w-0 break-words bg-white rounded shadow-md m-auto">
                 <div className="flex flex-col justify-center p-5 ">
                     <div className="container">
@@ -107,52 +107,67 @@ function SynthesisForm(props) {
                         </div>
                         <div className="container mt-16">
                             <div className="row">
-                        {
-                            !props.readOnly &&
-                            <div id="buttons" className="col-4 offset-4">
-                                <Button
-                                    color={synthesisInfo.info.buttons.formula.color}
-                                    size="lg"
-                                    fullWidth={true}
-                                    onClick={props.saveFormula}
-                                >
-                                    {synthesisInfo.info.buttons.formula.text}
-                                </Button>
-                            </div>
-                        }
-                        {
-                            props.readOnly &&
-                            <>
-                                <div id="buttons" className="col-3 offset-2">
-                                     <Link  to="synthesis" spy={true} smooth={true}>
+                                {
+                                    props.headerStates[0] &&
+                                    <div id="buttons" className="col-4 offset-4">
                                         <Button
-                                            id="buttonSynthesisStrix"
-                                            color={synthesisInfo.info.buttons.synthesis.color}
+                                            color={synthesisInfo.info.buttons.formula.color}
                                             size="lg"
-                                            outline={props.clickedButtonStrix}
                                             fullWidth={true}
-                                            onClick={props.synthesisStrix}
+                                            onClick={props.saveFormula}
                                         >
-                                            {synthesisInfo.info.buttons.synthesis.strix}
+                                            {synthesisInfo.info.buttons.formula.text}
                                         </Button>
-                                     </Link>
-                                </div>
-                                <div className="col-3 offset-2">
-                                     <Link  to="synthesis" spy={true} smooth={true}>
-                                        <Button
-                                            id="buttonParallelSynthesis"
-                                            color={synthesisInfo.info.buttons.synthesis.color}
-                                            size="lg"
-                                            outline={props.clickedButtonParallel}
-                                            fullWidth={true}
-                                            onClick={props.parallelSynthesis}
-                                        >
-                                            {synthesisInfo.info.buttons.synthesis.parallel}
-                                        </Button>
-                                     </Link>
-                                </div>
-                            </>
-                        }
+                                    </div>
+                                }
+                                {
+                                    props.headerStates[1] &&
+                                    <div id="buttons" className="col-4 offset-4">
+                                         <Link to="synthesis" spy={true} smooth={true}>
+                                            <Button
+                                                color={synthesisInfo.info.buttons.synthesis.color}
+                                                size="lg"
+                                                fullWidth={true}
+                                                onClick={props.synthesisControllers}
+                                            >
+                                                {synthesisInfo.info.buttons.synthesis.controller}
+                                            </Button>
+                                         </Link>
+                                    </div>
+                                }
+                                {
+                                    props.headerStates[2] &&
+                                    <>
+                                        <div id="buttons" className="col-3 offset-2">
+                                             <Link to="synthesis" spy={true} smooth={true}>
+                                                <Button
+                                                    id="buttonSynthesisStrix"
+                                                    color={synthesisInfo.info.buttons.synthesis.color}
+                                                    size="lg"
+                                                    outline={props.clickedButtonStrix}
+                                                    fullWidth={true}
+                                                    onClick={props.synthesisStrix}
+                                                >
+                                                    {synthesisInfo.info.buttons.synthesis.strix}
+                                                </Button>
+                                             </Link>
+                                        </div>
+                                        <div className="col-3 offset-2">
+                                             <Link to="synthesis" spy={true} smooth={true}>
+                                                <Button
+                                                    id="buttonParallelSynthesis"
+                                                    color={synthesisInfo.info.buttons.synthesis.color}
+                                                    size="lg"
+                                                    outline={props.clickedButtonParallel}
+                                                    fullWidth={true}
+                                                    onClick={props.parallelSynthesis}
+                                                >
+                                                    {synthesisInfo.info.buttons.synthesis.parallel}
+                                                </Button>
+                                             </Link>
+                                        </div>
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>
