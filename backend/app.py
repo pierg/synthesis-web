@@ -220,7 +220,7 @@ def delete_synthesis(name) -> None:
 
 
 @socketio.on("create-controller")
-def create_controller_strix(data) -> None:
+def create_controller(data) -> None:
     """
         Create the controller and the mealy according to the correct method
     """
