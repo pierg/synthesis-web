@@ -69,13 +69,8 @@ class Synthesis:
         if not os.path.exists(controller_folder):
             os.makedirs(controller_folder)
         _, _, filenames = next(walk(controller_folder))
-        m = -1
-        for filename in filenames:
-            sp = filename.split('.')
-            if sp[-1] == "txt":
-                if m < int(sp[0]):
-                    m = int(sp[0])
-        greatest_id = m + 1
+        greatest_id = -1 if len(filenames) == 0 else int(max(filenames)[0:4])
+        greatest_id += 1
 
         # We check if the same name don't already exist. If so we use the same .txt
         file_checked = Synthesis.__check_if_controller_exist(data["name"], controller_folder)
@@ -111,9 +106,8 @@ class Synthesis:
                     file.write(f"{controller_output}")
                 else:
                     file.write(f"{controller_output}, ")
-            file.write("\n")
 
-            file.write("\n**END**")
+            file.write("\n\n**END**")
 
     @staticmethod
     def delete_synthesis(name, session_id):
