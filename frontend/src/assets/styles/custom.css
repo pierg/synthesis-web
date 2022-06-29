@@ -193,7 +193,7 @@
         z-index: 10;
     }
     .xxl\:translate-x-0 {
-        --tw-translate-x: 0px;
+        --tw-translate-x: 0px !important;
     }
     .xxl\:hidden {
         display: none;
