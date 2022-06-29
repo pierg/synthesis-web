@@ -219,36 +219,20 @@ def delete_synthesis(name) -> None:
     emit("synthesis-deleted", True, room=request.sid)
 
 
-@socketio.on("controller-strix")
-def create_controller_strix(name) -> None:
+@socketio.on("create-controller")
+def create_controller_strix(data) -> None:
     """
-        Create the controller and the mealy according to the strix method
+        Create the controller and the mealy according to the correct method
     """
     try:
-        json_content = Synthesis.create_controller(name, request.args.get("id"), "strix")
+        json_content = Synthesis.create_controller(data["name"], request.args.get("id"), data["mode"])
 
-        send_message_to_user("The mealy has been created using strix method", request.sid, "success")
-        emit("controller-created-strix", json_content, room=request.sid)
+        send_message_to_user(f"The mealy has been created using {data['mode']} method", request.sid, "success")
+        emit("controller-created", json_content, room=request.sid)
     except Exception as e:
         emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
                                    "crometype": "error"}, room=request.sid)
-        emit("send-message", f"Mealy '{name}' can't be created. Error : {str(e)} ", room=request.sid)
-
-
-@socketio.on("controller-crome")
-def create_controller_crome(name) -> None:
-    """
-        Create the controller and the mealy according to the parallel method
-    """
-    try:
-        json_content = Synthesis.create_controller(name, request.args.get("id"), "parallel")
-
-        send_message_to_user("The mealy has been created using parallel method", request.sid, "success")
-        emit("controller-created-crome", json_content, room=request.sid)
-    except Exception as e:
-        emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
-                                   "crometype": "error"}, room=request.sid)
-        emit("send-message", f"Mealy '{name}' can't be created. Error : {str(e)} ", room=request.sid)
+        emit("send-message", f"Mealy \"{data['name']}\" can't be created. Error : {str(e)} ", room=request.sid)
 
 
 @socketio.on("get-inputs")
