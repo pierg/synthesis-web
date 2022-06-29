@@ -155,7 +155,8 @@ class Synthesis:
         if controller_file:
             if mode == "parallel":
                 pcontrollers = PControllers.from_file(file_path=controller_file)
-                # We have to dump the pcontrollers when the function will be written and works correctly
+                save_folder = controller_folder / "save_parallel"
+                dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontrollers)
                 if controller_return:
                     return pcontrollers
                 json_content = []
@@ -164,8 +165,8 @@ class Synthesis:
                 return json_content
             elif mode == "strix":
                 controller = Controller.from_file(file_path=controller_file)
-                save_strix_controller_folder = controller_folder / "save_strix"
-                dump_mono_controller(absolute_folder_path=save_strix_controller_folder, controller=controller)
+                save_folder = controller_folder / "save_strix"
+                dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
                 if controller_return:
                     return controller
                 return Synthesis.__upgrade_dot(controller.get_format("dot"))
