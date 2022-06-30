@@ -239,7 +239,7 @@ def create_controller(data) -> None:
 @socketio.on("get-inputs")
 def get_inputs(data) -> None:
     """
-        Get all the imputs possible for the current state of a controller.
+        Get all the inputs possible for the current state of a controller.
         It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
@@ -250,12 +250,12 @@ def get_inputs(data) -> None:
 @socketio.on("simulate-controller")
 def simulate_controller(data) -> None:
     """
-        Simulate the mealy according to the method strix
+        Simulate the mealy according to the method given
     """
     content = Simulation.react_to_inputs(name=data["name"], session_id=request.args.get("id"), mode=data["mode"],
                                          choice=data["input"])
     send_message_to_user("The mealy has been simulated", "success", request.sid)
-    emit("mealy-simulated", content, room=request.sid)
+    emit("controller-simulated", content, room=request.sid)
 
 
 @socketio.on("reset-controller")

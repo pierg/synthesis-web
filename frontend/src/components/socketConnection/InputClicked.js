@@ -5,11 +5,8 @@ function SocketInputClicked(props) {
     const socket = useSocket()
 
     const setLine = useCallback((line) => {
-        if(props.mode === "crome") {
-            socket.off('crome-simulated')
-        }
-        else if(props.mode === "strix"){
-            socket.off('mealy-simulated')
+        if(props.mode === "strix"){
+            socket.off('controller-simulated')
         }
         props.setLine(line);
         props.setTriggerGetInput(true);
@@ -23,7 +20,7 @@ function SocketInputClicked(props) {
 
             if(props.mode === "strix"){
                 socket.emit("simulate-controller",{name: props.name, mode: props.mode, input: props.input})
-                socket.on('mealy-simulated', setLine)
+                socket.on('controller-simulated', setLine)
             }
 
         }
