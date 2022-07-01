@@ -75,6 +75,7 @@ export default class Simulation extends React.Component {
 
     render(){
         let inputDisplay = []
+        console.log(this.state.inputs)
         if(this.state.inputs.length !== 0) {
             for (let i = 0; i < this.state.inputs.length; i++) {
                 inputDisplay.push(

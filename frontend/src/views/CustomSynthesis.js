@@ -31,6 +31,7 @@ export default class CustomSynthesis extends React.Component {
         tree : [],
         yourCreation : [],
         isOpen : [],
+        modeToDelete : null,
         creationToDelete : null,
         triggerDelete : false,
         parallelExpanded : false,
@@ -107,11 +108,6 @@ export default class CustomSynthesis extends React.Component {
             }
         }
         this.setState({
-            clickedButtonStrix : false,
-            clickedButtonParallel : false,
-            triggerSynthesis : false,
-            graph: null,
-            simulation: false,
         })
     }
 
@@ -154,15 +150,17 @@ export default class CustomSynthesis extends React.Component {
         this.setState({
             tree : treeTmp,
             yourCreation : yourCreationTmp,
+            parallelExpanded : false,
+            strixExpanded : false,
         })
     }
 
     deleteCreationClick = (mode,nodeId) => {
-        console.log(this.state.yourCreation[mode].childNodes[nodeId])
-        /*this.setState({
+        this.setState({
+            modeToDelete: mode,
             creationToDelete: this.state.yourCreation[mode].childNodes[nodeId]
         })
-        this.setTriggerDelete(true)*/
+        this.setTriggerDelete(true)
     }
 
     setTriggerDelete = (bool) => {
@@ -217,6 +215,7 @@ export default class CustomSynthesis extends React.Component {
         this.setState({
             graph : graph,
             toastLoading: null,
+            triggerExample: true,
         })
     }
 
@@ -294,6 +293,7 @@ export default class CustomSynthesis extends React.Component {
                     trigger={this.state.triggerDelete}
                     setTrigger={this.setTriggerDelete}
                     deletedDone={this.deletedDone}
+                    modeToDelete={this.state.modeToDelete}
                     creation={this.state.creationToDelete}
                 />
                 <SocketGetSynthesis

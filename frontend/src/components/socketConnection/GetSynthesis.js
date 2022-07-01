@@ -29,7 +29,14 @@ function SocketGetSynthesis(props) {
                 })
             }
             else if(props.parallel) {
-                socket.emit("create-controller", {name : props.name, mode : "parallel"})
+                socket.emit("create-controller", {
+                    mode : "parallel",
+                    name: props.name,
+                    assumptions: props.assumptions,
+                    guarantees: props.guarantees,
+                    inputs: props.inputs,
+                    outputs: props.outputs,
+                })
             }
             socket.on('controller-created', setGraph)
 
