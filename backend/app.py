@@ -35,15 +35,7 @@ users: dict[str, Any] = {}
 
 cookies: dict[str, str] = {}
 
-
 # String dictionary association the id of the session with that of the cookie that can open it.
-
-# HOW TO SEND A NOTIFICATION :
-# emit("send-notification", {"crometypes": "error", "content": "message appearing"}, room=users[data['session']])
-# crometypes : error = red,
-#         success = green,
-#         warning = yellow,
-#         info = blue
 
 
 @socketio.on("connect")
