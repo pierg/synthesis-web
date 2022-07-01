@@ -17,7 +17,14 @@ function SocketResetClicked(props) {
             props.setTrigger(false)
 
             if(props.mode === "strix"){
-                socket.emit("reset-controller",{name: props.name, mode: props.mode})
+                socket.emit("reset-controller",{
+                    mode: props.mode,
+                    name: props.name,
+                    assumptions: props.assumptions,
+                    guarantees: props.guarantees,
+                    inputs: props.inputs,
+                    outputs: props.outputs,
+                })
             }
 
             socket.on('reset-done', setLines)

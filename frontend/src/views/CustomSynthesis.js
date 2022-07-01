@@ -395,6 +395,10 @@ export default class CustomSynthesis extends React.Component {
                                     {this.state.clickedButtonStrix  ?
                                         <Simulation
                                             name={this.state.nameValue}
+                                            assumptions={this.state.assumptionsValue.split("\n")}
+                                            guarantees={this.state.guaranteesValue.split("\n")}
+                                            inputs={this.state.inputsValue.replaceAll(" ","").split(",")}
+                                            outputs={this.state.outputsValue.replaceAll(" ","").split(",")}
                                             mode="strix"
                                         />
                                         : <div className="flex flex-wrap justify-center">

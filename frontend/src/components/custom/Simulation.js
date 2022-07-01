@@ -138,33 +138,49 @@ export default class Simulation extends React.Component {
                     trigger={this.state.triggerGetInputs}
                     setTrigger={this.setTriggerGetInputs}
                     setInputs={this.setInputs}
-                    name={this.props.name}
                     mode={this.props.mode}
+                    name={this.props.name}
+                    assumptions={this.props.assumptions}
+                    guarantees={this.props.guarantees}
+                    inputs={this.props.inputs}
+                    outputs={this.props.outputs}
                 />
                 <SocketInputClicked
                     trigger={this.state.triggerInputClicked}
                     setTrigger={this.setTriggerInputClicked}
                     setTriggerGetInput={this.setTriggerGetInputs}
                     setLine={this.setLine}
-                    name={this.props.name}
                     mode={this.props.mode}
-                    input={this.state.inputClicked}
+                    name={this.props.name}
+                    assumptions={this.props.assumptions}
+                    guarantees={this.props.guarantees}
+                    inputs={this.props.inputs}
+                    outputs={this.props.outputs}
+                    choice={this.state.inputClicked}
                 />
                 <SocketResetClicked
                     trigger={this.state.triggerResetClicked}
                     setTrigger={this.setTriggerResetClicked}
                     setTriggerGetInput={this.setTriggerGetInputs}
                     emptyLines={this.emptyLines}
-                    name={this.props.name}
                     mode={this.props.mode}
+                    name={this.props.name}
+                    assumptions={this.props.assumptions}
+                    guarantees={this.props.guarantees}
+                    inputs={this.props.inputs}
+                    outputs={this.props.outputs}
                 />
                 <SocketRandomClicked
                     trigger={this.state.triggerRandomClicked}
                     setTrigger={this.setTriggerRandomClicked}
                     setTriggerGetInput={this.setTriggerGetInputs}
                     setLine={this.setLine}
-                    name={this.props.name}
                     mode={this.props.mode}
+                    name={this.props.name}
+                    assumptions={this.props.assumptions}
+                    guarantees={this.props.guarantees}
+                    inputs={this.props.inputs}
+                    outputs={this.props.outputs}
                     number={this.state.inputNumberRandom}
                 />
                 <div className="row mt-2">

@@ -21,7 +21,15 @@ function SocketRandomClicked(props) {
             props.setTrigger(false)
 
             if(props.mode === "strix"){
-                socket.emit("random-simulation-controller",{name: props.name, mode: props.mode, iterations: props.number})
+                socket.emit("random-simulation-controller",{
+                    mode: props.mode,
+                    name: props.name,
+                    assumptions: props.assumptions,
+                    guarantees: props.guarantees,
+                    inputs: props.inputs,
+                    outputs: props.outputs,
+                    iterations: props.number
+                })
                 socket.on('receive-random-simulation-controller', setLines)
             }
         }
