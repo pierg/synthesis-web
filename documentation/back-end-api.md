@@ -26,21 +26,44 @@
 
 ## Signal for the synthesis page
 
+### `"get-synthesis"`
+#### Get all the synthesis created by the user and the examples
+* accepts :
+  * None
+* returns :
+  * [return example](./jsons-examples/example-receive-synthesis.json)
+* returns-via: `"receive-synthesis"`
+
+### `"delete-synthesis"`
+#### Delete the save of a synthesis
+* accepts :
+  * [accept example](./jsons-examples/example-controller-information.json)
+* returns :
+  * A boolean
+* returns-via: `"synthesis-deleted"`
 
 ## Signal for the simulation
 
 ### `"get-inputs"`
 #### Get all the possible input for the current state
 * accepts :
-  * The name of the controller and the mode used
+  * [accept example](./jsons-examples/example-controller-information.json)
 * returns :
   * A list of the possible inputs 
 * returns-via: `""`
 
+### `"create-controller"`
+#### Create or resume a controller. It returns the mealy of this controller
+* accepts :
+  * [accept example](./jsons-examples/example-controller-information.json)
+* returns :
+  * [return example](./jsons-examples/example-controller-created.json)
+* returns-via: `"controller-created"`
+
 ### `"simulate-controller"`
 #### Simulate the controller with the input chose by the user
 * accepts :
-  * The name of the controller, the input and the mode used
+  * [accept example](./jsons-examples/example-controller-information.json) plus the input chosen by the user
 * returns :
   * The line to be display on the page 
 * returns-via: `"controller-simulated"`
@@ -48,7 +71,7 @@
 ### `"reset-controller"`
 #### Reset the current controller
 * accepts :
-  * The name of the controller and the mode used
+  * [accept example](./jsons-examples/example-controller-information.json)
 * returns :
   * A boolean
 * returns-via: `"reset-done"`
@@ -56,7 +79,7 @@
 ### `"random-simulation-controller"`
 #### Choose inputs randomly for x iterations
 * accepts :
-  * Name of the controller, the number of iterations and the mode used
+  * [accept example](./jsons-examples/example-controller-information.json) plus the number of iterations
 * returns :
   * The x line to be display on the page
 * returns-via: `"receive-random-simulation-controller"`

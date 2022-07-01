@@ -1,0 +1,132 @@
+{
+    "strix": [
+        {
+            "id": "AMBA Decomposed Shift",
+            "assumptions": [
+                "true"
+            ],
+            "guarantees": [
+                "G (hready -> (X hmastlock <-> locked))",
+                "G (!hready -> (X hmastlock <-> hmastlock))"
+            ],
+            "inputs": [
+                "locked",
+                "hready"
+            ],
+            "outputs": [
+                "hmastlock"
+            ]
+        }
+    ],
+    "parallel": [
+        {
+            "id": "AMBA Decomposed Shift",
+            "assumptions": [
+                "true"
+            ],
+            "guarantees": [
+                "G (hready -> (X hmastlock <-> locked))",
+                "G (!hready -> (X hmastlock <-> hmastlock))"
+            ],
+            "inputs": [
+                "locked",
+                "hready"
+            ],
+            "outputs": [
+                "hmastlock"
+            ]
+        }
+    ],
+    "Other": [
+        {
+            "id": "Detector n=2",
+            "assumptions": [
+                "true"
+            ],
+            "guarantees": [
+                "(G F request_0 & G F request_1) <-> G F grant"
+            ],
+            "inputs": [
+                "request_0",
+                "request_1"
+            ],
+            "outputs": [
+                "grant"
+            ]
+        },
+        {
+            "id": "Detector n=3",
+            "assumptions": [
+                "true"
+            ],
+            "guarantees": [
+                "(G F request_0 & G F request_1 & G F request_2) <-> G F grant"
+            ],
+            "inputs": [
+                "request_0",
+                "request_1",
+                "request_2"
+            ],
+            "outputs": [
+                "grant"
+            ]
+        },
+        {
+            "id": "Load Balancer n=2",
+            "assumptions": [
+                "G F idle",
+                "G ((idle & X (!grant_0 & !grant_1)) -> X idle)",
+                "X G (grant_0 -> ((!request_0 & !idle) U (!request_0 & idle)))"
+            ],
+            "guarantees": [
+                "X G (!grant_0 | !grant_1)",
+                "G (X grant_0 -> request_0)",
+                "G (X grant_1 -> request_1)",
+                "G (request_0 -> grant_1)",
+                "G (!idle -> X (!grant_0 & !grant_1))",
+                "G F (request_0 -> X grant_0)",
+                "G F (request_1 -> X grant_1)"
+            ],
+            "inputs": [
+                "idle",
+                "request_0",
+                "request_1"
+            ],
+            "outputs": [
+                "grant_0",
+                "grant_1"
+            ]
+        },
+        {
+            "id": "Load Balancer n=3",
+            "assumptions": [
+                "G F idle",
+                "G ((idle & X (!grant_0 & !grant_1 & !grant_2)) -> X idle)",
+                "X G (grant_0 -> ((!request_0 & !idle) U (!request_0 & idle)))"
+            ],
+            "guarantees": [
+                "X G ((!grant_0 & !grant_1) | ((!grant_0 | !grant_1) & !grant_2))",
+                "G (X grant_0 -> request_0)",
+                "G (X grant_1 -> request_1)",
+                "G (X grant_2 -> request_2)",
+                "G (request_0 -> grant_1)",
+                "G (request_0 -> grant_2)",
+                "G (!idle -> X (!grant_0 & !grant_1 & !grant_2))",
+                "G F (request_0 -> X grant_0)",
+                "G F (request_1 -> X grant_1)",
+                "G F (request_2 -> X grant_2)"
+            ],
+            "inputs": [
+                "idle",
+                "request_0",
+                "request_1",
+                "request_2"
+            ],
+            "outputs": [
+                "grant_0",
+                "grant_1",
+                "grant_2"
+            ]
+        }
+    ]
+}
