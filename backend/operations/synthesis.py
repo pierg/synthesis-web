@@ -59,25 +59,7 @@ class Synthesis:
         return list_controller
 
     @staticmethod
-    def get_controller(session_id):
-        controller_folder = controller_path(session_id)
-        list_controller_strix = Synthesis.__get_controller_from_folder(controller_folder / "save_strix", "strix")
-        list_controller_parallel = Synthesis.__get_controller_from_folder(controller_folder / "save_parallel",
-                                                                          "parallel")
-        dict_controller_info = {"parallel": [], "strix": []}
-        for controller in list_controller_strix:
-            data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
-                    "inputs": controller.spec.i, "outputs": controller.spec.o}
-            dict_controller_info["strix"].append(data)
-        for controller in list_controller_parallel:
-            data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
-                    "inputs": controller.spec.i, "outputs": controller.spec.o}
-            dict_controller_info["parallel"].append(data)
-        return dict_controller_info
-
-    @staticmethod
     def delete_synthesis(data, session_id):
-        print(data)
         complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
                        + " ".join(data["assumptions"])
         full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
@@ -112,23 +94,13 @@ class Synthesis:
                 set_ap_o = set(map(lambda x: BooleanControllable(name=x), spec.o))
                 typeset = Typeset(set_ap_i | set_ap_o)
                 ltl_formula = LTL(_init_formula=spec.formula, _typeset=typeset)
-                pcontroller = PControllers.from_ltl(guarantees=ltl_formula, name=data["name"])
+                pcontroller = PControllers.from_ltl(guarantees=ltl_formula, name=full_name)
+                pcontroller.spec = spec
                 dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontroller)
                 json_content = []
                 for controller in pcontroller.controllers:
                     json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
                 return json_content
-
-    @staticmethod
-    def __check_if_controller_exist(name, controller_folder) -> str:
-        if not name:
-            return ""
-        _, _, filenames = next(walk(controller_folder))
-        for filename in filenames:
-            name_found = Synthesis.__get_name_controller(controller_folder / filename)
-            if name_found == name:
-                return filename
-        return ""
 
     @staticmethod
     def __get_name_controller(file) -> str:

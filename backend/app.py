@@ -198,7 +198,7 @@ def get_inputs(data) -> None:
         It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
-    inputs = Simulation.get_input_possible(name=data["name"], session_id=session_id, mode=data["mode"])
+    inputs = Simulation.get_input_possible(data=data, session_id=session_id)
     emit("received-inputs", inputs, room=request.sid)
 
 
@@ -207,8 +207,7 @@ def simulate_controller(data) -> None:
     """
         Simulate the mealy according to the method given
     """
-    content = Simulation.react_to_inputs(name=data["name"], session_id=request.args.get("id"), mode=data["mode"],
-                                         choice=data["input"])
+    content = Simulation.react_to_inputs(data=data, session_id=request.args.get("id"), choice=data["choice"])
     send_message_to_user("The mealy has been simulated", "success", request.sid)
     emit("controller-simulated", content, room=request.sid)
 
@@ -220,7 +219,7 @@ def reset_controller(data) -> None:
         It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
-    Simulation.reset_simulation(name=data["name"], session_id=session_id, mode=data["mode"])
+    Simulation.reset_simulation(data=data, session_id=session_id)
     send_message_to_user("The simulation has been reset", request.sid, "success")
     emit("reset-done", True, room=request.sid)
 
@@ -232,8 +231,7 @@ def random_simulation_controller(data) -> None:
         It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
-    content = Simulation.random_simulation(name=data["name"], nb_iteration=data["iterations"], mode=data["mode"],
-                                           session_id=session_id)
+    content = Simulation.random_simulation(data=data, mode=data["mode"], session_id=session_id)
     emit("receive-random-simulation-controller", content, room=request.sid)
     send_message_to_user(f"A random simulation of {data['iterations']} iterations has been made",
                          request.sid, "success")
