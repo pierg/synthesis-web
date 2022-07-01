@@ -21,7 +21,6 @@ function SynthesisForm(props) {
                                     title={synthesisInfo.info.texts.name}
                                     value={props.nameValue}
                                     setValue={props.setNameValue}
-                                    readOnly={props.readOnly}
                                 />
                                 <div className="row mt-5">
                                     <div className="col-3 mt-2 fs-5 text-right text-blueGray-500 uppercase font-bold">
@@ -35,7 +34,6 @@ function SynthesisForm(props) {
                                             size={16}
                                             inputsValue={props.inputsValue}
                                             outputsValue={props.outputsValue}
-                                            readOnly={props.readOnly}
                                         />
                                     </div>
                                 </div>
@@ -51,7 +49,6 @@ function SynthesisForm(props) {
                                             size={16}
                                             inputsValue={props.inputsValue}
                                             outputsValue={props.outputsValue}
-                                            readOnly={props.readOnly}
                                         />
                                     </div>
                                 </div>
@@ -60,36 +57,29 @@ function SynthesisForm(props) {
                                         title={synthesisInfo.info.texts.inputs}
                                         value={props.inputsValue}
                                         setValue={props.setInputsValue}
-                                        readOnly={props.readOnly}
                                     />
                                 </div>
                                 <div className="mt-5">
                                     <SynthesisInput
                                         title={synthesisInfo.info.texts.outputs}
                                         value={props.outputsValue}
-                                        setValue={props.setNameValue}
-                                        readOnly={props.readOnly}
+                                        setValue={props.setOutputsValue}
                                     />
                                 </div>
                             </div>
                             <div className="col-4">
-                                {
-                                    !props.readOnly &&
-                                    <>
-                                        <div className="row">
-                                            <div className="text-center fs-6 text-blueGray-500 uppercase font-bold">
-                                                {synthesisInfo.info.texts.load}
-                                            </div>
-                                        </div>
-                                        <div className="row mt-3 mb-4 relative">
-                                            <Tree
-                                                contents={props.tree}
-                                                className={Classes.TEXT_SMALL}
-                                                onNodeClick={e => props.changeIsOpen({e: e})}
-                                            />
-                                        </div>
-                                    </>
-                                }
+                                <div className="row">
+                                    <div className="text-center fs-6 text-blueGray-500 uppercase font-bold">
+                                        {synthesisInfo.info.texts.load}
+                                    </div>
+                                </div>
+                                <div className="row mt-3 mb-4 relative">
+                                    <Tree
+                                        contents={props.tree}
+                                        className={Classes.TEXT_SMALL}
+                                        onNodeClick={e => props.changeIsOpen({e: e})}
+                                    />
+                                </div>
                                 <div className="row relative">
                                     <div className="text-center fs-6 text-blueGray-500 uppercase font-bold">
                                         {synthesisInfo.info.texts.yourCreation}
@@ -107,67 +97,34 @@ function SynthesisForm(props) {
                         </div>
                         <div className="container mt-16">
                             <div className="row">
-                                {
-                                    props.headerStates[0] &&
-                                    <div id="buttons" className="col-4 offset-4">
+                                <div id="buttons" className="col-3 offset-2">
+                                     <Link to="synthesis" spy={true} smooth={true}>
                                         <Button
-                                            color={synthesisInfo.info.buttons.formula.color}
+                                            id="buttonSynthesisStrix"
+                                            color={synthesisInfo.info.buttons.synthesis.color}
                                             size="lg"
+                                            outline={props.clickedButtonStrix}
                                             fullWidth={true}
-                                            onClick={props.saveFormula}
+                                            onClick={props.synthesisStrix}
                                         >
-                                            {synthesisInfo.info.buttons.formula.text}
+                                            {synthesisInfo.info.buttons.synthesis.strix}
                                         </Button>
-                                    </div>
-                                }
-                                {
-                                    props.headerStates[1] &&
-                                    <div id="buttons" className="col-4 offset-4">
-                                         <Link to="synthesis" spy={true} smooth={true}>
-                                            <Button
-                                                color={synthesisInfo.info.buttons.synthesis.color}
-                                                size="lg"
-                                                fullWidth={true}
-                                                onClick={props.synthesisControllers}
-                                            >
-                                                {synthesisInfo.info.buttons.synthesis.controller}
-                                            </Button>
-                                         </Link>
-                                    </div>
-                                }
-                                {
-                                    props.headerStates[2] &&
-                                    <>
-                                        <div id="buttons" className="col-3 offset-2">
-                                             <Link to="synthesis" spy={true} smooth={true}>
-                                                <Button
-                                                    id="buttonSynthesisStrix"
-                                                    color={synthesisInfo.info.buttons.synthesis.color}
-                                                    size="lg"
-                                                    outline={props.clickedButtonStrix}
-                                                    fullWidth={true}
-                                                    onClick={props.synthesisStrix}
-                                                >
-                                                    {synthesisInfo.info.buttons.synthesis.strix}
-                                                </Button>
-                                             </Link>
-                                        </div>
-                                        <div className="col-3 offset-2">
-                                             <Link to="synthesis" spy={true} smooth={true}>
-                                                <Button
-                                                    id="buttonParallelSynthesis"
-                                                    color={synthesisInfo.info.buttons.synthesis.color}
-                                                    size="lg"
-                                                    outline={props.clickedButtonParallel}
-                                                    fullWidth={true}
-                                                    onClick={props.parallelSynthesis}
-                                                >
-                                                    {synthesisInfo.info.buttons.synthesis.parallel}
-                                                </Button>
-                                             </Link>
-                                        </div>
-                                    </>
-                                }
+                                     </Link>
+                                </div>
+                                <div className="col-3 offset-2">
+                                     <Link to="synthesis" spy={true} smooth={true}>
+                                        <Button
+                                            id="buttonParallelSynthesis"
+                                            color={synthesisInfo.info.buttons.synthesis.color}
+                                            size="lg"
+                                            outline={props.clickedButtonParallel}
+                                            fullWidth={true}
+                                            onClick={props.parallelSynthesis}
+                                        >
+                                            {synthesisInfo.info.buttons.synthesis.parallel}
+                                        </Button>
+                                     </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

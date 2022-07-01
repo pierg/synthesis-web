@@ -16,24 +16,30 @@ class Synthesis:
     @staticmethod
     def get_synthesis(session_id) -> dict[str, list[Any]]:
         list_controller = {}
-        # We get the controller of the current session
+        # We get all the controller already synthesize
         controller_folder = controller_path(session_id)
         if os.path.isdir(controller_folder):
-            _, _, filenames = next(walk(controller_folder))
-            dict_controller = {"Your creation": []}
-            for filename in filenames:
-                if len(filename.split(".")) == 2 and filename.split(".")[-1] == "dat":
-                    continue
-                info = ControllerSpec.from_file(controller_folder / filename)
-                name = Synthesis.__get_name_controller(controller_folder / filename)
-                data = {"id": name, "assumptions": info.a, "guarantees": info.g, "inputs": info.i,
-                        "outputs": info.o}
-                dict_controller["Your creation"].append(data)
+            _, dir_names, filenames = next(walk(controller_folder))
+            dict_controller = {"strix": [], "parallel": []}
+            for dir_name in dir_names:
+                mode = dir_name[5:]
+                _, _, filenames = next(walk(controller_folder / dir_name))
+                load_function = None
+                if mode == "strix":
+                    load_function = load_mono_controller
+                elif mode == "parallel":
+                    load_function = load_parallel_controller
+                for filename in filenames:
+                    controller = load_function(absolute_folder_path=controller_folder / dir_name,
+                                               controller_name=filename.split(".")[0][:-2])
+                    data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
+                            "inputs": controller.spec.i, "outputs": controller.spec.o}
+                    dict_controller[mode].append(data)
             list_controller.update(dict_controller)
+
         # Now we get all the examples !
         controller_folder = controller_path("default")
-        print(controller_folder)
-        dir_path, dir_names, _ = next(walk(controller_folder))
+        _, dir_names, _ = next(walk(controller_folder))
         for dir_name in dir_names:
             _, _, filenames = next(walk(os.path.join(controller_folder, dir_name)))
             dict_controller = {dir_name: []}
@@ -282,7 +288,7 @@ class Synthesis:
             load_function = load_parallel_controller
         result = []
         for filename in filenames:
-            controller = load_function(absolute_folder_path=folder, controller_name=filename.split(".")[0][0:-2])
+            controller = load_function(absolute_folder_path=folder, controller_name=filename.split(".")[0][:-2])
             result.append(controller)
         return result
 

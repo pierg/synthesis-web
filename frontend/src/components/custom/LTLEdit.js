@@ -112,7 +112,6 @@ function LTLEdit(props) {
                 fontSize: props.size,
                 outline: 0,
             }}
-            readOnly={props.readOnly}
             />
     </>);
 }

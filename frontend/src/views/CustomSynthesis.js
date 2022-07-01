@@ -154,26 +154,21 @@ export default class CustomSynthesis extends React.Component {
         let keys = Object.keys(tree).sort()
         let node
         for(let i=0;i<keys.length;i++) {
-            if(keys[i] === "Your creation") {
-                for(let j=0;j<tree[keys[i]].length;j++) {
-                    yourCreationTmp.push(this.initChildNode(tree[keys[i]][j],i,j))
-                }
+            node = {}
+            node.id = i
+            node.label = keys[i]
+            node.icon = "folder-close"
+            node.isExpanded = false
+            node.childNodes = []
+
+            for(let j=0;j<tree[keys[i]].length;j++) {
+                node.childNodes[j] = this.initChildNode(tree[keys[i]][j],i,j)
+            }
+
+            if(keys[i] === "strix" || keys[i] === "parallel") {
+                yourCreationTmp[i] = node
             }
             else {
-                node = {}
-                node.id = i
-                node.label = keys[i]
-                node.icon = "folder-close"
-                node.isExpanded = false
-                node.childNodes = []
-
-                for(let j=0;j<tree[keys[i]].length;j++) {
-                    node.childNodes[j] = this.initChildNode(tree[keys[i]][j],i,j)
-                    if(node.label === "strix"  ||  node.label === "parallel") {
-                        node.childNodes[j].parent = node.label
-                    }
-                }
-
                 treeTmp[i] = node
             }
         }
@@ -351,7 +346,7 @@ export default class CustomSynthesis extends React.Component {
                     parallel={this.state.clickedButtonParallel}
                     setGraph={this.setGraph}
                 />
-                <div className="relative pt-8 bg-emerald-400 ">
+                <div className="relative py-8 bg-emerald-400 ">
                     <div className="px-4 md:px-6 mx-auto w-full">
                         <div>
                             <div className="flex flex-wrap justify-center">
@@ -363,61 +358,25 @@ export default class CustomSynthesis extends React.Component {
                     </div>
                 </div>
                 <Header {...customheadercards} states={this.state.headerStates} changePageHeader={this.changePageHeader}/>
-                {
-                    this.state.headerStates[0] &&
-                    <SynthesisForm
-                        nameValue={this.state.nameValue}
-                        setNameValue={this.setNameValue}
-                        assumptionsValue={this.state.assumptionsValue}
-                        setAssumptionsValue={this.setAssumptionsValue}
-                        guaranteesValue={this.state.guaranteesValue}
-                        setGuaranteesValue={this.setGuaranteesValue}
-                        inputsValue={this.state.inputsValue}
-                        setInputsValue={this.setInputsValue}
-                        outputsValue={this.state.outputsValue}
-                        setOutputsValue={this.setOutputsValue}
-                        tree={this.state.tree}
-                        yourCreation={this.state.yourCreation}
-                        deleteCreation={deleteCreation}
-                        changeIsOpen={this.changeIsOpen}
-                        saveFormula={this.saveFormula}
-                        readOnly={false}
-                        headerStates={this.state.headerStates}
-                    />
-                }
-                {
-                    this.state.headerStates[1] &&
-                    <SynthesisForm
-                        nameValue={this.state.nameValue}
-                        assumptionsValue={this.state.assumptionsValue}
-                        inputsValue={this.state.inputsValue}
-                        outputsValue={this.state.outputsValue}
-                        guaranteesValue={this.state.guaranteesValue}
-                        yourCreation={this.state.tree}
-                        changeIsOpen={this.changeIsOpen}
-                        synthesisControllers={this.synthesisControllers}
-                        readOnly={true}
-                        headerStates={this.state.headerStates}
-                    />
-                }
-                {
-                    this.state.headerStates[2] &&
-                    <SynthesisForm
-                        nameValue={this.state.nameValue}
-                        assumptionsValue={this.state.assumptionsValue}
-                        inputsValue={this.state.inputsValue}
-                        outputsValue={this.state.outputsValue}
-                        guaranteesValue={this.state.guaranteesValue}
-                        yourCreation={this.state.yourCreation}
-                        changeIsOpen={this.changeIsOpen}
-                        clickedButtonStrix={this.state.clickedButtonStrix}
-                        synthesisStrix={this.synthesisStrix}
-                        clickedButtonParallel={this.state.clickedButtonParallel}
-                        parallelSynthesis={this.parallelSynthesis}
-                        readOnly={true}
-                        headerStates={this.state.headerStates}
-                    />
-                }
+                <SynthesisForm
+                    nameValue={this.state.nameValue}
+                    setNameValue={this.setNameValue}
+                    assumptionsValue={this.state.assumptionsValue}
+                    setAssumptionsValue={this.setAssumptionsValue}
+                    guaranteesValue={this.state.guaranteesValue}
+                    setGuaranteesValue={this.setGuaranteesValue}
+                    inputsValue={this.state.inputsValue}
+                    setInputsValue={this.setInputsValue}
+                    outputsValue={this.state.outputsValue}
+                    setOutputsValue={this.setOutputsValue}
+                    tree={this.state.tree}
+                    yourCreation={this.state.yourCreation}
+                    deleteCreation={deleteCreation}
+                    changeIsOpen={this.changeIsOpen}
+                    saveFormula={this.saveFormula}
+                    parallelSynthesis={this.parallelSynthesis}
+                    synthesisStrix={this.synthesisStrix}
+                />
                 {
                     this.state.graph ?
                         <div  id="synthesis" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
