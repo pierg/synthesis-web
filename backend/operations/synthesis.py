@@ -1,7 +1,6 @@
 import os
 from os import walk
-from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from backend.shared.paths import controller_path
 from crome_logic.specification.temporal import LTL
@@ -59,7 +58,8 @@ class Synthesis:
     def get_controller(session_id):
         controller_folder = controller_path(session_id)
         list_controller_strix = Synthesis.__get_controller_from_folder(controller_folder / "save_strix", "strix")
-        list_controller_parallel = Synthesis.__get_controller_from_folder(controller_folder / "save_parallel", "parallel")
+        list_controller_parallel = Synthesis.__get_controller_from_folder(controller_folder / "save_parallel",
+                                                                          "parallel")
         dict_controller_info = {"parallel": [], "strix": []}
         for controller in list_controller_strix:
             data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
@@ -111,59 +111,11 @@ class Synthesis:
                 typeset = Typeset(set_ap_i | set_ap_o)
                 ltl_formula = LTL(_init_formula=spec.formula, _typeset=typeset)
                 pcontroller = PControllers.from_ltl(guarantees=ltl_formula, name=data["name"])
-                dump_mono_controller(absolute_folder_path=save_folder, controller=pcontroller)
+                dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontroller)
                 json_content = []
                 for controller in pcontroller.controllers:
                     json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
                 return json_content
-
-    @staticmethod
-    def get_mealy_from_controller(name, session_id, mode):
-        controller_folder = controller_path(session_id)
-        save_folder = controller_folder / f"save_{mode}"
-        _, _, filenames = next(walk(save_folder))
-        for filename in filenames:
-            if name == filename.split(".")[0][0:-2]:
-                if mode == "strix":
-                    controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=name)
-                    return Synthesis.__upgrade_dot(controller.get_format("dot"))
-                elif mode == "parallel":
-                    pcontroller = load_parallel_controller(absolute_folder_path=save_folder, controller_name=name)
-                    json_content = []
-                    for controller in pcontroller.controllers:
-                        json_content.append(Synthesis.__upgrade_dot(controller.spot_automaton.to_str("dot")))
-                    return json_content
-
-    @staticmethod
-    def get_specific_synthesis(data, session_id):
-        list_session = ["default", session_id]
-        file = None
-        dir = None
-        controller_folder = None
-        stop = False
-        for session in list_session:
-            controller_folder = controller_path(session)
-            file = Synthesis.__check_if_controller_exist(data["name"], controller_folder)
-            if file:
-                break
-            _, dir_names, _ = next(walk(controller_folder))
-            for dir_name in dir_names:
-                file = Synthesis.__check_if_controller_exist(data["name"], controller_folder / dir_name)
-                if file:
-                    stop = True
-                    break
-            if stop:
-                break
-
-        if file:
-            if dir:
-                controller = Controller.from_file(controller_folder / dir / file)
-            else:
-                controller = Controller.from_file(controller_folder / file)
-            content = {"assumptions": controller.info.a, "guarantees": controller.info.g,
-                       "inputs": controller.info.i,
-                       "outputs": controller.info.o, "name": data["name"]}
-            return content
 
     @staticmethod
     def __check_if_controller_exist(name, controller_folder) -> str:
