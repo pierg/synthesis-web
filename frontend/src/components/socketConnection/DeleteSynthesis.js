@@ -17,7 +17,13 @@ function SocketDeleteSynthesis(props) {
         if (socket == null) return
 
         if (props.trigger) {
-            socket.emit('delete-synthesis', props.name)
+            socket.emit('delete-synthesis', {
+                name: props.creation.label,
+                assumptions: props.creation.assumptions,
+                guarantees: props.creation.guarantees,
+                inputs: props.creation.inputs,
+                outputs: props.creation.outputs,
+            })
 
             socket.on('synthesis-deleted', deletedFinish)
         }

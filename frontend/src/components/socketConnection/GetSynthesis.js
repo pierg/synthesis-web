@@ -11,33 +11,27 @@ function SocketGetSynthesis(props) {
         else {
             props.setGraph(null);
         }
-        if(props.controllers) {
-            socket.off('receive-controller-mealy')
-        }
-        else {
-            socket.off('controller-created')
-        }
+        socket.off('controller-created')
     }, [props,socket]) // eslint-disable-next-line
 
     useEffect(() => {
         if (socket == null) return
 
         if (props.trigger && props.name !== "") {
-            if(props.controllers) {
-            console.log('props.controllers')
-            console.log(props.controllers)
-                socket.emit("controller-mealy", {name : props.name, mode : props.controllers})
-                socket.on('receive-controller-mealy', setGraph)
+            if (props.strix) {
+                socket.emit("create-controller", {
+                    mode : "strix",
+                    name: props.name,
+                    assumptions: props.assumptions,
+                    guarantees: props.guarantees,
+                    inputs: props.inputs,
+                    outputs: props.outputs,
+                })
             }
-            else {
-                if (props.strix) {
-                    socket.emit("create-controller", {name : props.name, mode : "strix"})
-                }
-                else if(props.parallel) {
-                    socket.emit("create-controller", {name : props.name, mode : "parallel"})
-                }
-                socket.on('controller-created', setGraph)
+            else if(props.parallel) {
+                socket.emit("create-controller", {name : props.name, mode : "parallel"})
             }
+            socket.on('controller-created', setGraph)
 
             props.setTrigger(false)
 

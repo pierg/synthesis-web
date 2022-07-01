@@ -85,8 +85,8 @@ class Synthesis:
     @staticmethod
     def create_controller(data, session_id) -> list[str] | str:
         controller_folder = controller_path(session_id)
-        full_name = data["name"] + hash(" ".join(data["inputs"]) + " ".join(data["outputs"])
-                                        + " ".join(data["guarantees"]) + " ".join(data["assumptions"]))
+        full_name = data["name"] + str(hash(" ".join(data["inputs"]) + " ".join(data["outputs"])
+                                        + " ".join(data["guarantees"]) + " ".join(data["assumptions"])))
         save_folder = controller_folder / f"save_{data['mode']}"
         if data["mode"] == "strix":
             controller_found = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
@@ -94,9 +94,10 @@ class Synthesis:
                 return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
             else:
                 spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
-                controller = Controller(name=data["name"], spec=spec)
+                print(spec.i)
+                controller = Controller(name=full_name, spec=spec)
                 dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
-                return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
+                return Synthesis.__upgrade_dot(controller.get_format("dot"))
         else:
             controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if controller_found:

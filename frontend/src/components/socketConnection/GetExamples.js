@@ -13,14 +13,8 @@ function SocketGetExamples(props) {
 
         if (props.trigger) {
             props.setTrigger(false)
-            if(!props.controllers) {
-                socket.emit("get-synthesis")
-                socket.on('receive-synthesis', setTree)
-            }
-            else {
-                socket.emit("get-controller")
-                socket.on('receive-controller', setTree)
-            }
+            socket.emit("get-synthesis")
+            socket.on('receive-synthesis', setTree)
 
             return () => socket.off('graph-generated')
         }

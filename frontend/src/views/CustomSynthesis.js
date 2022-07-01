@@ -4,7 +4,6 @@ import '@blueprintjs/core/lib/css/blueprint.css';
 import { Graphviz } from 'graphviz-react';
 import {toast} from "react-toastify";
 
-import SocketSaveSynthesis from "../components/socketConnection/SaveSynthesis";
 import SocketDeleteSynthesis from "../components/socketConnection/DeleteSynthesis";
 import SocketGetSynthesis from "../components/socketConnection/GetSynthesis";
 import SocketGetExamples from "../components/socketConnection/GetExamples";
@@ -16,33 +15,28 @@ import customfooter from "../_texts/customfooter";
 import Simulation from "../components/custom/Simulation";
 import SynthesisForm from "../components/custom/SynthesisForm";
 import CustomFooter from "../components/custom/CustomFooter";
-import Header from "../components/custom/Header";
-import customheadercards from "../_texts/customheadercards";
 
 export default class CustomSynthesis extends React.Component {
 
     state = {
-        headerStates : [true, false, false],
-
-        //-- first page
+        //-- form
         nameValue : "",
         assumptionsValue : "",
         guaranteesValue : "",
         inputsValue : "",
         outputsValue : "",
 
+        //-- tree
         triggerExample : true,
         tree : [],
         yourCreation : [],
         isOpen : [],
-        nameToDelete : "",
-        triggerSave : false,
+        creationToDelete : null,
         triggerDelete : false,
+        parallelExpanded : false,
+        strixExpanded : false,
 
-        //-- second page
-        modeParent : "",
-
-        //-- third page
+        //-- save
         triggerSynthesis : false,
         toastLoading : null,
         clickedButtonStrix : false,
@@ -51,33 +45,7 @@ export default class CustomSynthesis extends React.Component {
         simulation : false,
     }
 
-    // -------------------- GENERALE PAGE FUNCTIONS --------------------
-    setHeaderStates = (headerStates) => {
-        this.setState({
-            headerStates : headerStates
-        })
-    }
-
-    changePageHeader = (keyPage) => {
-        let headerStates = [false,false,false]
-        headerStates[keyPage] = true
-        this.setState({
-            nameValue : "",
-            assumptionsValue : "",
-            guaranteesValue : "",
-            inputsValue : "",
-            outputsValue : "",
-            modeParent : "",
-            clickedButtonStrix : false,
-            clickedButtonParallel : false,
-            graph : null,
-            simulation : false,
-        })
-        this.setHeaderStates(headerStates)
-        this.setTriggerExample(true)
-    }
-
-    // -------------------- FIRST PAGE FUNCTIONS (form) --------------------
+    // -------------------- FORM --------------------
     setNameValue = (e) => {
         this.setState({
             nameValue : e.target.value
@@ -114,6 +82,7 @@ export default class CustomSynthesis extends React.Component {
         })
     }
 
+    // -------------------- TREE --------------------
     changeIsOpen = ({e}) => {
         e.isExpanded = !e.isExpanded
         if(e.id.length !== undefined) {
@@ -124,8 +93,17 @@ export default class CustomSynthesis extends React.Component {
                 inputsValue : e.inputs.join(", "),
                 outputsValue : e.outputs.join(", "),
             })
-            if(this.state.headerStates[1]) {
-                this.setModeParent(e.parent)
+        }
+        else {
+            if(e.label === "parallel") {
+                this.setState({
+                    parallelExpanded : !this.state.parallelExpanded,
+                })
+            }
+            else if(e.label === "strix") {
+                this.setState({
+                    strixExpanded : !this.state.strixExpanded,
+                })
             }
         }
         this.setState({
@@ -166,10 +144,10 @@ export default class CustomSynthesis extends React.Component {
             }
 
             if(keys[i] === "strix" || keys[i] === "parallel") {
-                yourCreationTmp[i] = node
+                yourCreationTmp.push(node)
             }
             else {
-                treeTmp[i] = node
+                treeTmp.push(node)
             }
         }
 
@@ -179,25 +157,12 @@ export default class CustomSynthesis extends React.Component {
         })
     }
 
-    saveFormula = () => {
-        this.setTriggerSave(true)
-    }
-
-    setTriggerSave = (bool) => {
-        this.setState({
-            triggerSave: bool
+    deleteCreationClick = (mode,nodeId) => {
+        console.log(this.state.yourCreation[mode].childNodes[nodeId])
+        /*this.setState({
+            creationToDelete: this.state.yourCreation[mode].childNodes[nodeId]
         })
-    }
-
-    savedDone = () => {
-        this.setTriggerExample(true)
-    }
-
-    deleteCreationClick = (nodeId) => {
-        this.setState({
-            nameToDelete: this.state.yourCreation[nodeId].label
-        })
-        this.setTriggerDelete(true)
+        this.setTriggerDelete(true)*/
     }
 
     setTriggerDelete = (bool) => {
@@ -210,24 +175,7 @@ export default class CustomSynthesis extends React.Component {
         this.setTriggerExample(true)
     }
 
-    // -------------------- SECOND PAGE FUNCTIONS (graph ...) --------------------
-    setModeParent = (mode) => {
-        this.setState({
-            modeParent: mode
-        })
-    }
-
-    synthesisControllers = () => {
-        this.setState({
-            clickedButtonStrix : false,
-            clickedButtonParallel : false,
-            triggerSynthesis : true,
-            graph: null,
-            simulation: false
-        })
-    }
-
-    // -------------------- THIRD PAGE FUNCTIONS (graph ...) --------------------
+    // -------------------- SAVE --------------------
     setTriggerSynthesis = (bool) => {
         this.setState({
             triggerSynthesis: bool
@@ -280,17 +228,39 @@ export default class CustomSynthesis extends React.Component {
 
     render(){
         const deleteCreation = [];
-        for (let i = 0; i < this.state.yourCreation.length; i += 1) {
-            deleteCreation.push(
-                <button
-                    key={i}
-                    style={{top: (i*30)+"px", right: "10px", height: "30px", width: "30px"}}
-                    className="absolute text-right"
-                    onClick={() => this.deleteCreationClick(i)}
-                >
-                    <span className="fas fa-trash"></span>
-                </button>
-            );
+        if(this.state.yourCreation.length === 2) {
+            let cpt = 2
+            //delete for parallel
+            if(this.state.parallelExpanded) {
+                for (let i = 1; i < this.state.yourCreation[0].childNodes.length+1; i += 1) {
+                    deleteCreation.push(
+                        <button
+                            key={i}
+                            style={{top: (i*30)+"px", right: "10px", height: "30px", width: "30px"}}
+                            className="absolute text-right"
+                            onClick={() => this.deleteCreationClick(0,i-1)}
+                        >
+                            <span className="fas fa-trash"></span>
+                        </button>
+                    );
+                    cpt = i
+                }
+            }
+            //delete for strix
+            if(this.state.strixExpanded) {
+                for (let i = cpt; i < this.state.yourCreation[1].childNodes.length + cpt; i += 1) {
+                    deleteCreation.push(
+                        <button
+                            key={i}
+                            style={{top: (i * 30) + "px", right: "10px", height: "30px", width: "30px"}}
+                            className="absolute text-right"
+                            onClick={() => this.deleteCreationClick(1,i-cpt)}
+                        >
+                            <span className="fas fa-trash"></span>
+                        </button>
+                    );
+                }
+            }
         }
 
         let width=window.innerWidth
@@ -318,32 +288,24 @@ export default class CustomSynthesis extends React.Component {
                 <SocketGetExamples
                     trigger={this.state.triggerExample}
                     setTrigger={this.setTriggerExample}
-                    controllers={this.state.headerStates[1]}
                     setTree={this.setTree}
-                />
-                <SocketSaveSynthesis
-                    trigger={this.state.triggerSave}
-                    setTrigger={this.setTriggerSave}
-                    savedDone={this.savedDone}
-                    name={this.state.nameValue}
-                    assumptions={this.state.assumptionsValue.split("\n")}
-                    guarantees={this.state.guaranteesValue.split("\n")}
-                    inputs={this.state.inputsValue.split(",")}
-                    outputs={this.state.outputsValue.split(",")}
                 />
                 <SocketDeleteSynthesis
                     trigger={this.state.triggerDelete}
                     setTrigger={this.setTriggerDelete}
                     deletedDone={this.deletedDone}
-                    name={this.state.nameToDelete}
+                    creation={this.state.creationToDelete}
                 />
                 <SocketGetSynthesis
                     trigger={this.state.triggerSynthesis}
                     setTrigger={this.setTriggerSynthesis}
-                    name={this.state.nameValue}
-                    controllers={this.state.modeParent}
                     strix={this.state.clickedButtonStrix}
                     parallel={this.state.clickedButtonParallel}
+                    name={this.state.nameValue}
+                    assumptions={this.state.assumptionsValue.split("\n")}
+                    guarantees={this.state.guaranteesValue.split("\n")}
+                    inputs={this.state.inputsValue.replaceAll(" ","").split(",")}
+                    outputs={this.state.outputsValue.replaceAll(" ","").split(",")}
                     setGraph={this.setGraph}
                 />
                 <div className="relative py-8 bg-emerald-400 ">
@@ -357,7 +319,6 @@ export default class CustomSynthesis extends React.Component {
                         </div>
                     </div>
                 </div>
-                <Header {...customheadercards} states={this.state.headerStates} changePageHeader={this.changePageHeader}/>
                 <SynthesisForm
                     nameValue={this.state.nameValue}
                     setNameValue={this.setNameValue}
@@ -379,46 +340,47 @@ export default class CustomSynthesis extends React.Component {
                 />
                 {
                     this.state.graph ?
-                        <div  id="synthesis" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
-                            <div className="px-3 pb-5 relative flex flex-col min-w-0 break-words bg-white rounded shadow-md m-auto">
-                                <div className="w-full border-b-1">
-                                    <div className="fs-4 m-2 text-center">
-                                        {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix" ? synthesisInfo.info.buttons.synthesis.strix : synthesisInfo.info.buttons.synthesis.parallel}
-                                    </div>
+                    <div className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
+                        <div className="px-3 pb-5 relative flex flex-col min-w-0 break-words bg-white rounded shadow-md m-auto">
+                            <div className="w-full border-b-1">
+                                <div className="fs-4 m-2 text-center">
+                                    {this.state.clickedButtonStrix  ? synthesisInfo.info.buttons.synthesis.strix : synthesisInfo.info.buttons.synthesis.parallel}
                                 </div>
-                                <div className="row h-auto">
-                                    <div className="m-auto">
-                                        {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix"  ?
-                                            <Graphviz
-                                                dot={this.state.graph}
-                                                options={({
-                                                    fit: true,
-                                                    height: 400,
-                                                    width: width / 1.2,
-                                                    zoom: true
-                                                })}
-                                                className="p-4 flex wrap-content justify-center"
-                                            />
-                                        :
-                                            <div className="flex flex-wrap p-4 justify-center">{children}</div>
-                                        }
-                                    </div>
-                                    <div className="row offset-1 text-center py-2 m-auto">
-                                        <Link  to="simulation" spy={true} smooth={true}>
-                                            <Button
-                                                id="simulationButton"
-                                                size="lg"
-                                                onClick={this.clickSimulation}
-                                            >
-                                                simulation
-                                            </Button>
-                                        </Link>
-                                    </div>
+                            </div>
+                            <div className="row h-auto">
+                                <div className="m-auto">
+                                    {this.state.clickedButtonStrix  ?
+                                        <Graphviz
+                                            dot={this.state.graph}
+                                            options={({
+                                                fit: true,
+                                                height: 400,
+                                                width: width / 1.2,
+                                                zoom: true
+                                            })}
+                                            className="p-4 flex wrap-content justify-center"
+                                        />
+                                    :
+                                        <div className="flex flex-wrap p-4 justify-center">{children}</div>
+                                    }
+                                </div>
+                                <div className="row offset-1 text-center py-2 m-auto">
+                                    <Link  to="simulation" spy={true} smooth={true}>
+                                        <Button
+                                            id="simulationButton"
+                                            size="lg"
+                                            onClick={this.clickSimulation}
+                                        >
+                                            simulation
+                                        </Button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     : null
                 }
+                <div id="synthesis"></div>
                 {
                     this.state.simulation ?
                         <div  id="simulation" className="w-full lg:w-9/12 xl:w-10/12 flex-col mt-5 mx-auto">
@@ -430,7 +392,7 @@ export default class CustomSynthesis extends React.Component {
                                     </div>
                                 </div>
                                 <div className="row h-auto mt-4">
-                                    {this.state.clickedButtonStrix  ||  this.state.modeParent === "strix"  ?
+                                    {this.state.clickedButtonStrix  ?
                                         <Simulation
                                             name={this.state.nameValue}
                                             mode="strix"

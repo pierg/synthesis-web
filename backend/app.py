@@ -179,8 +179,8 @@ def create_controller(data) -> None:
     """
         Create the controller and the mealy according to the correct method
     """
+    json_content = Synthesis.create_controller(data, request.args.get("id"))
     try:
-        json_content = Synthesis.create_controller(data, request.args.get("id"))
 
         send_message_to_user(f"The mealy has been created using {data['mode']} method", request.sid, "success")
         emit("controller-created", json_content, room=request.sid)

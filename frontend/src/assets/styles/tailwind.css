@@ -1678,6 +1678,11 @@ select {
     background-color: rgba(241, 245, 249, var(--tw-bg-opacity));
 }
 
+.hover\:bg-blueGray-200:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgba(226, 232, 240, var(--tw-bg-opacity));
+}
+
 .hover\:bg-blueGray-400:hover {
     --tw-bg-opacity: 1;
     background-color: rgba(148, 163, 184, var(--tw-bg-opacity));
