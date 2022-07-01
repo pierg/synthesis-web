@@ -2,7 +2,8 @@ import os
 from os import walk
 from typing import Any
 
-from backend.shared.paths import controller_path
+from hashlib import sha256
+from backend.shared.paths import controller_path, save_controller_path
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
 from crome_logic.typeset import Typeset
@@ -34,7 +35,10 @@ class Synthesis:
                 for filename in filenames:
                     controller = load_function(absolute_folder_path=controller_folder / dir_name,
                                                controller_name=filename.split(".")[0][:-2])
-                    data = {"id": controller.name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
+                    name_split = controller.name.split(" # ")
+                    name_split.pop(-1)
+                    name = " # ".join(name_split)
+                    data = {"id": name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
                             "inputs": controller.spec.i, "outputs": controller.spec.o}
                     dict_controller[mode].append(data)
             list_controller.update(dict_controller)
@@ -72,29 +76,26 @@ class Synthesis:
         return dict_controller_info
 
     @staticmethod
-    def delete_synthesis(name, session_id):
-        controller_folder = controller_path(session_id)
-        _, _, filenames = next(walk(controller_folder))
-        for filename in filenames:
-            if len(filename.split(".")) == 2 and filename.split(".")[-1] == "dat":
-                continue
-            name_found = Synthesis.__get_name_controller(controller_folder / filename)
-            if name_found == name:
-                os.remove(controller_folder / filename)
+    def delete_synthesis(data, session_id):
+        print(data)
+        complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
+                       + " ".join(data["assumptions"])
+        full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+        save_folder = save_controller_path(session_id, data["mode"])
+        os.remove(save_folder / f"{full_name}_s.dat")
 
     @staticmethod
     def create_controller(data, session_id) -> list[str] | str:
-        controller_folder = controller_path(session_id)
-        full_name = data["name"] + str(hash(" ".join(data["inputs"]) + " ".join(data["outputs"])
-                                        + " ".join(data["guarantees"]) + " ".join(data["assumptions"])))
-        save_folder = controller_folder / f"save_{data['mode']}"
+        complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
+                       + " ".join(data["assumptions"])
+        full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+        save_folder = save_controller_path(session_id, data["mode"])
         if data["mode"] == "strix":
             controller_found = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if controller_found:
                 return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
             else:
                 spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
-                print(spec.i)
                 controller = Controller(name=full_name, spec=spec)
                 dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
                 return Synthesis.__upgrade_dot(controller.get_format("dot"))

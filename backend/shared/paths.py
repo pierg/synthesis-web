@@ -17,3 +17,9 @@ session_path: Callable[[str], Path] = lambda s: storage_path / f"s_{s}"
 controller_path: Callable[str, Path] = (
     lambda s: storage_path / f"s_{s}" / "controllers"
 )
+
+# Usage: save_controller_path(_SESSION_ID_, _MODE_)
+save_controller_path: Callable[[str, str], Path] = (
+    lambda s, m: storage_path / f"s_{s}" / "controllers" / f"save_{m}"
+)
+
