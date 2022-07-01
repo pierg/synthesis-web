@@ -11,7 +11,6 @@ class Simulation:
 
     @staticmethod
     def get_input_possible(session_id, data):
-        print(data)
         save_folder = save_controller_path(session_id, data["mode"])
         if data["mode"] == "parallel":
             return  # Not implemented yet
