@@ -161,53 +161,16 @@ def get_synthesis() -> None:
     emit("receive-synthesis", list_examples, room=request.sid)
 
 
-@socketio.on("get-controller")
-def get_controller() -> None:
-    """
-        Get the controllers already created by the user
-    """
-    list_controller = Synthesis.get_controller(str(request.args.get("id")))
-
-    emit("receive-controller", list_controller, room=request.sid)
-
-
-@socketio.on("controller-mealy")
-def get_mealy_from_controller(data):
-    """
-        Get the mealy of a controller that is already created
-    """
-    mealy_content = Synthesis.get_mealy_from_controller(name=data["name"], session_id=str(request.args.get("id")),
-                                                        mode=data["mode"])
-
-    emit("receive-controller-mealy", mealy_content, room=request.sid)
-
-
-@socketio.on("save-synthesis")
-def save_synthesis(data) -> None:
-    """
-        Save the current synthesis inside a .txt file inside the session folder
-    """
-    session_id = str(request.args.get("id"))
-    for key in data:
-        if not data[key]:
-            emit("synthesis-saved", False, room=request.sid)
-            return
-    Synthesis.create_txt_file(data, session_id)
-
-    send_message_to_user("The mealy has been saved", request.sid, "success")
-    emit("synthesis-saved", True, room=request.sid)
-
-
 @socketio.on("delete-synthesis")
-def delete_synthesis(name) -> None:
+def delete_synthesis(data) -> None:
     """
         Delete a synthesis using only his name to find it.
     """
     session_id = str(request.args.get("id"))
 
-    Synthesis.delete_synthesis(name, session_id)
+    Synthesis.delete_synthesis(data, session_id)
 
-    send_message_to_user(f"The synthesis '{name}' has been deleted.", request.sid, "success")
+    send_message_to_user(f"The synthesis \"{data['name']}\" has been deleted.", request.sid, "success")
     emit("synthesis-deleted", True, room=request.sid)
 
 
@@ -217,7 +180,7 @@ def create_controller(data) -> None:
         Create the controller and the mealy according to the correct method
     """
     try:
-        json_content = Synthesis.create_controller(data["name"], request.args.get("id"), data["mode"])
+        json_content = Synthesis.create_controller(data, request.args.get("id"))
 
         send_message_to_user(f"The mealy has been created using {data['mode']} method", request.sid, "success")
         emit("controller-created", json_content, room=request.sid)

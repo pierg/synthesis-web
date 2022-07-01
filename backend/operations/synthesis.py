@@ -1,9 +1,12 @@
 import os
 from os import walk
 from pathlib import Path
-from typing import Any
+from typing import Any, List
 
 from backend.shared.paths import controller_path
+from crome_logic.specification.temporal import LTL
+from crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
+from crome_logic.typeset import Typeset
 from crome_synthesis.controller import _check_header, Controller
 from crome_synthesis.controller.controller_info import ControllerSpec
 from crome_synthesis.pcontrollers import PControllers
@@ -69,53 +72,6 @@ class Synthesis:
         return dict_controller_info
 
     @staticmethod
-    def create_txt_file(data, session_id) -> None:
-        controller_folder = controller_path(session_id)
-
-        if not os.path.exists(controller_folder):
-            os.makedirs(controller_folder)
-        _, _, filenames = next(walk(controller_folder))
-        greatest_id = -1 if len(filenames) == 0 else int(max(filenames)[0:4])
-        greatest_id += 1
-
-        # We check if the same name don't already exist. If so we use the same .txt
-        file_checked = Synthesis.__check_if_controller_exist(data["name"], controller_folder)
-        file = os.path.join(controller_folder, f"{str(greatest_id).zfill(4)}.txt")
-        if file_checked:
-            file = os.path.join(controller_folder, file_checked)
-
-        with open(file, "w") as file:
-            file.write("**NAME**\n\n")
-            file.write(f"{data['name']}\n\n")
-
-            file.write("**ASSUMPTIONS**\n\n")
-            for assumption in data["assumptions"]:
-                file.write(f"{assumption}\n")
-
-            file.write("\n**GUARANTEES**\n\n")
-            for guarantee in data["guarantees"]:
-                file.write(f"{guarantee}\n")
-
-            file.write("\n**INPUTS**\n\n")
-            for i in range(len(data["inputs"])):
-                controller_input = data["inputs"][i]
-                if i == len(data["inputs"]) - 1:
-                    file.write(f"{controller_input}")
-                else:
-                    file.write(f"{controller_input}, ")
-            file.write("\n")
-
-            file.write("\n**OUTPUTS**\n\n")
-            for i in range(len(data["outputs"])):
-                controller_output = data["outputs"][i]
-                if i == len(data["outputs"]) - 1:
-                    file.write(f"{controller_output}")
-                else:
-                    file.write(f"{controller_output}, ")
-
-            file.write("\n\n**END**")
-
-    @staticmethod
     def delete_synthesis(name, session_id):
         controller_folder = controller_path(session_id)
         _, _, filenames = next(walk(controller_folder))
@@ -127,52 +83,39 @@ class Synthesis:
                 os.remove(controller_folder / filename)
 
     @staticmethod
-    def create_controller(name, session_id, mode, controller_return=False)\
-            -> list[str] | str | None | Controller | PControllers:
-        list_session = [session_id, "default"]
-
-        controller_file = None
-        controller_folder = None
-        stop = False
-        for session in list_session:
-            controller_folder = controller_path(session)
-            controller_file = Synthesis.__check_if_controller_exist(name, controller_folder)
-            if controller_file:
-                controller_file = Path(os.path.join(controller_folder, controller_file))
-                break
+    def create_controller(data, session_id) -> list[str] | str:
+        controller_folder = controller_path(session_id)
+        full_name = data["name"] + hash(" ".join(data["inputs"]) + " ".join(data["outputs"])
+                                        + " ".join(data["guarantees"]) + " ".join(data["assumptions"]))
+        save_folder = controller_folder / f"save_{data['mode']}"
+        if data["mode"] == "strix":
+            controller_found = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
+            if controller_found:
+                return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
             else:
-                if session == "default":
-                    _, dir_names, _ = next(walk(controller_folder))
-                    for dir_name in dir_names:
-                        controller_file = Synthesis.__check_if_controller_exist(name, controller_folder / dir_name)
-                        if controller_file:
-                            controller_file = Path(os.path.join(controller_folder / dir_name, controller_file))
-                            stop = True
-                            break
-            if stop:
-                break
-
-        if controller_file:
-            if mode == "parallel":
-                pcontrollers = PControllers.from_file(file_path=controller_file)
-                save_folder = controller_folder / "save_parallel"
-                dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontrollers)
-                if controller_return:
-                    return pcontrollers
-                json_content = []
-                for controller in pcontrollers.controllers:
-                    json_content.append(Synthesis.__upgrade_dot(controller.spot_automaton.to_str("dot")))
-                return json_content
-            elif mode == "strix":
-                controller = Controller.from_file(file_path=controller_file)
-                save_folder = controller_folder / "save_strix"
+                spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
+                controller = Controller(name=data["name"], spec=spec)
                 dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
-                if controller_return:
-                    return controller
-                return Synthesis.__upgrade_dot(controller.get_format("dot"))
+                return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
+        else:
+            controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name)
+            if controller_found:
+                json_content = []
+                for controller in controller_found.controllers:
+                    json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
+                return json_content
             else:
-                # Not a good mode !
-                return None
+                spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
+                set_ap_i = set(map(lambda x: BooleanUncontrollable(name=x), spec.i))
+                set_ap_o = set(map(lambda x: BooleanControllable(name=x), spec.o))
+                typeset = Typeset(set_ap_i | set_ap_o)
+                ltl_formula = LTL(_init_formula=spec.formula, _typeset=typeset)
+                pcontroller = PControllers.from_ltl(guarantees=ltl_formula, name=data["name"])
+                dump_mono_controller(absolute_folder_path=save_folder, controller=pcontroller)
+                json_content = []
+                for controller in pcontroller.controllers:
+                    json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
+                return json_content
 
     @staticmethod
     def get_mealy_from_controller(name, session_id, mode):
@@ -269,14 +212,6 @@ class Synthesis:
         return "\n".join(result)
 
     @staticmethod
-    def __remove_dat_file(folder):
-        _, _, filenames = next(walk(folder))
-        for filename in filenames:
-            tmp = filename.split(".")
-            if len(tmp) == 2 and tmp[-1] == "dat":
-                os.remove(folder / filename)
-
-    @staticmethod
     def __get_controller_from_folder(folder, mode) -> list[Controller]:
         if not os.path.exists(folder):
             return []
@@ -291,4 +226,3 @@ class Synthesis:
             controller = load_function(absolute_folder_path=folder, controller_name=filename.split(".")[0][:-2])
             result.append(controller)
         return result
-
