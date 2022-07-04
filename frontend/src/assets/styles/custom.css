@@ -155,6 +155,16 @@
     height: fit-content;
 }
 
+.react-transform-wrapper {
+    width: 100% !important;
+    min-height: 150px !important;
+}
+
+.react-transform-component {
+    width: 100% !important;
+    min-height: 150px !important;
+    height: 100% !important;
+}
 
 @media (min-width: 640px) {
     .sm\:c-m-w-70 {

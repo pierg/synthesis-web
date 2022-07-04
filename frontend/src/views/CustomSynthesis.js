@@ -1,8 +1,8 @@
 import React from "react";
 import {Link} from 'react-scroll';
 import '@blueprintjs/core/lib/css/blueprint.css';
-import { Graphviz } from 'graphviz-react';
 import {toast} from "react-toastify";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import SocketDeleteSynthesis from "../components/socketConnection/DeleteSynthesis";
 import SocketGetSynthesis from "../components/socketConnection/GetSynthesis";
@@ -219,6 +219,11 @@ export default class CustomSynthesis extends React.Component {
         })
     }
 
+    arrayBufferToImage = (buffer) => {
+        buffer = buffer.slice(2,buffer.length-1)
+        return buffer;
+    }
+
     clickSimulation = () => {
         this.setState({
             simulation: true
@@ -265,20 +270,33 @@ export default class CustomSynthesis extends React.Component {
         let width=window.innerWidth
 
         const children = [];
-        let graph
         if (this.state.clickedButtonParallel && this.state.graph) {
             for (let i = 0; i < this.state.graph.length; i += 1) {
-                graph = this.state.graph[i].slice(0,this.state.graph[i].indexOf("{")+1)+'\n  bgcolor="#F1F5F9"'+this.state.graph[i].slice(this.state.graph[i].indexOf("{")+1)
-                children.push(<Graphviz
-                                dot={graph}
-                                key={i}
-                                options={({
-                                    fit: true,
-                                    height: 300,
-                                    width: width / 4.2,
-                                    zoom: true
-                                })}
-                                className="p-2 m-3 border-solid border-2 rounded-md flex bg-blueGray-100 border-blueGray-100 wrap-content"/>);
+                children.push(
+                    <>
+                        <TransformWrapper
+                            key={i}
+                            defaultScale={1}
+                            defaultPositionX={width/2}
+                            defaultPositionY={0}
+                        >
+                            {({ zoomIn, zoomOut, resetTransform, positionX, positionY, ...rest }) => (
+                                <React.Fragment>
+                                    <TransformComponent>
+                                        <div className="m-auto h-auto">
+                                            <img src={"data:image/png;base64," + this.arrayBufferToImage(this.state.graph[i])} alt={"World"} className="w-full"/>
+                                        </div>
+                                    </TransformComponent>
+                                </React.Fragment>
+                            )}
+                        </TransformWrapper>
+                        {
+                            i !== this.state.graph.length-1 &&
+                            <div style={{"width":"80%", "height":"2px", "backgroundColor":"black"}}>
+                            </div>
+                        }
+                    </>
+                );
             }
         }
 
@@ -350,16 +368,21 @@ export default class CustomSynthesis extends React.Component {
                             <div className="row h-auto">
                                 <div className="m-auto">
                                     {this.state.clickedButtonStrix  ?
-                                        <Graphviz
-                                            dot={this.state.graph}
-                                            options={({
-                                                fit: true,
-                                                height: 400,
-                                                width: width / 1.2,
-                                                zoom: true
-                                            })}
-                                            className="p-4 flex wrap-content justify-center"
-                                        />
+                                    <TransformWrapper
+                                        defaultScale={2}
+                                        defaultPositionX={5}
+                                        defaultPositionY={5}
+                                    >
+                                        {({ zoomIn, zoomOut, resetTransform, positionX, positionY, ...rest }) => (
+                                            <React.Fragment>
+                                                <TransformComponent>
+                                                    <div>
+                                                        <img src={"data:image/png;base64," + this.arrayBufferToImage(this.state.graph)} alt={"World"} className="w-full"/>
+                                                    </div>
+                                                </TransformComponent>
+                                            </React.Fragment>
+                                        )}
+                                    </TransformWrapper>
                                     :
                                         <div className="flex flex-wrap p-4 justify-center">{children}</div>
                                     }
@@ -404,6 +427,7 @@ export default class CustomSynthesis extends React.Component {
                                         : <div className="flex flex-wrap justify-center">
                                             Work in progress
                                         </div>
+
                                     }
                                 </div>
                             </div>

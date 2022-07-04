@@ -5,6 +5,7 @@ function SocketGetSynthesis(props) {
     const socket = useSocket()
 
     const setGraph = useCallback((graph) => {
+        console.log(graph)
         if(graph) {
             props.setGraph(graph);
         }
