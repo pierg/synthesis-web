@@ -4,6 +4,7 @@ import SocketInputClicked from "../socketConnection/InputClicked";
 import SocketResetClicked from "../socketConnection/ResetClicked";
 import SocketRandomClicked from "../socketConnection/RandomClicked";
 import Button from "../elements/Button";
+import SocketGetHistory from "../socketConnection/GetHistory";
 
 export default class Simulation extends React.Component {
 
@@ -15,7 +16,8 @@ export default class Simulation extends React.Component {
         inputClicked : null,
         inputNumberRandom : 25,
         triggerRandomClicked: false,
-        lines : [],
+        lines : [], triggerHistory: true
+
     }
 
     setTriggerGetInputs = (bool) => {
@@ -37,9 +39,7 @@ export default class Simulation extends React.Component {
         })
     }
 
-    setLine = (line) => {
-        let lines = this.state.lines
-        lines.push(line)
+    setLine = (lines) => {
         this.setState({
             lines : lines,
         })
@@ -72,10 +72,14 @@ export default class Simulation extends React.Component {
             triggerRandomClicked : bool,
         })
     }
+    setTriggerHistory = (bool) => {
+        this.setState({
+            triggerHistory : bool,
+        })
+    }
 
     render(){
         let inputDisplay = []
-        console.log(this.state.inputs)
         if(this.state.inputs.length !== 0) {
             for (let i = 0; i < this.state.inputs.length; i++) {
                 inputDisplay.push(
@@ -113,11 +117,8 @@ export default class Simulation extends React.Component {
                         key={i}
                     >
                         <th scope="row">
-                            {i}
-                        </th>
-                        <td>
                             {this.state.lines[i][0]}
-                        </td>
+                        </th>
                         <td>
                             {this.state.lines[i][1]}
                         </td>
@@ -127,6 +128,9 @@ export default class Simulation extends React.Component {
                         <td>
                             {this.state.lines[i][3]}
                         </td>
+                        <td>
+                            {this.state.lines[i][4]}
+                        </td>
                     </tr>
                 );
             }
@@ -134,6 +138,17 @@ export default class Simulation extends React.Component {
 
         return (
             <>
+                <SocketGetHistory
+                    trigger={this.state.triggerHistory}
+                    setTrigger={this.setTriggerHistory}
+                    setLine={this.setLine}
+                    mode={this.props.mode}
+                    name={this.props.name}
+                    assumptions={this.props.assumptions}
+                    guarantees={this.props.guarantees}
+                    inputs={this.props.inputs}
+                    outputs={this.props.outputs}
+                />
                 <SocketGetInputs
                     trigger={this.state.triggerGetInputs}
                     setTrigger={this.setTriggerGetInputs}

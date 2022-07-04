@@ -1,15 +1,14 @@
 import React, {useCallback, useEffect} from 'react'
 import {useSocket} from "../../socket/SocketProvider";
 
-function SocketRandomClicked(props) {
+function SocketGetHistory(props) {
     const socket = useSocket()
 
     const setLines = useCallback((lines) => {
         if(props.mode === "strix"){
-            socket.off('receive-random-simulation-controller')
+            socket.off('received-history')
         }
         props.setLine(lines)
-        props.setTriggerGetInput(true);
     }, [props,socket]) // eslint-disable-next-line
 
     useEffect(() => {
@@ -19,7 +18,7 @@ function SocketRandomClicked(props) {
             props.setTrigger(false)
 
             if(props.mode === "strix"){
-                socket.emit("random-simulation-controller",{
+                socket.emit("get-history",{
                     mode: props.mode,
                     name: props.name,
                     assumptions: props.assumptions,
@@ -28,7 +27,7 @@ function SocketRandomClicked(props) {
                     outputs: props.outputs,
                     iterations: props.number
                 })
-                socket.on('receive-random-simulation-controller', setLines)
+                socket.on('received-history', setLines)
             }
         }
 
@@ -37,4 +36,4 @@ function SocketRandomClicked(props) {
     return (<></>);
 }
 
-export default SocketRandomClicked;
+export default SocketGetHistory;

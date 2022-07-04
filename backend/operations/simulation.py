@@ -44,9 +44,8 @@ class Simulation:
                     input_mealy = possible_input
                     break
             outputs = controller.mealy.react(input_mealy)
-            outputs = " ".join([str(a) for a in outputs.sorted])
-            result = [choice, old_state, controller.mealy.current_state.name, outputs]
-            return result
+            dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
+            return controller.mealy.raw_history
 
     @staticmethod
     def random_simulation(session_id, mode, data):
@@ -60,16 +59,11 @@ class Simulation:
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return
-            history = []
             for i in range(int(data["iterations"])):
-                old_state = controller.mealy.current_state.name
                 choice = random.choice(controller.mealy.current_state.possible_inputs)
-                outputs = controller.mealy.react(choice)
-                outputs = " ".join([str(a) for a in outputs.sorted])
-                new_state = controller.mealy.current_state.name
-                history.append([str(choice).strip(), old_state, new_state, outputs])
+                controller.mealy.react(choice)
             dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
-            return history
+            return controller.mealy.raw_history
 
     @staticmethod
     def reset_simulation(session_id, data):
@@ -90,4 +84,18 @@ class Simulation:
                 return
             controller.mealy.reset()
             dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
+
+    @staticmethod
+    def get_history(data, session_id):
+        save_folder = save_controller_path(session_id, data["mode"])
+        if data["mode"] == "parallel":
+            return  # Not implemented yet
+        elif data["mode"] == "strix":
+            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
+                           + " ".join(data["assumptions"])
+            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
+            if not controller:
+                return []
+            return controller.mealy.raw_history
 

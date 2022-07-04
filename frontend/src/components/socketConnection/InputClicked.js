@@ -4,11 +4,11 @@ import {useSocket} from "../../socket/SocketProvider";
 function SocketInputClicked(props) {
     const socket = useSocket()
 
-    const setLine = useCallback((line) => {
+    const setLines = useCallback((lines) => {
         if(props.mode === "strix"){
             socket.off('controller-simulated')
         }
-        props.setLine(line);
+        props.setLine(lines)
         props.setTriggerGetInput(true);
     }, [props,socket]) // eslint-disable-next-line
 
@@ -28,12 +28,12 @@ function SocketInputClicked(props) {
                     outputs: props.outputs,
                     choice: props.choice
                 })
-                socket.on('controller-simulated', setLine)
+                socket.on('controller-simulated', setLines)
             }
 
         }
 
-    }, [socket, props, setLine])
+    }, [socket, props, setLines])
 
     return (<></>);
 }

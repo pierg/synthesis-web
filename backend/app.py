@@ -203,6 +203,15 @@ def get_inputs(data) -> None:
     emit("received-inputs", inputs, room=request.sid)
 
 
+@socketio.on("get-history")
+def get_history(data) -> None:
+    """
+        Get the history of the mealy.
+    """
+    session_id = request.args.get("id")
+    history = Simulation.get_history(data=data, session_id=session_id)
+    emit("received-history", history, room=request.sid)
+
 @socketio.on("simulate-controller")
 def simulate_controller(data) -> None:
     """
