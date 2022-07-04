@@ -95,12 +95,17 @@ class Synthesis:
                     read_png_file = base64.b64encode(file.read())
                     return str(read_png_file)
         else:
-            controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name)
+            controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name+"_p")
             if controller_found:
+                print("Found !")
                 json_content = []
                 for controller in controller_found.controllers:
                     if not os.path.exists(save_folder / f"{controller.name}.png"):
                         controller.save(absolute_folder_path=save_folder, format="png")
+                    with open(save_folder / f"{controller.name}.png", "rb") as file:
+                        read_png_file = base64.b64encode(file.read())
+                        json_content.append(str(read_png_file))
+                return json_content
             else:
                 spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
                 set_ap_i = set(map(lambda x: BooleanUncontrollable(name=x), spec.i))
@@ -111,12 +116,13 @@ class Synthesis:
                 pcontroller.spec = spec
                 dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontroller)
                 json_content = []
-                print(f"Le nom de tous les controllers de {pcontroller.name}")
                 for controller in pcontroller.controllers:
+                    controller.save(absolute_folder_path=save_folder, format="png")
                     print(controller.name)
-                return
+                    with open(save_folder / f"{controller.name}.png", "rb") as file:
+                        read_png_file = base64.b64encode(file.read())
+                        json_content.append(str(read_png_file))
                 return json_content
-
     @staticmethod
     def __get_name_controller(file) -> str:
         with open(file, 'r') as ifile:
