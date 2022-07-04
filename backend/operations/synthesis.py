@@ -1,3 +1,4 @@
+import base64
 import os
 from os import walk
 from typing import Any
@@ -33,6 +34,8 @@ class Synthesis:
                 elif mode == "parallel":
                     load_function = load_parallel_controller
                 for filename in filenames:
+                    if os.path.splitext(filename)[1] == ".png":
+                        continue
                     controller = load_function(absolute_folder_path=controller_folder / dir_name,
                                                controller_name=filename.split(".")[0][:-2])
                     name_split = controller.name.split(" # ")
@@ -73,21 +76,31 @@ class Synthesis:
         full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
         save_folder = save_controller_path(session_id, data["mode"])
         if data["mode"] == "strix":
+            if os.path.exists(save_folder / f"{full_name}.png"):
+                with open(save_folder / f"{full_name}.png", "rb") as file:
+                    read_png_file = base64.b64encode(file.read())
+                    return str(read_png_file)
             controller_found = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if controller_found:
-                return Synthesis.__upgrade_dot(controller_found.get_format("dot"))
+                controller_found.save(format="png", absolute_folder_path=save_folder)
+                with open(save_folder / f"{full_name}.png", "rb") as file:
+                    read_png_file = base64.b64encode(file.read())
+                    return str(read_png_file)
             else:
                 spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
                 controller = Controller(name=full_name, spec=spec)
                 dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
-                return Synthesis.__upgrade_dot(controller.get_format("dot"))
+                controller.save(format="png", absolute_folder_path=save_folder)
+                with open(save_folder / f"{full_name}.png", "rb") as file:
+                    read_png_file = base64.b64encode(file.read())
+                    return str(read_png_file)
         else:
             controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if controller_found:
                 json_content = []
                 for controller in controller_found.controllers:
-                    json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
-                return json_content
+                    if not os.path.exists(save_folder / f"{controller.name}.png"):
+                        controller.save(absolute_folder_path=save_folder, format="png")
             else:
                 spec = ControllerSpec(a=data["assumptions"], g=data["guarantees"], i=data["inputs"], o=data["outputs"])
                 set_ap_i = set(map(lambda x: BooleanUncontrollable(name=x), spec.i))
@@ -98,8 +111,10 @@ class Synthesis:
                 pcontroller.spec = spec
                 dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontroller)
                 json_content = []
+                print(f"Le nom de tous les controllers de {pcontroller.name}")
                 for controller in pcontroller.controllers:
-                    json_content.append(Synthesis.__upgrade_dot(controller.get_format("dot")))
+                    print(controller.name)
+                return
                 return json_content
 
     @staticmethod
