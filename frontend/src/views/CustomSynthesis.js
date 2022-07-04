@@ -249,6 +249,7 @@ export default class CustomSynthesis extends React.Component {
                     );
                     cpt = i
                 }
+                cpt += 2
             }
             //delete for strix
             if(this.state.strixExpanded) {
@@ -266,6 +267,7 @@ export default class CustomSynthesis extends React.Component {
                 }
             }
         }
+        console.log(deleteCreation)
 
         let width=window.innerWidth
 
