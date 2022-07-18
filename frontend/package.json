@@ -5,10 +5,14 @@
   "license": "SEE LICENSE IN <https://www.creative-tim.com/product/notus-pro-react>",
   "main": "./index.js",
   "dependencies": {
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@blueprintjs/core": "^4.4.1",
     "@fortawesome/fontawesome-free": "6.1.1",
+    "autoprefixer": "10.4.5",
     "classnames": "2.3.1",
     "graphviz-react": "^1.2.0",
+    "postcss": "^8.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "2.4.0",
     "react-dom": "^18.2.0",
@@ -37,6 +41,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "resolutions": {
+    "autoprefixer": "10.4.5"
+},
   "browserslist": {
     "production": [
       ">0.2%",
@@ -67,13 +74,14 @@
     "sass": "^1.52.3"
   },
   "peerDependencies": {
+    "@babel/plugin-syntax-flow": "^7.14.5",
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "2.9.2",
     "@tailwindcss/forms": "0.3.2",
     "autoprefixer": "10.2.5",
     "chart.js": "3.1.0",
     "classnames": "2.3.1",
-    "postcss": "8.2.10",
+    "postcss": "^8.1.0",
     "prop-types": "15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
