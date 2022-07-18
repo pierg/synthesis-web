@@ -1,6 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { HashRouter, Route } from "react-router-dom";
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./assets/styles/bootstrap.min.css";
@@ -14,15 +13,20 @@ import "./assets/styles/docs.css";
 import RoutePage from "./RoutePage";
 
 
-ReactDOM.render(
-  <HashRouter>
-    <Switch>
+// // custom
+import ReactDOM from "react-dom/client";
 
-      {/* Custom Routes added */}
-      <Route exact path="/:id" render={(props) => ( <RoutePage page={props.match.params.id}/>)} />
+import {Navigate, Routes} from "react-router";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-      <Redirect from="*" to="/index" />
-    </Switch>
-  </HashRouter>,
-  document.getElementById("root")
+root.render(
+    <HashRouter>
+        <Routes>
+
+            <Route path="/:id" element={<RoutePage/>}/>
+            <Route path="*" element={<Navigate to="index"/>}/>
+
+
+        </Routes>
+    </HashRouter>
 );

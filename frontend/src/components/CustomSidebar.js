@@ -4,14 +4,18 @@ import {Link} from "react-router-dom";
 import LoginSession from "./LoginSession";
 
 export default function CustomSidebar({
+                                          page,
                                           brand,
                                           id,
                                           setId,
                                           cookie,
                                       }) {
     const [sidebarShow, setSidebarShow] = React.useState("-translate-x-full");
-
+    if (page === "index") {
+        return (<></>)
+    }
     return (
+
         <>
             <nav
                 className={
