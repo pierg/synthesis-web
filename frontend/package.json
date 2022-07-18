@@ -25,8 +25,8 @@
     "uuidv4": "^6.2.13"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && gulp licenses",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build && gulp licenses",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm run build:tailwind && npm start",
@@ -62,7 +62,7 @@
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9",
     "prettier": "2.2.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.1",
     "react-syntax-highlighter": "15.4.3",
     "sass": "^1.52.3"
   },
