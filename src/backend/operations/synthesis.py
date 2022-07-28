@@ -4,7 +4,7 @@ from os import walk
 from typing import Any
 
 from hashlib import sha256
-from backend.shared.paths import controller_path, save_controller_path
+from src.backend.shared.paths import controller_path, save_controller_path
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
 from crome_logic.typeset import Typeset

@@ -1,5 +1,4 @@
 import argparse
-import json
 import threading
 import time
 from os import walk
@@ -9,9 +8,9 @@ from typing import Any
 from flask import Flask, Response, request
 from flask_socketio import SocketIO, emit
 
-from backend.operations.simulation import Simulation
-from backend.operations.synthesis import Synthesis
-from backend.shared.paths import (
+from src.backend.operations.simulation import Simulation
+from src.backend.operations.synthesis import Synthesis
+from src.backend.shared.paths import (
     build_path,
     storage_path,
 )

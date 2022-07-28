@@ -1,0 +1,19 @@
+# Changes here will be overwritten by Copier
+_commit: 0.9.8
+_src_path: https://github.com/pawamoy/copier-pdm.git
+author_email: piergiuseppe.mallozzi@gmail.com
+author_fullname: Piergiuseppe Mallozzi
+author_username: pierg
+copyright_date: '2022'
+copyright_holder: Piergiuseppe Mallozzi
+copyright_holder_email: piergiuseppe.mallozzi@gmail.com
+copyright_license: MIT License
+project_description: Web Interface for the Synthesis package
+project_name: synthesis-web
+python_package_command_line_name: synthesis-web
+python_package_distribution_name: synthesis-web
+python_package_import_name: synthesis_web
+repository_name: synthesis-web
+repository_namespace: pierg
+repository_provider: github.com
+use_precommit: true

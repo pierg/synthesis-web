@@ -1,7 +1,7 @@
 import random
 from hashlib import sha256
 
-from backend.shared.paths import save_controller_path
+from src.backend.shared.paths import save_controller_path
 from crome_synthesis.tools.persistence import dump_mono_controller, load_mono_controller, load_parallel_controller, \
     dump_parallel_controller
 
