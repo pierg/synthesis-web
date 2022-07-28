@@ -1,22 +1,71 @@
-# synthesis-web
+# Synthesis-web
 
-[![ci](https://github.com/pierg/synthesis-web/workflows/ci/badge.svg)](https://github.com/pierg/synthesis-web/actions?query=workflow%3Aci)
-[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://pierg.github.io/synthesis-web/)
-[![pypi version](https://img.shields.io/pypi/v/synthesis-web.svg)](https://pypi.org/project/synthesis-web/)
-[![gitpod](https://img.shields.io/badge/gitpod-workspace-blue.svg?style=flat)](https://gitpod.io/#https://github.com/pierg/synthesis-web)
-[![gitter](https://badges.gitter.im/join%20chat.svg)](https://gitter.im/synthesis-web/community)
+Web Interface for the Synthesis package.
 
-Web Interface for the Synthesis package
+## System Requirements
+
+[Strix](https://strix.model.in.tum.de) must be installed on the system.
+
+### Dependencies
+
+Clone crome-logic, crome-contracts, crome-cgg and crome-synthesis from git in the same
+folder where synthesis-web is located
+
+```bash
+git clone https://github.com/pierg/crome-logic.git
+```
+
+```bash
+git clone https://github.com/pierg/crome-contracts.git
+```
+
+```bash
+git clone https://github.com/pierg/crome-cgg.git
+```
+
+```bash
+git clone https://github.com/pierg/crome-synthesis.git
+```
+
+Append it to PYTHONPATH
+
+```bash
+export PYTHONPATH=$PYTHONPATH:../crome-logic/:../crome-contracts/:../crome-cgg/:../crome-synthesis/
+```
 
 ## Installation
 
-With `pip`:
+We use
+[conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) to
+manage the environment and dependencies.
+
+We use [poetry](https://github.com/python-poetry/poetry) to manage 'development'
+dependencies (e.g. linting, type checking).
+
+
+You need to install `conda-merge` so that we can merge all the dependecies from the other repositories and create the `environment.yml`
 ```bash
-pip install synthesis-web
+pip install conda-merge
 ```
 
-With [`pipx`](https://github.com/pipxproject/pipx):
+Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the environment and activate it by runnin the following commands:
 ```bash
-python3.7 -m pip install --user pipx
-pipx install synthesis-web
+make conda-create
+make conda-install
+make conda-activate
 ```
+
+Install the other dependencies with poetry (optional):
+
+```bash
+poetry install
+```
+
+## License
+
+[MIT](https://github.com/piergiuseppe/crome-synthesis/blob/master/LICENSE)
+
+## Features and Credits
+
+- This project has been initially generated with
+  [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package).
