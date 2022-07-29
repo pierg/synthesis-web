@@ -55,11 +55,22 @@ make conda-install
 make conda-activate
 ```
 
-Install the other dependencies with poetry (optional):
+Install the other dependencies with pdm (optional):
 
 ```bash
-poetry install
+pdm install
 ```
+
+## Documentation
+
+You can generate the documentation of the project by running the following commands:
+
+```bash
+make setup
+make docs
+```
+
+The documentation can then be found in a folder named "site" at the root of the project
 
 ## License
 
