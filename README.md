@@ -39,7 +39,7 @@ We use
 [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) to
 manage the environment and dependencies.
 
-We use [poetry](https://github.com/python-poetry/poetry) to manage 'development'
+We use [pdm](https://github.com/pdm-project/pdm) to manage 'development'
 dependencies (e.g. linting, type checking).
 
 
