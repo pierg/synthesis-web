@@ -1,25 +1,25 @@
 channels:
-- default
-- conda-forge
+  - default
+  - conda-forge
 dependencies:
-- aenum
-- dill
-- docker-py
-- flask
-- flask-socketio
-- matplotlib
-- pip
-- poetry
-- pre-commit
-- pydantic
-- pydot
-- pygraphviz
-- python-igraph
-- python=3.10
-- spot
-- tabulate
-- treelib
-- pip:
-  - bloom-filter
-  - pyeda
+  - aenum
+  - dill
+  - docker-py
+  - flask
+  - flask-socketio
+  - matplotlib
+  - pip
+  - poetry
+  - pre-commit
+  - pydantic
+  - pydot
+  - pygraphviz
+  - python-igraph
+  - python=3.10
+  - spot
+  - tabulate
+  - treelib
+  - pip:
+      - bloom-filter
+      - pyeda
 name: synthesis-web

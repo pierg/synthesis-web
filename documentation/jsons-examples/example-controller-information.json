@@ -1,18 +1,11 @@
 {
-    "mode": "strix",
-    "name": "AMBA Decomposed Shift",
-    "assumptions": [
-        "true"
-    ],
-    "guarantees": [
-        "G (hready -> (X hmastlock <-> locked))",
-        "G (!hready -> (X hmastlock <-> hmastlock))"
-    ],
-    "inputs": [
-        "locked",
-        "hready"
-    ],
-    "outputs": [
-        "hmastlock"
-    ]
+  "mode": "strix",
+  "name": "AMBA Decomposed Shift",
+  "assumptions": ["true"],
+  "guarantees": [
+    "G (hready -> (X hmastlock <-> locked))",
+    "G (!hready -> (X hmastlock <-> hmastlock))"
+  ],
+  "inputs": ["locked", "hready"],
+  "outputs": ["hmastlock"]
 }

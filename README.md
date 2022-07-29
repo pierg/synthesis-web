@@ -39,16 +39,19 @@ We use
 [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html) to
 manage the environment and dependencies.
 
-We use [pdm](https://github.com/pdm-project/pdm) to manage 'development'
-dependencies (e.g. linting, type checking).
+We use [pdm](https://github.com/pdm-project/pdm) to manage 'development' dependencies
+(e.g. linting, type checking).
 
+You need to install `conda-merge` so that we can merge all the dependecies from the
+other repositories and create the `environment.yml`
 
-You need to install `conda-merge` so that we can merge all the dependecies from the other repositories and create the `environment.yml`
 ```bash
 pip install conda-merge
 ```
 
-Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the environment and activate it by runnin the following commands:
+Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the
+environment and activate it by runnin the following commands:
+
 ```bash
 make conda-create
 make conda-install

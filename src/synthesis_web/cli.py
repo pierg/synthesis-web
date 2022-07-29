@@ -16,8 +16,7 @@ from typing import List, Optional
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """
-    Return the CLI argument parser.
+    """Return the CLI argument parser.
 
     Returns:
         An argparse parser.
@@ -26,8 +25,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(args: Optional[List[str]] = None) -> int:
-    """
-    Run the main program.
+    """Run the main program.
 
     This function is executed when you type `synthesis-web` or `python -m synthesis_web`.
 

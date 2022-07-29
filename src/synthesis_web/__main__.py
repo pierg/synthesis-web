@@ -1,5 +1,4 @@
-"""
-Entry-point module, in case you use `python -m synthesis_web`.
+"""Entry-point module, in case you use `python -m synthesis_web`.
 
 Why does this file exist, and why `__main__`? For more info, read:
 

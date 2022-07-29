@@ -1,22 +1,26 @@
 import base64
 import os
+from hashlib import sha256
 from os import walk
 from typing import Any
 
-from hashlib import sha256
-from src.backend.shared.paths import controller_path, save_controller_path
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
 from crome_logic.typeset import Typeset
-from crome_synthesis.controller import _check_header, Controller
+from crome_synthesis.controller import Controller, _check_header
 from crome_synthesis.controller.controller_info import ControllerSpec
 from crome_synthesis.pcontrollers import PControllers
-from crome_synthesis.tools.persistence import dump_mono_controller, load_mono_controller, load_parallel_controller, \
-    dump_parallel_controller
+from crome_synthesis.tools.persistence import (
+    dump_mono_controller,
+    dump_parallel_controller,
+    load_mono_controller,
+    load_parallel_controller,
+)
+
+from src.backend.shared.paths import controller_path, save_controller_path
 
 
 class Synthesis:
-
     @staticmethod
     def get_synthesis(session_id) -> dict[str, list[Any]]:
         list_controller = {}
@@ -36,13 +40,19 @@ class Synthesis:
                 for filename in filenames:
                     if os.path.splitext(filename)[1] == ".png":
                         continue
-                    controller = load_function(absolute_folder_path=controller_folder / dir_name,
-                                               controller_name=filename.split(".")[0][:-2])
+                    controller = load_function(
+                        absolute_folder_path=controller_folder / dir_name, controller_name=filename.split(".")[0][:-2]
+                    )
                     name_split = controller.name.split(" # ")
                     name_split.pop(-1)
                     name = " # ".join(name_split)
-                    data = {"id": name, "assumptions": controller.spec.a, "guarantees": controller.spec.g,
-                            "inputs": controller.spec.i, "outputs": controller.spec.o}
+                    data = {
+                        "id": name,
+                        "assumptions": controller.spec.a,
+                        "guarantees": controller.spec.g,
+                        "inputs": controller.spec.i,
+                        "outputs": controller.spec.o,
+                    }
                     dict_controller[mode].append(data)
             list_controller.update(dict_controller)
 
@@ -55,25 +65,32 @@ class Synthesis:
             for filename in filenames:
                 info = ControllerSpec.from_file(controller_folder / dir_name / filename)
                 name = Synthesis.__get_name_controller(controller_folder / dir_name / filename)
-                data = {"id": name, "assumptions": info.a, "guarantees": info.g, "inputs": info.i,
-                        "outputs": info.o}
+                data = {"id": name, "assumptions": info.a, "guarantees": info.g, "inputs": info.i, "outputs": info.o}
                 dict_controller[dir_name].append(data)
             list_controller.update(dict_controller)
         return list_controller
 
     @staticmethod
     def delete_synthesis(data, session_id):
-        complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                       + " ".join(data["assumptions"])
-        full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+        complete_str = (
+            " ".join(data["inputs"])
+            + " ".join(data["outputs"])
+            + " ".join(data["guarantees"])
+            + " ".join(data["assumptions"])
+        )
+        full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
         save_folder = save_controller_path(session_id, data["mode"])
         os.remove(save_folder / f"{full_name}_s.dat")
 
     @staticmethod
     def create_controller(data, session_id) -> list[str] | str:
-        complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                       + " ".join(data["assumptions"])
-        full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+        complete_str = (
+            " ".join(data["inputs"])
+            + " ".join(data["outputs"])
+            + " ".join(data["guarantees"])
+            + " ".join(data["assumptions"])
+        )
+        full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
         save_folder = save_controller_path(session_id, data["mode"])
         if data["mode"] == "strix":
             if os.path.exists(save_folder / f"{full_name}.png"):
@@ -95,7 +112,9 @@ class Synthesis:
                     read_png_file = base64.b64encode(file.read())
                     return str(read_png_file)
         else:
-            controller_found = load_parallel_controller(absolute_folder_path=save_folder, controller_name=full_name+"_p")
+            controller_found = load_parallel_controller(
+                absolute_folder_path=save_folder, controller_name=full_name + "_p"
+            )
             if controller_found:
                 print("Found !")
                 json_content = []
@@ -123,9 +142,10 @@ class Synthesis:
                         read_png_file = base64.b64encode(file.read())
                         json_content.append(str(read_png_file))
                 return json_content
+
     @staticmethod
     def __get_name_controller(file) -> str:
-        with open(file, 'r') as ifile:
+        with open(file, "r") as ifile:
             name_found = False
             for line in ifile:
                 if not line.strip():
@@ -147,12 +167,12 @@ class Synthesis:
         for line in lst:
             if "->" in line and "label" in line:  # It's a line with a
                 split_line = line.split("label=")
-                to_modify = split_line[1].replace(']', '').replace('"', '')
+                to_modify = split_line[1].replace("]", "").replace('"', "")
                 lst_to_modify = to_modify.split("&")
                 tmp = []
                 for elt in lst_to_modify:
                     if "!" not in elt:
-                        tmp.append(elt.replace(' ', ''))
+                        tmp.append(elt.replace(" ", ""))
                 split_line[1] = " & ".join(tmp)
                 line = 'label="'.join(split_line) + '"]'
             result.append(line)

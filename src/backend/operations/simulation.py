@@ -1,23 +1,31 @@
 import random
 from hashlib import sha256
 
+from crome_synthesis.tools.persistence import (
+    dump_mono_controller,
+    dump_parallel_controller,
+    load_mono_controller,
+    load_parallel_controller,
+)
+
 from src.backend.shared.paths import save_controller_path
-from crome_synthesis.tools.persistence import dump_mono_controller, load_mono_controller, load_parallel_controller, \
-    dump_parallel_controller
 
 
 # noinspection DuplicatedCode
 class Simulation:
-
     @staticmethod
     def get_input_possible(session_id, data):
         save_folder = save_controller_path(session_id, data["mode"])
         if data["mode"] == "parallel":
             return  # Not implemented yet
         elif data["mode"] == "strix":
-            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                           + " ".join(data["assumptions"])
-            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            complete_str = (
+                " ".join(data["inputs"])
+                + " ".join(data["outputs"])
+                + " ".join(data["guarantees"])
+                + " ".join(data["assumptions"])
+            )
+            full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return
@@ -31,19 +39,23 @@ class Simulation:
         if data["mode"] == "parallel":
             return  # We haven't implemented it yet
         elif data["mode"] == "strix":
-            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                           + " ".join(data["assumptions"])
-            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            complete_str = (
+                " ".join(data["inputs"])
+                + " ".join(data["outputs"])
+                + " ".join(data["guarantees"])
+                + " ".join(data["assumptions"])
+            )
+            full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return  # The controller saved is not the one wanted. Glitch !
-            old_state = controller.mealy.current_state.name
+            controller.mealy.current_state.name
             input_mealy = None
             for possible_input in controller.mealy.current_state.possible_inputs:
                 if str(possible_input).strip() == choice:
                     input_mealy = possible_input
                     break
-            outputs = controller.mealy.react(input_mealy)
+            controller.mealy.react(input_mealy)
             dump_mono_controller(absolute_folder_path=save_folder, controller=controller)
             return controller.mealy.raw_history
 
@@ -53,9 +65,13 @@ class Simulation:
         if mode == "parallel":
             return
         if mode == "strix":
-            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                           + " ".join(data["assumptions"])
-            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            complete_str = (
+                " ".join(data["inputs"])
+                + " ".join(data["outputs"])
+                + " ".join(data["guarantees"])
+                + " ".join(data["assumptions"])
+            )
+            full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return
@@ -76,9 +92,13 @@ class Simulation:
                 controller.mealy.reset()
             dump_parallel_controller(absolute_folder_path=save_folder, controller=pcontroller)
         elif data["mode"] == "strix":
-            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                           + " ".join(data["assumptions"])
-            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            complete_str = (
+                " ".join(data["inputs"])
+                + " ".join(data["outputs"])
+                + " ".join(data["guarantees"])
+                + " ".join(data["assumptions"])
+            )
+            full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return
@@ -91,11 +111,14 @@ class Simulation:
         if data["mode"] == "parallel":
             return  # Not implemented yet
         elif data["mode"] == "strix":
-            complete_str = " ".join(data["inputs"]) + " ".join(data["outputs"]) + " ".join(data["guarantees"]) \
-                           + " ".join(data["assumptions"])
-            full_name = data["name"] + " # " + sha256(complete_str.encode('utf-8')).hexdigest()[:10]
+            complete_str = (
+                " ".join(data["inputs"])
+                + " ".join(data["outputs"])
+                + " ".join(data["guarantees"])
+                + " ".join(data["assumptions"])
+            )
+            full_name = data["name"] + " # " + sha256(complete_str.encode("utf-8")).hexdigest()[:10]
             controller = load_mono_controller(absolute_folder_path=save_folder, controller_name=full_name)
             if not controller:
                 return []
             return controller.mealy.raw_history
-

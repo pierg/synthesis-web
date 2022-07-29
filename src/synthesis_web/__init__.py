@@ -1,5 +1,4 @@
-"""
-synthesis-web package.
+"""synthesis-web package.
 
 Web Interface for the Synthesis package
 """

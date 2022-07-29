@@ -1,38 +1,38 @@
 .first-child-no-border-top:first-child > td {
-    border-top: 0;
+  border-top: 0;
 }
 
 .overflow-x-initial > div:first-child {
-    overflow-x: initial;
+  overflow-x: initial;
 }
 
 .custom-modal-dialog {
-    max-width: 75%;
-    margin: 6.75rem auto;
+  max-width: 75%;
+  margin: 6.75rem auto;
 }
 
 .min-content {
-    width: min-content;
+  width: min-content;
 }
 
 .grid-template-25-75 {
-    grid-template-columns: 25% 75%;
+  grid-template-columns: 25% 75%;
 }
 
 .grid-template-2 {
-    grid-template-columns: auto;
+  grid-template-columns: auto;
 }
 
 .shifted-canvas-margin {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .font-semibold-important {
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 }
 
 .hover-no-underline:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .y-translate-0 {
@@ -44,15 +44,15 @@
 }
 
 .top--10 {
-    top: -1.5rem;
+  top: -1.5rem;
 }
 
 .top--12 {
-    top: -3rem;
+  top: -3rem;
 }
 
 .top--30 {
-    top: -4.5rem;
+  top: -4.5rem;
 }
 
 .left-9\/10 {
@@ -60,27 +60,27 @@
 }
 
 .no-resize {
-    resize: none;
+  resize: none;
 }
 
 .justify-evenly {
-    justify-content: space-evenly;
+  justify-content: space-evenly;
 }
 
 .world-border-8 {
-    border-width: 8px;
+  border-width: 8px;
 }
 
 .world-border-0 {
-    border-width: 0px;
+  border-width: 0px;
 }
 
 .hover\:no-underline:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .cursor-default {
-    cursor: default;
+  cursor: default;
 }
 
 .hover\:text-lightBlue-500:hover {
@@ -89,18 +89,17 @@
 }
 
 .dark-tooltip > div > div {
-    background-color: #0f172a;
-    color: white;
+  background-color: #0f172a;
+  color: white;
 }
 
 .dark-tooltip > div > span:before {
-    border-bottom-color: #0f172a !important;
+  border-bottom-color: #0f172a !important;
 }
 
 .dark-tooltip > div {
-    z-index: 9999;
+  z-index: 9999;
 }
-
 
 .fade-enter {
   opacity: 0;
@@ -121,15 +120,21 @@
 }
 
 .ring-1 {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+    var(--tw-shadow, 0 0 #0000);
 }
 
 .ring {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width)
+    var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+    var(--tw-shadow, 0 0 #0000);
 }
 
 .ring-lightBlue-500 {
@@ -138,93 +143,96 @@
 }
 
 #synthesisTable {
-    border-collapse: collapse;
-    border-spacing: 0 0.5em;
+  border-collapse: collapse;
+  border-spacing: 0 0.5em;
 }
 
-#synthesisTable th, #synthesisTable td {
-    padding: 1em;
+#synthesisTable th,
+#synthesisTable td {
+  padding: 1em;
 }
 
-#synthesisTable, #synthesisTable th, #synthesisTable td {
-    border-top: 1px solid rgb(203, 213, 225);
-    border-bottom: 1px solid rgb(203, 213, 225);
+#synthesisTable,
+#synthesisTable th,
+#synthesisTable td {
+  border-top: 1px solid rgb(203, 213, 225);
+  border-bottom: 1px solid rgb(203, 213, 225);
 }
 
 .h-fit {
-    height: fit-content;
+  height: fit-content;
 }
 
 .react-transform-wrapper {
-    width: 100% !important;
-    min-height: 150px !important;
+  width: 100% !important;
+  min-height: 150px !important;
 }
 
 .react-transform-component {
-    width: 100% !important;
-    min-height: 150px !important;
-    height: 100% !important;
+  width: 100% !important;
+  min-height: 150px !important;
+  height: 100% !important;
 }
 
 @media (min-width: 640px) {
-    .sm\:c-m-w-70 {
-        max-width: 500px;
-    }
+  .sm\:c-m-w-70 {
+    max-width: 500px;
+  }
 }
 
 @media (min-width: 768px) {
-    .md\:c-m-w-60 {
-        max-width: 600px;
-    }
+  .md\:c-m-w-60 {
+    max-width: 600px;
+  }
 }
 
 @media (min-width: 1024px) {
-    .lg\:c-m-w-50 {
-        max-width: 700px;
-    }
+  .lg\:c-m-w-50 {
+    max-width: 700px;
+  }
 }
 
 @media (min-width: 1280px) {
-    .xl\:c-m-w-40 {
-        max-width: 1000px;
-    }
+  .xl\:c-m-w-40 {
+    max-width: 1000px;
+  }
 }
 
 @media (min-width: 1850px) {
-    .xxl\:w-3\/12 {
-        width: 25%;
-    }
-    .xxl\:mb-0 {
-        margin-bottom: 0;
-    }
+  .xxl\:w-3\/12 {
+    width: 25%;
+  }
+  .xxl\:mb-0 {
+    margin-bottom: 0;
+  }
 
-    /** SIDEBAR **/
-    .xxl\:z-10 {
-        z-index: 10;
-    }
-    .xxl\:translate-x-0 {
-        --tw-translate-x: 0px !important;
-    }
-    .xxl\:hidden {
-        display: none;
-    }
-    .xxl\:flex {
-        display: -webkit-flex;
-        display: flex;
-    }
-    .xxl\:pb-2 {
-        padding-bottom: 0.5rem;
-    }
-    .xxl\:flex-col {
-        -webkit-flex-direction: column;
-        flex-direction: column;
-    }
-    .xxl\:min-w-full {
-        min-width: 100%;
-    }
+  /** SIDEBAR **/
+  .xxl\:z-10 {
+    z-index: 10;
+  }
+  .xxl\:translate-x-0 {
+    --tw-translate-x: 0px !important;
+  }
+  .xxl\:hidden {
+    display: none;
+  }
+  .xxl\:flex {
+    display: -webkit-flex;
+    display: flex;
+  }
+  .xxl\:pb-2 {
+    padding-bottom: 0.5rem;
+  }
+  .xxl\:flex-col {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+  .xxl\:min-w-full {
+    min-width: 100%;
+  }
 
-    .xxl\:ml-64 {
-        margin-left: 16rem;
-    }
-    /** SIDEBAR **/
+  .xxl\:ml-64 {
+    margin-left: 16rem;
+  }
+  /** SIDEBAR **/
 }

@@ -1,49 +1,55 @@
-import React, {useEffect, useCallback, useState} from 'react'
-import {useSocket} from "../../../socket/SocketProvider";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useCallback, useState } from "react";
+import { useSocket } from "../../../socket/SocketProvider";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SocketIoConsoleMessage(props) {
+  const socket = useSocket();
 
-    const socket = useSocket()
+  const [message, setMessage] = useState("");
 
-    const [message, setMessage] = useState("");
+  const setMessageFunction = useCallback(
+    (message_received) => {
+      setMessage(message_received);
+    },
+    [setMessage]
+  );
 
-    const setMessageFunction = useCallback((message_received) => {
-        setMessage(message_received);
-    }, [setMessage])
+  const setNotificationFunction = useCallback((message_received) => {
+    toast[message_received["crometypes"]](message_received["content"]);
+  }, []);
 
-    const setNotificationFunction = useCallback((message_received) => {
-        toast[message_received["crometypes"]](message_received["content"]);
-    }, [])
+  useEffect(() => {
+    // CONSOLE MESSAGE
+    if (socket == null) return;
 
-    useEffect(() => { // CONSOLE MESSAGE
-        if (socket == null) return
+    socket.on("send-message", setMessageFunction);
 
-        socket.on('send-message', setMessageFunction)
+    return () => {
+      socket.off("send-message");
+    };
+  }, [socket, setMessageFunction, props.session]);
 
-        return () => {
-            socket.off('send-message')
-        }
+  useEffect(() => {
+    // NOTIFICATION MESSAGE (TOAST)
+    if (socket == null) return;
 
-    }, [socket, setMessageFunction, props.session])
+    socket.on("send-notification", setNotificationFunction);
 
-    useEffect(() => { // NOTIFICATION MESSAGE (TOAST)
-        if (socket == null) return
+    return () => {
+      socket.off("send-message");
+    };
+  }, [socket, setNotificationFunction, props.session]);
 
-        socket.on('send-notification', setNotificationFunction)
+  useEffect(() => {
+    props.modifyMessage(message);
+  }, [message]); // eslint-disable-line react-hooks/exhaustive-deps
 
-        return () => {
-            socket.off('send-message')
-        }
-
-    }, [socket, setNotificationFunction, props.session])
-
-    useEffect(() => {
-        props.modifyMessage(message);
-    }, [message])  // eslint-disable-line react-hooks/exhaustive-deps
-
-    return (<><ToastContainer /></>);
+  return (
+    <>
+      <ToastContainer />
+    </>
+  );
 }
 
 export default SocketIoConsoleMessage;

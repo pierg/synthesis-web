@@ -10,15 +10,10 @@ from flask_socketio import SocketIO, emit
 
 from src.backend.operations.simulation import Simulation
 from src.backend.operations.synthesis import Synthesis
-from src.backend.shared.paths import (
-    build_path,
-    storage_path,
-)
+from src.backend.shared.paths import build_path, storage_path
 
 parser = argparse.ArgumentParser(description="Launching Flask Backend")
-parser.add_argument(
-    "--serve", default=False, type=bool, help="indicate if serving the pages"
-)
+parser.add_argument("--serve", default=False, type=bool, help="indicate if serving the pages")
 args = parser.parse_args()
 
 if args.serve:
@@ -40,10 +35,8 @@ cookies: dict[str, str] = {}
 
 @socketio.on("connect")
 def connected() -> None:
-    """
-    Establish the connection between the front and the back
-    while checking that the session is not already in use.
-    """
+    """Establish the connection between the front and the back while checking
+    that the session is not already in use."""
     print("Connected")
     print(f'ID {request.args.get("id")}')
     lock = threading.Lock()
@@ -53,11 +46,7 @@ def connected() -> None:
     tab_id = str(request.args.get("tabId"))
     if session_id in users:  # Check if this session is already open
         if cookie != cookies[session_id]:
-            emit(
-                "is-connected",
-                False,
-                room=request.sid
-            )
+            emit("is-connected", False, room=request.sid)
             return
     else:
         users[session_id] = {}
@@ -65,23 +54,15 @@ def connected() -> None:
     cookies[session_id] = cookie
     now = time.localtime(time.time())
     emit(
-        "send-message",
-        strftime("%H:%M:%S", now) + f" Connected to session {request.args.get('id')}",
-        room=request.sid
+        "send-message", strftime("%H:%M:%S", now) + f" Connected to session {request.args.get('id')}", room=request.sid
     )
-    emit(
-        "is-connected",
-        True,
-        room=request.sid
-    )
+    emit("is-connected", True, room=request.sid)
     lock.release()
 
 
 @socketio.on("session-existing")
 def check_if_session_exist(data) -> None:
-    """
-    Check if a session is free and if the user can enter it.
-    """
+    """Check if a session is free and if the user can enter it."""
     session_id = str(data["session"])
     tab_id = str(request.args.get("tabId"))
     cookie = str(request.args.get("cookie"))
@@ -104,9 +85,7 @@ def check_if_session_exist(data) -> None:
 
 @socketio.on("disconnect")
 def disconnected() -> None:
-    """
-    It disconnects the user of the session he was attached to.
-    """
+    """It disconnects the user of the session he was attached to."""
     print("Disconnected")
     print(request.args)
     print(f'ID {request.args.get("id")}')
@@ -119,7 +98,7 @@ def disconnected() -> None:
         emit(
             "send-message",
             f"{strftime('%H:%M:%S', now)} Session {request.args.get('id')} disconnected",
-            room=request.sid
+            room=request.sid,
         )
         del users[session_id][tab_id]
 
@@ -135,27 +114,15 @@ def get_current_time() -> dict[str, float]:
 
 
 def send_message_to_user(content: str, room_id: str, crometype: str) -> None:
-    """
-    Simplified version to send a notification and a message to a user.
-    """
+    """Simplified version to send a notification and a message to a user."""
     now = time.localtime(time.time())
-    emit(
-        "send-notification",
-        {"crometypes": crometype, "content": content},
-        room=room_id
-    )
-    emit(
-        "send-message",
-        f"{strftime('%H:%M:%S', now)} - {content}",
-        room=room_id
-    )
+    emit("send-notification", {"crometypes": crometype, "content": content}, room=room_id)
+    emit("send-message", f"{strftime('%H:%M:%S', now)} - {content}", room=room_id)
 
 
 @socketio.on("get-synthesis")
 def get_synthesis() -> None:
-    """
-        get the synthesis created by the user and the examples.
-    """
+    """get the synthesis created by the user and the examples."""
     list_examples = Synthesis.get_synthesis(str(request.args.get("id")))
 
     emit("receive-synthesis", list_examples, room=request.sid)
@@ -163,9 +130,7 @@ def get_synthesis() -> None:
 
 @socketio.on("delete-synthesis")
 def delete_synthesis(data) -> None:
-    """
-        Delete a synthesis using only his name to find it.
-    """
+    """Delete a synthesis using only his name to find it."""
     session_id = str(request.args.get("id"))
 
     Synthesis.delete_synthesis(data, session_id)
@@ -176,9 +141,7 @@ def delete_synthesis(data) -> None:
 
 @socketio.on("create-controller")
 def create_controller(data) -> None:
-    """
-        Create the controller and the mealy according to the correct method
-    """
+    """Create the controller and the mealy according to the correct method."""
 
     try:
         json_content = Synthesis.create_controller(data, request.args.get("id"))
@@ -186,16 +149,19 @@ def create_controller(data) -> None:
         emit("controller-created", json_content, room=request.sid)
     except Exception as e:
         emit("controller-created", False, room=request.sid)
-        emit("send-notification", {"content": "The mealy creation has failed. See the console for more information",
-                                   "crometypes": "error"}, room=request.sid)
+        emit(
+            "send-notification",
+            {"content": "The mealy creation has failed. See the console for more information", "crometypes": "error"},
+            room=request.sid,
+        )
         emit("send-message", f"Mealy \"{data['name']}\" can't be created. Error : {str(e)} ", room=request.sid)
 
 
 @socketio.on("get-inputs")
 def get_inputs(data) -> None:
-    """
-        Get all the inputs possible for the current state of a controller.
-        It differentiates the two ways of simulating the synthesis.
+    """Get all the inputs possible for the current state of a controller.
+
+    It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
     inputs = Simulation.get_input_possible(data=data, session_id=session_id)
@@ -204,18 +170,15 @@ def get_inputs(data) -> None:
 
 @socketio.on("get-history")
 def get_history(data) -> None:
-    """
-        Get the history of the mealy.
-    """
+    """Get the history of the mealy."""
     session_id = request.args.get("id")
     history = Simulation.get_history(data=data, session_id=session_id)
     emit("received-history", history, room=request.sid)
 
+
 @socketio.on("simulate-controller")
 def simulate_controller(data) -> None:
-    """
-        Simulate the mealy according to the method given
-    """
+    """Simulate the mealy according to the method given."""
     content = Simulation.react_to_inputs(data=data, session_id=request.args.get("id"), choice=data["choice"])
     send_message_to_user("The mealy has been simulated", "success", request.sid)
     emit("controller-simulated", content, room=request.sid)
@@ -223,9 +186,9 @@ def simulate_controller(data) -> None:
 
 @socketio.on("reset-controller")
 def reset_controller(data) -> None:
-    """
-        It reset a controller to his initial state.
-        It differentiates the two ways of simulating the synthesis.
+    """It reset a controller to his initial state.
+
+    It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
     Simulation.reset_simulation(data=data, session_id=session_id)
@@ -235,15 +198,17 @@ def reset_controller(data) -> None:
 
 @socketio.on("random-simulation-controller")
 def random_simulation_controller(data) -> None:
-    """
-        It simulates a controller by randomly choosing the inputs for each state.
-        It differentiates the two ways of simulating the synthesis.
+    """It simulates a controller by randomly choosing the inputs for each
+    state.
+
+    It differentiates the two ways of simulating the synthesis.
     """
     session_id = request.args.get("id")
     content = Simulation.random_simulation(data=data, mode=data["mode"], session_id=session_id)
     emit("receive-random-simulation-controller", content, room=request.sid)
-    send_message_to_user(f"A random simulation of {data['iterations']} iterations has been made",
-                         request.sid, "success")
+    send_message_to_user(
+        f"A random simulation of {data['iterations']} iterations has been made", request.sid, "success"
+    )
 
 
 if __name__ == "__main__":

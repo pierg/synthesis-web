@@ -1,4 +1,4 @@
 const textProps = {
-    text: ""
+  text: "",
 };
 export default textProps;

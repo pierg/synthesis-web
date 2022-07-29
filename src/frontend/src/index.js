@@ -12,21 +12,17 @@ import "./assets/styles/docs.css";
 //
 import RoutePage from "./RoutePage";
 
-
 // // custom
 import ReactDOM from "react-dom/client";
 
-import {Navigate, Routes} from "react-router";
+import { Navigate, Routes } from "react-router";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <HashRouter>
-        <Routes>
-
-            <Route path="/:id" element={<RoutePage/>}/>
-            <Route path="*" element={<Navigate to="index"/>}/>
-
-
-        </Routes>
-    </HashRouter>
+  <HashRouter>
+    <Routes>
+      <Route path="/:id" element={<RoutePage />} />
+      <Route path="*" element={<Navigate to="index" />} />
+    </Routes>
+  </HashRouter>
 );

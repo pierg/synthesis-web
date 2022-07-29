@@ -24,29 +24,29 @@
 .docs-code-preview .token.comment {
   color: #7d7d7d;
 }
-.ct-docs-disable-nav-fixed nav.fixed{
-  position: absolute!important;
+.ct-docs-disable-nav-fixed nav.fixed {
+  position: absolute !important;
   top: 0;
   left: 0;
 }
-.ct-docs-disable-sidebar-fixed nav.fixed{
-  position: unset!important;
+.ct-docs-disable-sidebar-fixed nav.fixed {
+  position: unset !important;
   top: 0;
 }
-.ct-docs-disable-sidebar-content nav.fixed{
-  position: unset!important;
+.ct-docs-disable-sidebar-content nav.fixed {
+  position: unset !important;
 }
-.ct-docs-disable-sidebar-content div.md\:ml-64{
-  margin-left: -16rem!important;
+.ct-docs-disable-sidebar-content div.md\:ml-64 {
+  margin-left: -16rem !important;
   width: 100%;
 }
 @media (min-width: 768px) {
-  .ct-docs-disable-sidebar-content div.md\:ml-64{
-    margin-left: 0!important;
+  .ct-docs-disable-sidebar-content div.md\:ml-64 {
+    margin-left: 0 !important;
     width: calc(100% - 16rem);
   }
 }
-.docs-components-wrapper [id]::before{
+.docs-components-wrapper [id]::before {
   display: block;
   height: 6rem;
   margin-top: -6rem;
