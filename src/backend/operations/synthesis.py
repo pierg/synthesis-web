@@ -2,7 +2,7 @@ import base64
 import os
 from hashlib import sha256
 from os import walk
-from typing import Any
+from typing import Any, Dict, List
 
 from crome_logic.specification.temporal import LTL
 from crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
@@ -22,20 +22,19 @@ from src.backend.shared.paths import controller_path, save_controller_path
 
 class Synthesis:
     @staticmethod
-    def get_synthesis(session_id) -> dict[str, list[Any]]:
+    def get_synthesis(session_id) -> Dict[str, List[Any]]:
         list_controller = {}
         # We get all the controller already synthesize
         controller_folder = controller_path(session_id)
         if os.path.isdir(controller_folder):
             _, dir_names, filenames = next(walk(controller_folder))
-            dict_controller = {"strix": [], "parallel": []}
+            dict_controller: Dict[str, List[Any]] = {"strix": [], "parallel": []}
             for dir_name in dir_names:
                 mode = dir_name[5:]
                 _, _, filenames = next(walk(controller_folder / dir_name))
-                load_function = None
                 if mode == "strix":
                     load_function = load_mono_controller
-                elif mode == "parallel":
+                else:
                     load_function = load_parallel_controller
                 for filename in filenames:
                     if os.path.splitext(filename)[1] == ".png":
@@ -83,7 +82,7 @@ class Synthesis:
         os.remove(save_folder / f"{full_name}_s.dat")
 
     @staticmethod
-    def create_controller(data, session_id) -> list[str] | str:
+    def create_controller(data, session_id) -> List[str] | str:
         complete_str = (
             " ".join(data["inputs"])
             + " ".join(data["outputs"])
@@ -179,14 +178,13 @@ class Synthesis:
         return "\n".join(result)
 
     @staticmethod
-    def __get_controller_from_folder(folder, mode) -> list[Controller]:
+    def __get_controller_from_folder(folder, mode) -> List[Controller]:
         if not os.path.exists(folder):
             return []
         _, _, filenames = next(walk(folder))
-        load_function = None
         if mode == "strix":
             load_function = load_mono_controller
-        elif mode == "parallel":
+        else:
             load_function = load_parallel_controller
         result = []
         for filename in filenames:

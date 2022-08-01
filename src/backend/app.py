@@ -3,7 +3,7 @@ import threading
 import time
 from os import walk
 from time import strftime
-from typing import Any
+from typing import Any, Dict
 
 from flask import Flask, Response, request
 from flask_socketio import SocketIO, emit
@@ -25,10 +25,10 @@ else:
 
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-users: dict[str, Any] = {}
+users: Dict[str, Any] = {}
 # String dictionary associating the id of the request to talk to the user with the session id given by the frontend.
 
-cookies: dict[str, str] = {}
+cookies: Dict[str, str] = {}
 
 # String dictionary association the id of the session with that of the cookie that can open it.
 
@@ -109,7 +109,7 @@ def index() -> Response:
 
 
 @app.route("/time")
-def get_current_time() -> dict[str, float]:
+def get_current_time() -> Dict[str, float]:
     return {"time": time.time()}
 
 
