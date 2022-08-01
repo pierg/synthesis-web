@@ -63,6 +63,11 @@ Install the other dependencies with pdm (optional):
 ```bash
 pdm install
 ```
+## One magic command
+
+Run `make pre-commit` to run all the pre-commit tools ([pre-commit](https://pre-commit.com/#install) needs to be installed)
+
+Check all the available commands in `Makefile`
 
 ## Documentation
 
