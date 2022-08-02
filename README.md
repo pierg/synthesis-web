@@ -65,7 +65,7 @@ pdm install
 ```
 ## One magic command
 
-Run `make pre-commit` to run all the pre-commit tools ([pre-commit](https://pre-commit.com/#install) needs to be installed)
+Run `make pre-commit` to run all the pre-commit tools
 
 Check all the available commands in `Makefile`
 
