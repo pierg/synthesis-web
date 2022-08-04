@@ -74,6 +74,7 @@ Check all the available commands in `Makefile`
 You can generate the documentation of the project by running the following commands:
 
 ```bash
+pdm install
 make setup
 make docs
 ```
