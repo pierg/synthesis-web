@@ -1,78 +1,89 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 import React from "react";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
-import {Modal} from "reactstrap";
+import {Modal, ModalBody} from "reactstrap";
+import customfooter from "../../_texts/custom/customfooter";
 
 
-export default function CustomFooter({copyright, links}) {
+export default function CustomFooter() {
 
-    const [open, setOpen] = React.useState(false);
+    const [openAboutUs, setOpenAboutUs] = React.useState(false);
+    const [openPublication, setOpenPublication] = React.useState(false);
 
-
-    return (
-        <>
+    return (<>
             <footer className="block py-4 w-full absolute bottom-0">
                 <div className="container mx-auto px-4">
                     <hr className="mb-4 border-b-1 border-blueGray-200"/>
-                    <div className="flex flex-wrap items-center md:justify-between justify-center">
-                        <div className="w-full md:w-4/12 px-4">
-                            <div className="text-center mb-2 md:text-left md:mb-0">
-                                {copyright && copyright.to && (
-                                    <Link
-                                        {...copyright}
-                                        className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left"
-                                    />
-                                )}
-                                {copyright && copyright.to === undefined && (
-                                    <a
-                                        {...copyright}
-                                        className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left"
-                                    />
-                                )}
-                            </div>
-                        </div>
+                    <div className="flex flex-wrap justify-end">
                         <div className="w-full md:w-8/12 px-4">
-                            <ul className="flex flex-wrap list-none md:justify-end  justify-center">
-                                {links.map((prop, key) => (
-                                    <li key={key}>
-                                        {prop.children === "About us" ?
-                                            <>
-                                                <button
-                                                    onClick={() => setOpen(true)}
-                                                    className="text-blueGray-700 hover:text-blueGray-900 text-sm font-semibold block py-1 px-3"
-                                                >{prop.children}</button>
-                                                <Modal
-                                                    isOpen={open}
-                                                    toggle={() => setOpen(false)}
-                                                    className={
-                                                      "custom-modal-dialog lg:c-m-w-50"
-                                                    }
-                                                >
-                                                    <div className="modal-header justify-content-center pt-5 font-bold text-2xl uppercase text-blueGray-700">About us</div>
-                                                    <p className="modal-body text-justify px-5 pb-5 text-lg">{prop.text}</p>
-                                                </Modal>
-                                            </>
-                                            :
-                                            <a
-                                                {...prop}
-                                                className="text-blueGray-700 hover:text-blueGray-900 text-sm font-semibold block py-1 px-3"
-                                            />
-                                        }
-                                    </li>
-                                ))}
+                            <ul className="flex flex-wrap list-none md:justify-end justify-center">
+                                <li>
+                                    <a
+                                        target="_blank"
+                                        href={customfooter.github.href}
+                                        className="text-blueGray-700 hover:no-underline no-underline hover:text-blueGray-900 text-sm focus:outline-none font-semibold block px-3"
+                                    > {customfooter.github.title} </a>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={() => setOpenPublication(true)}
+                                        className="text-blueGray-700 hover:text-blueGray-900 text-sm font-semibold block px-3"
+                                    > {customfooter.publications.title} </button>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={() => setOpenAboutUs(true)}
+                                        className="text-blueGray-700 hover:text-blueGray-900 text-sm font-semibold block px-3"
+                                    > {customfooter.aboutUs.title} </button>
+                                </li>
+
+
                             </ul>
+                            <Modal
+                                isOpen={openPublication}
+                                toggle={() => setOpenPublication(false)}
+                                className={"custom-modal-dialog lg:c-m-w-50"}
+                            >
+                                <ModalBody>
+
+                                    <div
+                                        className="modal-header justify-content-center font-bold text-2xl uppercase text-blueGray-700">{customfooter.publications.title}
+                                    </div>
+
+                                    <ul className="modal-body pb-5">
+                                        {customfooter.publications.papers.map((prop, key) => (<li key={key}>
+                                                <a
+                                                    target="_blank"
+                                                    href={prop.href}
+                                                    className="text-blueGray-700 hover:text-blueGray-900 text-base focus:outline-none font-medium block py-1 px-3"
+                                                > {prop.text} </a>
+                                            </li>))}
+                                    </ul>
+                                </ModalBody>
+                            </Modal>
+
+                            <Modal
+                                isOpen={openAboutUs}
+                                toggle={() => setOpenAboutUs(false)}
+                                className={"custom-modal-dialog lg:c-m-w-50"}
+                            >
+                                <ModalBody>
+                                    <div
+                                        className="modal-header justify-content-center font-bold text-2xl uppercase text-blueGray-700">{customfooter.aboutUs.title}
+                                    </div>
+
+                                    <p className="modal-body text-justify font-medium text-lg">{customfooter.aboutUs.text}</p>
+                                </ModalBody>
+                            </Modal>
                         </div>
                     </div>
                 </div>
             </footer>
-        </>
-    );
+        </>);
 }
 
 CustomFooter.defaultProps = {
-    copyright: {},
-    links: [],
+    copyright: {}, links: [],
 };
 
 CustomFooter.propTypes = {
@@ -80,8 +91,7 @@ CustomFooter.propTypes = {
     // that sits on the left of the footer
     // if you pass a prop named to, the link will be
     // generated using Link from react-router-dom
-    copyright: PropTypes.object,
-    // array of properties to pass to the link object
+    copyright: PropTypes.object, // array of properties to pass to the link object
     // that are on the right side of the footer
     // if you pass a prop named to, the link will be
     // generated using Link from react-router-dom
