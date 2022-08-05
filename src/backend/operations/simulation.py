@@ -1,7 +1,7 @@
 import random
 from hashlib import sha256
 
-from src.crome_synthesis.tools.persistence import (
+from crome_synthesis.src.crome_synthesis.tools.persistence import (
     dump_mono_controller,
     dump_parallel_controller,
     load_mono_controller,

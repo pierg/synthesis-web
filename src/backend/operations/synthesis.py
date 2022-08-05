@@ -4,13 +4,13 @@ from hashlib import sha256
 from os import walk
 from typing import Any, Dict, List
 
-from src.crome_logic.specification.temporal import LTL
-from src.crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
-from src.crome_logic.typeset import Typeset
-from src.crome_synthesis.controller import Controller, _check_header
-from src.crome_synthesis.controller.controller_info import ControllerSpec
-from src.crome_synthesis.pcontrollers import PControllers
-from src.crome_synthesis.tools.persistence import (
+from crome_logic.src.crome_logic.specification.temporal import LTL
+from crome_logic.src.crome_logic.typelement.basic import BooleanControllable, BooleanUncontrollable
+from crome_logic.src.crome_logic.typeset import Typeset
+from crome_synthesis.src.crome_synthesis.controller import Controller, _check_header
+from crome_synthesis.src.crome_synthesis.controller.controller_info import ControllerSpec
+from crome_synthesis.src.crome_synthesis.pcontrollers import PControllers
+from crome_synthesis.src.crome_synthesis.tools.persistence import (
     dump_mono_controller,
     dump_parallel_controller,
     load_mono_controller,
