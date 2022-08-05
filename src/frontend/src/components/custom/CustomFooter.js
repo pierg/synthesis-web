@@ -2,7 +2,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Modal, ModalBody} from "reactstrap";
-import customfooter from "../../_texts/custom/customfooter";
+import customfooter from "../../_texts/customfooter";
 
 
 export default function CustomFooter() {
@@ -21,6 +21,7 @@ export default function CustomFooter() {
                                     <a
                                         target="_blank"
                                         href={customfooter.github.href}
+                                        rel="noreferrer"
                                         className="text-blueGray-700 hover:no-underline no-underline hover:text-blueGray-900 text-sm focus:outline-none font-semibold block px-3"
                                     > {customfooter.github.title} </a>
                                 </li>
@@ -53,6 +54,7 @@ export default function CustomFooter() {
                                     <ul className="modal-body pb-5">
                                         {customfooter.publications.papers.map((prop, key) => (<li key={key}>
                                                 <a
+                                                    rel="noreferrer"
                                                     target="_blank"
                                                     href={prop.href}
                                                     className="text-blueGray-700 hover:text-blueGray-900 text-base focus:outline-none font-medium block py-1 px-3"
