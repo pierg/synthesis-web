@@ -4,7 +4,7 @@ site_url: "https://pierg.github.io/synthesis-web"
 repo_url: "https://github.com/pierg/synthesis-web"
 repo_name: "pierg/synthesis-web"
 site_dir: "site"
-watch: [README.md, CONTRIBUTING.md, CHANGELOG.md, src/synthesis_web]
+watch: [README.md, CONTRIBUTING.md, CHANGELOG.md]
 
 nav:
   - Home:
