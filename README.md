@@ -80,6 +80,3 @@ To build the image you can run the following command
 
 - Fully typed with annotations and checked with mypy,
   [PEP561 compatible](https://www.python.org/dev/peps/pep-0o561/)
-
-- This project has been initially generated with
-  [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package).
