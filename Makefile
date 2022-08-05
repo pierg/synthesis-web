@@ -55,7 +55,7 @@ $(QUALITY_DUTIES):
 
 .PHONY: env-create
 env-create:
-	conda-merge ../crome-cgg/environment-cgg.yml ../crome-contracts/environment-contracts.yml ../crome-logic/environment-logic.yml ../crome-synthesis/environment-synthesis.yml environment-web.yml > environment.yml
+	conda-merge ./crome_cgg/environment-cgg.yml ./crome_contracts/environment-contracts.yml ./crome_logic/environment-logic.yml ./crome_synthesis/environment-synthesis.yml environment-web.yml > environment.yml
 
 
 .PHONY: env-install
