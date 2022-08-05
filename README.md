@@ -4,33 +4,14 @@ Web Interface for the Synthesis package.
 
 ## System Requirements
 
-[Strix](https://strix.model.in.tum.de) must be installed on the system.
+[Strix](https://strix.model.in.tum.de) must be installed on the system. Alternatively, a
+[docker](https://www.docker.com) must be installed and running.
 
 ### Dependencies
-
-Clone crome-logic, crome-contracts, crome-cgg and crome-synthesis from git in the same
-folder where synthesis-web is located
-
+This project contains submodules.
+To properly download them run :
 ```bash
-git clone https://github.com/pierg/crome-logic.git
-```
-
-```bash
-git clone https://github.com/pierg/crome-contracts.git
-```
-
-```bash
-git clone https://github.com/pierg/crome-cgg.git
-```
-
-```bash
-git clone https://github.com/pierg/crome-synthesis.git
-```
-
-Append it to PYTHONPATH
-
-```bash
-export PYTHONPATH=$PYTHONPATH:../crome-logic/:../crome-contracts/:../crome-cgg/:../crome-synthesis/
+git clone --recursive https://github.com/pierg/synthesis-web
 ```
 
 ## Installation
@@ -42,50 +23,63 @@ manage the environment and dependencies.
 We use [pdm](https://github.com/pdm-project/pdm) to manage 'development' dependencies
 (e.g. linting, type checking).
 
-You need to install `conda-merge` so that we can merge all the dependecies from the
-other repositories and create the `environment.yml`
 
+You need to install `conda-merge` so that we can merge all the dependecies from the other repositories and create the `environment.yml`
 ```bash
 pip install conda-merge
 ```
 
-Once `conda-merge` is installed, you can create the `envioronment.yml` file, create the
-environment and activate it by runnin the following commands:
-
+Once `conda-merge` is installed, you can create the `environment.yml` file, create the environment and activate it by running the following commands:
 ```bash
-make conda-create
-make conda-install
-make conda-activate
+make env-create
+make env-install
+make env-activate
 ```
 
-Install the other dependencies with pdm (optional):
+Or alternately `make env-all`
+## Makefile
 
+To discover Makefile commands or generate documentation you need install pdm dependancies ans setup the Makefile :
 ```bash
 pdm install
 ```
-## One magic command
+```bash
+make setup
+```
+Check basic commands available by running 
+```bash
+make
+```
+### Documentation
+You can generate the documentation of the project by running the following commands:
+
+```bash
+make docs
+```
+
+
+## Pre-commit tools
 
 Run `make pre-commit` to run all the pre-commit tools
 
 Check all the available commands in `Makefile`
 
-## Documentation
+## Docker
 
-You can generate the documentation of the project by running the following commands:
+### Building the image
 
-```bash
-pdm install
-make setup
-make docs
-```
+To build the image you can run the following command
 
-The documentation can then be found in a folder named "site" at the root of the project
+`docker buildx build --platform linux/x86_64 -t [DOCKERUSERNAME]/[PROJECT]:[TAG] --push .`
 
 ## License
 
 [MIT](https://github.com/piergiuseppe/crome-synthesis/blob/master/LICENSE)
 
 ## Features and Credits
+
+- Fully typed with annotations and checked with mypy,
+  [PEP561 compatible](https://www.python.org/dev/peps/pep-0o561/)
 
 - This project has been initially generated with
   [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package).
