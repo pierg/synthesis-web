@@ -39,7 +39,7 @@ make env-activate
 Or alternately `make env-all`
 ## Makefile
 
-To discover Makefile commands or generate documentation you need install pdm dependancies ans setup the Makefile :
+To discover Makefile commands or generate documentation you need install pdm dependancies and setup the Makefile :
 ```bash
 pdm install
 ```
