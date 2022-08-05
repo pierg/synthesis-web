@@ -1,0 +1,12 @@
+[submodule "crome_cgg"]
+	path = crome_cgg
+	url = https://github.com/pierg/crome-cgg
+[submodule "crome_contracts"]
+	path = crome_contracts
+	url = https://github.com/pierg/crome-contracts
+[submodule "crome_logic"]
+	path = crome_logic
+	url = https://github.com/pierg/crome-logic
+[submodule "crome_synthesis"]
+	path = crome_synthesis
+	url = https://github.com/pierg/crome-synthesis
