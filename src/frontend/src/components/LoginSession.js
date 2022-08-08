@@ -26,7 +26,7 @@ export default function LoginSession({ id, onIdSubmit, cookie }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    socket.emit("session-existing", { session: idRef.current.value });
+    socket.emit("session-existing", idRef.current.value);
 
     socket.on("receive-answer", handleAnswer);
 
