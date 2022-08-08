@@ -62,6 +62,7 @@ def connected() -> None:
 @socketio.on("session-existing")
 def check_if_session_exist(session_id: str) -> None:
     """Check if a session is free and if the user can enter it.
+
     Arguments:
         session_id: the id of the wanted session.
     """
@@ -188,6 +189,7 @@ def get_inputs(data: Dict) -> None:
 @socketio.on("get-history")
 def get_history(data) -> None:
     """Get the history of the mealy.
+
     Arguments:
         data: A dictionary that contains all the information about the synthesis and the mode used to get the history.
     """

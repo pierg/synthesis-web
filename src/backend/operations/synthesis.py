@@ -16,16 +16,16 @@ from crome_synthesis.src.crome_synthesis.tools.persistence import (
     load_mono_controller,
     load_parallel_controller,
 )
-
 from src.backend.shared.paths import controller_path, save_controller_path
 
 
 class Synthesis:
     """Class that has all the useful functions to synthesis a controller."""
+
     @staticmethod
     def get_synthesis(session_id: str) -> Dict[str, List[Any]]:
-        """
-        Get all the synthesis that have been created in the default session or the session of the user.
+        """Get all the synthesis that have been created in the default session
+        or the session of the user.
 
         Arguments:
             session_id: The id of the session of the user.
@@ -81,8 +81,7 @@ class Synthesis:
 
     @staticmethod
     def delete_synthesis(data: Dict, session_id: str) -> None:
-        """
-        Delete a synthesis of the session folder of the user.
+        """Delete a synthesis of the session folder of the user.
 
         Arguments:
             session_id: The id of the session where the controller is saved.
@@ -100,8 +99,7 @@ class Synthesis:
 
     @staticmethod
     def create_controller(data: dict, session_id: str) -> List[str] | str:
-        """
-        Create a controller from a synthesis.
+        """Create a controller from a synthesis.
 
         Arguments:
             session_id: The id of the session where the controller is saved.
