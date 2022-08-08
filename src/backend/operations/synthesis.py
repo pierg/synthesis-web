@@ -21,8 +21,18 @@ from src.backend.shared.paths import controller_path, save_controller_path
 
 
 class Synthesis:
+    """Class that has all the useful functions to synthesis a controller."""
     @staticmethod
-    def get_synthesis(session_id) -> Dict[str, List[Any]]:
+    def get_synthesis(session_id: str) -> Dict[str, List[Any]]:
+        """
+        Get all the synthesis that have been created in the default session or the session of the user.
+
+        Arguments:
+            session_id: The id of the session of the user.
+
+        Returns:
+            A dictionary that contain all the controllers.
+        """
         list_controller = {}
         # We get all the controller already synthesize
         controller_folder = controller_path(session_id)
@@ -62,15 +72,22 @@ class Synthesis:
             _, _, filenames = next(walk(os.path.join(controller_folder, dir_name)))
             dict_controller = {dir_name: []}
             for filename in filenames:
-                info = ControllerSpec.from_file(controller_folder / dir_name / filename)
-                name = Synthesis.__get_name_controller(controller_folder / dir_name / filename)
+                info = ControllerSpec.from_file(controller_folder / dir_name / str(filename))
+                name = Synthesis.__get_name_controller(controller_folder / dir_name / str(filename))
                 data = {"id": name, "assumptions": info.a, "guarantees": info.g, "inputs": info.i, "outputs": info.o}
                 dict_controller[dir_name].append(data)
             list_controller.update(dict_controller)
         return list_controller
 
     @staticmethod
-    def delete_synthesis(data, session_id):
+    def delete_synthesis(data: Dict, session_id: str) -> None:
+        """
+        Delete a synthesis of the session folder of the user.
+
+        Arguments:
+            session_id: The id of the session where the controller is saved.
+            data: A dictionary that contains all the information to find the controller.
+        """
         complete_str = (
             " ".join(data["inputs"])
             + " ".join(data["outputs"])
@@ -82,7 +99,17 @@ class Synthesis:
         os.remove(save_folder / f"{full_name}_s.dat")
 
     @staticmethod
-    def create_controller(data, session_id) -> List[str] | str:
+    def create_controller(data: dict, session_id: str) -> List[str] | str:
+        """
+        Create a controller from a synthesis.
+
+        Arguments:
+            session_id: The id of the session where the controller is saved.
+            data: A dictionary that contains all the information of the synthesis.
+
+        Returns:
+            The mealy machine that is/are the representation of the controller.
+        """
         complete_str = (
             " ".join(data["inputs"])
             + " ".join(data["outputs"])
@@ -115,7 +142,6 @@ class Synthesis:
                 absolute_folder_path=save_folder, controller_name=full_name + "_p"
             )
             if controller_found:
-                print("Found !")
                 json_content = []
                 for controller in controller_found.controllers:
                     if not os.path.exists(save_folder / f"{controller.name}.png"):

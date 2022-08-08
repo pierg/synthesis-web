@@ -29,7 +29,6 @@ users: Dict[str, Any] = {}
 # String dictionary associating the id of the request to talk to the user with the session id given by the frontend.
 
 cookies: Dict[str, str] = {}
-
 # String dictionary association the id of the session with that of the cookie that can open it.
 
 
@@ -61,9 +60,11 @@ def connected() -> None:
 
 
 @socketio.on("session-existing")
-def check_if_session_exist(data) -> None:
-    """Check if a session is free and if the user can enter it."""
-    session_id = str(data["session"])
+def check_if_session_exist(session_id: str) -> None:
+    """Check if a session is free and if the user can enter it.
+    Arguments:
+        session_id: the id of the wanted session.
+    """
     tab_id = str(request.args.get("tabId"))
     cookie = str(request.args.get("cookie"))
     print("check if following session exists : " + session_id)
@@ -114,7 +115,13 @@ def get_current_time() -> Dict[str, float]:
 
 
 def send_message_to_user(content: str, room_id: str, crometype: str) -> None:
-    """Simplified version to send a notification and a message to a user."""
+    """Simplified version to send a notification and a message to a user.
+
+    Arguments:
+        content: The content of the message.
+        room_id: Where to send the notification and the message.
+        crometype: The type of notification to send.
+    """
     now = time.localtime(time.time())
     emit("send-notification", {"crometypes": crometype, "content": content}, room=room_id)
     emit("send-message", f"{strftime('%H:%M:%S', now)} - {content}", room=room_id)
@@ -129,8 +136,12 @@ def get_synthesis() -> None:
 
 
 @socketio.on("delete-synthesis")
-def delete_synthesis(data) -> None:
-    """Delete a synthesis using only his name to find it."""
+def delete_synthesis(data: Dict) -> None:
+    """Delete a synthesis using only his name to find it.
+
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis that will be deleted.
+    """
     session_id = str(request.args.get("id"))
 
     Synthesis.delete_synthesis(data, session_id)
@@ -140,8 +151,12 @@ def delete_synthesis(data) -> None:
 
 
 @socketio.on("create-controller")
-def create_controller(data) -> None:
-    """Create the controller and the mealy according to the correct method."""
+def create_controller(data: Dict) -> None:
+    """Create the controller and the mealy according to the correct method.
+
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis that will be created.
+    """
 
     try:
         json_content = Synthesis.create_controller(data, request.args.get("id"))
@@ -158,10 +173,12 @@ def create_controller(data) -> None:
 
 
 @socketio.on("get-inputs")
-def get_inputs(data) -> None:
+def get_inputs(data: Dict) -> None:
     """Get all the inputs possible for the current state of a controller.
 
     It differentiates the two ways of simulating the synthesis.
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis and the mode used to get the inputs.
     """
     session_id = request.args.get("id")
     inputs = Simulation.get_input_possible(data=data, session_id=session_id)
@@ -170,7 +187,10 @@ def get_inputs(data) -> None:
 
 @socketio.on("get-history")
 def get_history(data) -> None:
-    """Get the history of the mealy."""
+    """Get the history of the mealy.
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis and the mode used to get the history.
+    """
     session_id = request.args.get("id")
     history = Simulation.get_history(data=data, session_id=session_id)
     emit("received-history", history, room=request.sid)
@@ -178,7 +198,12 @@ def get_history(data) -> None:
 
 @socketio.on("simulate-controller")
 def simulate_controller(data) -> None:
-    """Simulate the mealy according to the method given."""
+    """Simulate the mealy according to the method given.
+
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis, the mode and the input chosen by the
+        user.
+    """
     content = Simulation.react_to_inputs(data=data, session_id=request.args.get("id"), choice=data["choice"])
     send_message_to_user("The mealy has been simulated", "success", request.sid)
     emit("controller-simulated", content, room=request.sid)
@@ -189,6 +214,10 @@ def reset_controller(data) -> None:
     """It reset a controller to his initial state.
 
     It differentiates the two ways of simulating the synthesis.
+
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis and the mode used to reset
+        the controller.
     """
     session_id = request.args.get("id")
     Simulation.reset_simulation(data=data, session_id=session_id)
@@ -202,6 +231,9 @@ def random_simulation_controller(data) -> None:
     state.
 
     It differentiates the two ways of simulating the synthesis.
+    Arguments:
+        data: A dictionary that contains all the information about the synthesis and the mode used to simulate
+        the controller and the number of iterations to do.
     """
     session_id = request.args.get("id")
     content = Simulation.random_simulation(data=data, mode=data["mode"], session_id=session_id)
