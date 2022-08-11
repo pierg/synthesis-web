@@ -7,3 +7,4 @@ channels:
 dependencies:
   - flask
   - flask-socketio
+  - eventlet

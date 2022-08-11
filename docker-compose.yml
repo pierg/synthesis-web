@@ -1,0 +1,17 @@
+version: "3"
+services:
+  backend:
+    build: .
+    restart: always
+    container_name: backend_synthesis
+    volumes:
+      - ./src/frontend/build:/home/crome-contracts/src/frontend/build
+      - ../cert.pem:/home/contracts-web/cert.pem
+      - ../privkey.pem:/home/contracts-web/privkey.pem
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+      - 443:5000
+      - 80:5000
+    command: -s
