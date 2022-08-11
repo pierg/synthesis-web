@@ -246,5 +246,9 @@ def random_simulation_controller(data) -> None:
 
 
 if __name__ == "__main__":
-    # app.run(host='localhost', debug=True, port=3000)*
-    socketio.run(app, host="0.0.0.0")
+    if args.dev:
+        print("Starting the backend in development mode")
+        socketio.run(app, host="0.0.0.0")
+    else:
+        print("Starting the server")
+        socketio.run(app, host="0.0.0.0", certfile="cert.pem", keyfile="privkey.pem")
