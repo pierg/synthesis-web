@@ -51,16 +51,21 @@ export default function CustomFooter() {
                                         className="modal-header justify-content-center font-bold text-2xl uppercase text-blueGray-700">{customfooter.publications.title}
                                     </div>
 
-                                    <ul className="modal-body pb-5">
-                                        {customfooter.publications.papers.map((prop, key) => (<li key={key}>
-                                                <a
-                                                    rel="noreferrer"
-                                                    target="_blank"
-                                                    href={prop.href}
-                                                    className="text-blueGray-700 hover:text-blueGray-900 text-base focus:outline-none font-medium block py-1 px-3"
-                                                > {prop.text} </a>
-                                            </li>))}
-                                    </ul>
+                                     <ul className="modal-body pb-5 ">
+                                    {customfooter.publications.papers.map((prop, key) => (
+                                        <li key={key}>
+                                            <p>
+                                            <a
+                                                rel="noreferrer"
+                                                target="_blank"
+                                                href={prop.href}
+                                                className="text-blueGray-700 hover:text-blueGray-900 text-base focus:outline-none font-medium inline-block"
+                                            > {prop.title} </a>
+                                                </p>
+                                            <p className="pl-3 text-base ">{prop.authors}</p>
+                                            <p className="pl-3 text-sm">{prop.details}</p>
+                                        </li>))}
+                                </ul>
                                 </ModalBody>
                             </Modal>
 
