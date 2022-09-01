@@ -1,52 +1,29 @@
-[build-system]
-requires = ["pdm-pep517"]
-build-backend = "pdm.pep517.api"
-
 [project]
 name = "synthesis-web"
-description = "Web Interface for the Synthesis package"
-authors = [{name = "Piergiuseppe Mallozzi", email = "piergiuseppe.mallozzi@gmail.com"}]
-license-expression = "MIT"
-readme = "README.md"
-requires-python = ">=3.7"
-keywords = []
-dynamic = ["version"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Documentation",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Documentation",
-    "Topic :: Utilities",
-    "Typing :: Typed",
+version = ""
+description = "Contract algebra implementation in LTL"
+authors = [
+    {name = "Piergiuseppe Mallozzi", email = "piergiuseppe.mallozzi@gmail.com"},
 ]
-dependencies = []
-
-[project.urls]
-Homepage = "https://pierg.github.io/synthesis-web"
-Documentation = "https://pierg.github.io/synthesis-web"
-Changelog = "https://pierg.github.io/synthesis-web/changelog"
-Repository = "https://github.com/pierg/synthesis-web"
-Issues = "https://github.com/pierg/synthesis-web/issues"
-Discussions = "https://github.com/pierg/synthesis-web/discussions"
-Gitter = "https://gitter.im/synthesis-web/community"
-Funding = "https://github.com/sponsors/pierg"
+dependencies = [
+    "editables>=0.3",
+    "crome-cgg @ file:///${PROJECT_ROOT}/crome_cgg",
+    "crome-contracts @ file:///${PROJECT_ROOT}/crome_contracts",
+    "crome-logic @ file:///${PROJECT_ROOT}/crome_logic",
+    "crome-synthesis @ file:///${PROJECT_ROOT}/crome_synthesis",
+    "flask>=2.2.2",
+    "flask-socketio>=5.3.0",
+]
+requires-python = ">=3.9,<3.11"
+license = {text = "MIT"}
 
 [project.scripts]
-synthesis-web = "synthesis_web.cli:main"
+example = "synthesis_web.cli:main"
 
-[tool.pdm]
-version = {use_scm = true}
-package-dir = "src"
-editable-backend = "editables"
+[project.optional-dependencies]
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
 
 [tool.pdm.dev-dependencies]
 duty = ["duty>=0.7"]
@@ -97,17 +74,10 @@ typing = [
     "types-toml>=0.10",
 ]
 security = ["safety>=1.10"]
+dev = [
+    "pre-commit>=2.20.0",
+    "pylint>=2.15.0",
+]
 
-[tool.black]
-line-length = 120
-exclude = "tests/fixtures"
-
-[tool.isort]
-line_length = 120
-not_skip = "__init__.py"
-multi_line_output = 3
-force_single_line = false
-balanced_wrapping = true
-default_section = "THIRDPARTY"
-known_first_party = "synthesis_web"
-include_trailing_comma = true
+[tool]
+[tool.pdm]
