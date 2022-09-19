@@ -14,6 +14,7 @@ from backend.shared.paths import build_path, storage_path
 
 parser = argparse.ArgumentParser(description="Launching Flask Backend")
 parser.add_argument("--serve", default=False, type=bool, help="indicate if serving the pages")
+parser.add_argument("--dev", default=False, type=bool, help="development mode")
 args = parser.parse_args()
 
 if args.serve:

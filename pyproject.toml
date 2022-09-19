@@ -13,6 +13,7 @@ dependencies = [
     "crome-synthesis @ file:///${PROJECT_ROOT}/crome_synthesis",
     "flask>=2.2.2",
     "flask-socketio>=5.3.0",
+    "eventlet>=0.33.1",
 ]
 requires-python = ">=3.9,<3.11"
 license = {text = "MIT"}

@@ -27,6 +27,8 @@ setup() {
     conda activate ./.venv
     echo "installing conda dependencies..."
     conda env update --file conda-dependencies.yml --prune
+    cd src/frontend
+    npm install --legacy-peer-deps
 }
 
 install_with_pipx pdm

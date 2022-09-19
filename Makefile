@@ -39,6 +39,11 @@ lock:
 setup:
 	@bash scripts/setup.sh
 
+
+.PHONY: uninstall
+uninstall:
+	@bash scripts/uninstall.sh
+
 .PHONY: check
 check:
 	@bash scripts/multirun.sh duty check-quality check-types check-docs
